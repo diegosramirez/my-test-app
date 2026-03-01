@@ -1,0 +1,41 @@
+<div class="todo-container">
+  <h1>To-Do List</h1>
+
+  <div class="todo-input-row">
+    <input
+      type="text"
+      [(ngModel)]="newTask"
+      (keyup.enter)="addTask()"
+      placeholder="Enter a new task..."
+      aria-label="New task input"
+      class="todo-input"
+    />
+    <button
+      (click)="addTask()"
+      class="btn-add"
+      aria-label="Add task"
+    >
+      Add
+    </button>
+  </div>
+
+  <ul class="todo-list" aria-label="Task list">
+    <li
+      *ngFor="let task of tasks; let i = index"
+      class="todo-item"
+    >
+      <span class="todo-item-text">{{ task }}</span>
+      <button
+        (click)="deleteTask(i)"
+        class="btn-delete"
+        [attr.aria-label]="'Delete task: ' + task"
+      >
+        Delete
+      </button>
+    </li>
+  </ul>
+
+  <p *ngIf="tasks.length === 0" class="todo-empty" aria-live="polite">
+    No tasks yet. Add one above!
+  </p>
+</div>
