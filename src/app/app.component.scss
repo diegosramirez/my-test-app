@@ -1,0 +1,33 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sidebar-region {
+  flex: 0 0 240px;
+  width: 240px;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #1e2a3a;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+}
+
+.content-region {
+  flex: 1 1 auto;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #f5f7fa;
+  padding: 24px;
+  box-sizing: border-box;
+}

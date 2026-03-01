@@ -1,0 +1,72 @@
+<nav class="side-nav">
+  <div class="side-nav__brand">
+    <span class="side-nav__brand-title">My App</span>
+  </div>
+
+  <ul class="side-nav__list" role="list">
+    <li class="side-nav__item">
+      <a
+        class="side-nav__link"
+        routerLink="/home"
+        routerLinkActive="side-nav__link--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        aria-label="Navigate to Home"
+      >
+        <span class="side-nav__icon" aria-hidden="true">🏠</span>
+        <span class="side-nav__label">Home</span>
+      </a>
+    </li>
+
+    <li class="side-nav__item">
+      <a
+        class="side-nav__link"
+        routerLink="/dashboard"
+        routerLinkActive="side-nav__link--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        aria-label="Navigate to Dashboard"
+      >
+        <span class="side-nav__icon" aria-hidden="true">📊</span>
+        <span class="side-nav__label">Dashboard</span>
+      </a>
+    </li>
+
+    <li class="side-nav__item">
+      <a
+        class="side-nav__link"
+        routerLink="/todo"
+        routerLinkActive="side-nav__link--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        aria-label="Navigate to To-Do"
+      >
+        <span class="side-nav__icon" aria-hidden="true">✅</span>
+        <span class="side-nav__label">To-Do</span>
+      </a>
+    </li>
+
+    <li class="side-nav__item">
+      <a
+        class="side-nav__link"
+        routerLink="/profile"
+        routerLinkActive="side-nav__link--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        aria-label="Navigate to Profile"
+      >
+        <span class="side-nav__icon" aria-hidden="true">👤</span>
+        <span class="side-nav__label">Profile</span>
+      </a>
+    </li>
+
+    <li class="side-nav__item">
+      <a
+        class="side-nav__link"
+        routerLink="/settings"
+        routerLinkActive="side-nav__link--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        aria-label="Navigate to Settings"
+      >
+        <span class="side-nav__icon" aria-hidden="true">⚙️</span>
+        <span class="side-nav__label">Settings</span>
+      </a>
+    </li>
+  </ul>
+</nav>

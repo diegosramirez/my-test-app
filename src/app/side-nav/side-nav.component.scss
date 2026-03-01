@@ -1,0 +1,129 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  min-width: 240px;
+  height: 100vh;
+  background-color: #1e2a3a;
+  color: #c8d6e5;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.25);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.side-nav {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.side-nav__header {
+  display: flex;
+  align-items: center;
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 8px;
+}
+
+.side-nav__logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.side-nav__nav {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 8px 0;
+  list-style: none;
+  margin: 0;
+}
+
+.side-nav__item {
+  display: block;
+  width: 100%;
+}
+
+.side-nav__link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: #c8d6e5;
+  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-left-color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0;
+  margin: 2px 8px 2px 0;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border-left-color: rgba(255, 255, 255, 0.3);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #4a9eff;
+    outline-offset: -2px;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+  }
+
+  &.active {
+    background-color: rgba(74, 158, 255, 0.15);
+    color: #4a9eff;
+    border-left-color: #4a9eff;
+    font-weight: 600;
+
+    .side-nav__icon {
+      color: #4a9eff;
+    }
+  }
+}
+
+.side-nav__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  color: #8fa8c0;
+  transition: color 0.2s ease;
+}
+
+.side-nav__label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.side-nav__footer {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.75rem;
+  color: #5a7a96;
+  text-align: center;
+}
