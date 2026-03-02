@@ -1,0 +1,57 @@
+<div class="todo-container">
+  <h1>To-Do List</h1>
+
+  <div class="todo-input-row">
+    <input
+      type="text"
+      [(ngModel)]="newTodoText"
+      (keyup.enter)="addTodo()"
+      placeholder="What needs to be done?"
+      #todoInput
+      class="todo-input"
+      aria-label="New to-do item"
+    />
+    <button
+      (click)="addTodo()"
+      class="btn btn-add"
+      aria-label="Add to-do"
+    >
+      Add
+    </button>
+  </div>
+
+  <ul class="todo-list" *ngIf="todos.length > 0; else emptyState">
+    <li
+      *ngFor="let todo of todos"
+      class="todo-item"
+      [class.completed]="todo.completed"
+    >
+      <input
+        type="checkbox"
+        [id]="'todo-' + todo.id"
+        [checked]="todo.completed"
+        (change)="toggleTodo(todo)"
+        class="todo-checkbox"
+        [attr.aria-label]="'Mark &quot;' + todo.text + '&quot; as ' + (todo.completed ? 'incomplete' : 'complete')"
+      />
+      <label
+        [for]="'todo-' + todo.id"
+        class="todo-label"
+        [class.todo-label--completed]="todo.completed"
+      >
+        {{ todo.text }}
+      </label>
+      <button
+        (click)="deleteTodo(todo.id)"
+        class="btn btn-delete"
+        [attr.aria-label]="'Delete &quot;' + todo.text + '&quot;'"
+      >
+        Delete
+      </button>
+    </li>
+  </ul>
+
+  <ng-template #emptyState>
+    <p class="todo-empty">No to-do items yet. Add one above!</p>
+  </ng-template>
+</div>
