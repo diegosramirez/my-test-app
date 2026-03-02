@@ -1,0 +1,32 @@
+<ng-container *ngIf="state$ | async as state">
+  <mat-sidenav-container class="sidenav-container" autosize>
+    <mat-sidenav
+      #sidenav
+      [mode]="state.mode"
+      [opened]="state.isOpen"
+      (openedChange)="onOpenedChange($event)"
+      class="sidenav"
+    >
+      <app-sidenav></app-sidenav>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="sidenav-content">
+      <mat-toolbar class="toolbar" color="primary">
+        <button
+          mat-icon-button
+          appSidenavToggle
+          [attr.aria-expanded]="state.isOpen"
+          aria-label="Toggle navigation"
+          class="toggle-button"
+        >
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span class="toolbar-title">my-test-app</span>
+      </mat-toolbar>
+
+      <main class="main-content">
+        <router-outlet></router-outlet>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ng-container>
