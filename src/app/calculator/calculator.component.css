@@ -1,0 +1,129 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px 10px;
+  box-sizing: border-box;
+}
+
+.calculator {
+  max-width: 400px;
+  width: 100%;
+  background: #1e1e1e;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.display {
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  text-align: right;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+.expression {
+  font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 14px;
+  color: #888;
+  min-height: 20px;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.display-value {
+  font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 36px;
+  color: #fff;
+  font-variant-numeric: tabular-nums lining-nums;
+  line-height: 1.2;
+}
+
+.display-value.error {
+  color: #e57373;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  touch-action: manipulation;
+}
+
+.btn {
+  min-height: 48px;
+  border: none;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.1s, transform 0.05s;
+  font-family: inherit;
+  padding: 12px 8px;
+  /* WCAG AA: #333 bg with #fff text = 12.6:1 contrast */
+  background: #333;
+  color: #fff;
+}
+
+.btn:focus-visible {
+  outline: 2px solid #64b5f6;
+  outline-offset: 2px;
+}
+
+.btn:active {
+  transform: scale(0.95);
+  background: #444;
+}
+
+.btn-digit {
+  background: #424242;
+  color: #fff;
+}
+
+.btn-digit:active {
+  background: #555;
+}
+
+.btn-operator {
+  /* WCAG AA: #e8a735 bg with #1e1e1e text = 7.1:1 contrast */
+  background: #e8a735;
+  color: #1e1e1e;
+}
+
+.btn-operator:active {
+  background: #f0bd5e;
+}
+
+.btn-operator.active {
+  background: #fff;
+  color: #e8a735;
+}
+
+.btn-clear {
+  /* WCAG AA: #616161 bg with #fff text = 5.7:1 contrast */
+  background: #616161;
+  color: #fff;
+}
+
+.btn-clear:active {
+  background: #757575;
+}
+
+.btn-equals {
+  background: #4caf50;
+  color: #fff;
+}
+
+.btn-equals:active {
+  background: #66bb6a;
+}
+
+.btn-zero {
+  grid-column: span 2;
+}
