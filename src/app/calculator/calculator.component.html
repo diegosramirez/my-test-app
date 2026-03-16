@@ -1,0 +1,40 @@
+<div class="calculator">
+  <div class="display" aria-live="polite" role="status">
+    <div class="expression">{{ state.expression }}</div>
+    <div class="display-value" [class.error]="state.errorState" aria-atomic="true">
+      {{ state.displayValue }}
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button class="btn btn-clear" aria-label="clear" (click)="onClear()">C</button>
+    <button class="btn btn-operator" aria-label="divide"
+            [class.active]="state.operator === '÷' && state.waitingForSecondOperand"
+            (click)="onOperator('÷')">÷</button>
+    <button class="btn btn-operator" aria-label="multiply"
+            [class.active]="state.operator === '×' && state.waitingForSecondOperand"
+            (click)="onOperator('×')">×</button>
+    <button class="btn btn-operator" aria-label="subtract"
+            [class.active]="state.operator === '−' && state.waitingForSecondOperand"
+            (click)="onOperator('−')">−</button>
+
+    <button class="btn btn-digit" aria-label="7" (click)="onDigit('7')">7</button>
+    <button class="btn btn-digit" aria-label="8" (click)="onDigit('8')">8</button>
+    <button class="btn btn-digit" aria-label="9" (click)="onDigit('9')">9</button>
+    <button class="btn btn-operator" aria-label="add"
+            [class.active]="state.operator === '+' && state.waitingForSecondOperand"
+            (click)="onOperator('+')">+</button>
+
+    <button class="btn btn-digit" aria-label="4" (click)="onDigit('4')">4</button>
+    <button class="btn btn-digit" aria-label="5" (click)="onDigit('5')">5</button>
+    <button class="btn btn-digit" aria-label="6" (click)="onDigit('6')">6</button>
+
+    <button class="btn btn-digit" aria-label="1" (click)="onDigit('1')">1</button>
+    <button class="btn btn-digit" aria-label="2" (click)="onDigit('2')">2</button>
+    <button class="btn btn-digit" aria-label="3" (click)="onDigit('3')">3</button>
+
+    <button class="btn btn-digit btn-zero" aria-label="0" (click)="onDigit('0')">0</button>
+    <button class="btn btn-digit" aria-label="decimal point" (click)="onDecimal()">.</button>
+    <button class="btn btn-equals" aria-label="equals" (click)="onEquals()">=</button>
+  </div>
+</div>
