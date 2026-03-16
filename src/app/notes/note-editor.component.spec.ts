@@ -21,6 +21,10 @@ describe('NoteEditorComponent', () => {
   let mockService: any;
   let router: Router;
 
+  afterEach(() => {
+    TestBed.resetTestingModule();
+  });
+
   function setup(params: Record<string, string | null> = {}, existingNote?: Note) {
     mockService = {
       getById: vi.fn((id: string) => existingNote ?? null),
@@ -50,6 +54,12 @@ describe('NoteEditorComponent', () => {
     router = TestBed.inject(Router);
     vi.spyOn(router, 'navigate').mockResolvedValue(true);
     fixture.detectChanges();
+  }
+
+  /** Helper: set component properties and trigger a stable change detection cycle */
+  function updateAndDetect(updates: () => void): void {
+    updates();
+    fixture.changeDetectorRef.detectChanges();
   }
 
   describe('Create Mode', () => {
@@ -117,8 +127,7 @@ describe('NoteEditorComponent', () => {
 
     it('should enable save when title has content', () => {
       setup({});
-      component.title = 'Something';
-      fixture.detectChanges();
+      updateAndDetect(() => { component.title = 'Something'; });
       const saveBtn = fixture.nativeElement.querySelector('.btn-save') as HTMLButtonElement;
       expect(saveBtn.disabled).toBe(false);
     });
@@ -127,8 +136,8 @@ describe('NoteEditorComponent', () => {
       setup({});
       component.title = '   ';
       component.onSave();
-      fixture.detectChanges();
       expect(component.showTitleError).toBe(true);
+      updateAndDetect(() => {});
       expect(fixture.nativeElement.querySelector('#title-error')?.textContent).toContain('Title is required');
     });
 
@@ -149,8 +158,7 @@ describe('NoteEditorComponent', () => {
 
     it('should have aria-describedby when title error is shown', () => {
       setup({});
-      component.showTitleError = true;
-      fixture.detectChanges();
+      updateAndDetect(() => { component.showTitleError = true; });
       const input = fixture.nativeElement.querySelector('#note-title');
       expect(input?.getAttribute('aria-describedby')).toBe('title-error');
     });
@@ -166,14 +174,15 @@ describe('NoteEditorComponent', () => {
 
     it('should disable save button when isSaving', () => {
       setup({});
-      component.title = 'Title';
-      component.isSaving = true;
-      fixture.detectChanges();
+      updateAndDetect(() => {
+        component.title = 'Title';
+        component.isSaving = true;
+      });
       const saveBtn = fixture.nativeElement.querySelector('.btn-save') as HTMLButtonElement;
       expect(saveBtn.disabled).toBe(true);
     });
 
-    it('should re-enable isSaving on failed save', () => {
+    it('should re-enable isSaving when create returns null (validation failure)', () => {
       setup({});
       mockService.create.mockReturnValue(null);
       component.title = 'Title';
@@ -192,8 +201,7 @@ describe('NoteEditorComponent', () => {
 
     it('should show "Discard changes" when form is dirty', () => {
       setup({});
-      component.isDirty = true;
-      fixture.detectChanges();
+      updateAndDetect(() => { component.isDirty = true; });
       const cancelBtn = fixture.nativeElement.querySelector('.btn-cancel');
       expect(cancelBtn?.textContent?.trim()).toBe('Discard changes');
     });
