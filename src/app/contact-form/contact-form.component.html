@@ -1,0 +1,102 @@
+<div class="contact-form-wrapper">
+  <!-- Success Banner Container (fixed height to prevent layout shift) -->
+  <div class="banner-container" aria-live="polite" role="status">
+    @if (bannerVisible) {
+      <div
+        #successBanner
+        class="success-banner"
+        [class.fade-out]="bannerFadingOut"
+        tabindex="-1"
+        (click)="dismissBanner()"
+      >
+        <span aria-hidden="true">&#10003;</span> Thank you! Your message has been sent.
+      </div>
+    }
+  </div>
+
+  <h1>Contact Us</h1>
+  <p class="required-legend"><span class="asterisk" aria-hidden="true">*</span> indicates a required field</p>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <!-- Honeypot -->
+    <input type="text" name="website" tabindex="-1" autocomplete="off" style="display:none">
+
+    <!-- Name -->
+    <div class="form-field">
+      <label for="name">Name <span class="asterisk" aria-hidden="true">*</span></label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        aria-required="true"
+        [attr.aria-describedby]="shouldShowError('name') ? 'name-error' : null"
+      >
+      @if (shouldShowError('name')) {
+        <span id="name-error" class="error" role="alert">
+          <span aria-hidden="true">&#9888;</span> {{ getErrorMessage('name') }}
+        </span>
+      }
+    </div>
+
+    <!-- Email -->
+    <div class="form-field">
+      <label for="email">Email <span class="asterisk" aria-hidden="true">*</span></label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        aria-required="true"
+        [attr.aria-describedby]="shouldShowError('email') ? 'email-error' : null"
+      >
+      @if (shouldShowError('email')) {
+        <span id="email-error" class="error" role="alert">
+          <span aria-hidden="true">&#9888;</span> {{ getErrorMessage('email') }}
+        </span>
+      }
+    </div>
+
+    <!-- Subject -->
+    <div class="form-field">
+      <label for="subject">Subject</label>
+      <input
+        id="subject"
+        type="text"
+        formControlName="subject"
+      >
+    </div>
+
+    <!-- Message -->
+    <div class="form-field">
+      <label for="message">Message <span class="asterisk" aria-hidden="true">*</span></label>
+      <textarea
+        id="message"
+        formControlName="message"
+        rows="4"
+        aria-required="true"
+        [attr.aria-describedby]="shouldShowError('message') ? 'message-error' : null"
+      ></textarea>
+      <span class="char-counter">{{ form.controls.message.value.length }} / 10 min</span>
+      @if (shouldShowError('message')) {
+        <span id="message-error" class="error" role="alert">
+          <span aria-hidden="true">&#9888;</span> {{ getErrorMessage('message') }}
+        </span>
+      }
+    </div>
+
+    <!-- Submit -->
+    <button
+      type="submit"
+      [disabled]="form.invalid || form.pristine || isSubmitting"
+    >
+      @if (isSubmitting) {
+        Sending...
+      } @else {
+        Submit
+      }
+    </button>
+
+    @if (form.invalid && form.dirty) {
+      <p class="helper-text">Please complete all required fields</p>
+    }
+  </form>
+</div>
