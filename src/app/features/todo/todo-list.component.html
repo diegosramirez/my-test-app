@@ -1,0 +1,53 @@
+<section class="todo-container" aria-label="Todo list">
+  @if (!storage.storageAvailable()) {
+    <div class="warning-banner" role="alert">
+      Your browser doesn't support local storage. Todos won't be saved between sessions.
+    </div>
+  }
+
+  <div class="input-area">
+    <input
+      type="text"
+      class="todo-input"
+      placeholder="What needs to be done?"
+      maxlength="250"
+      [ngModel]="inputValue()"
+      (ngModelChange)="inputValue.set($event)"
+      (keydown.enter)="onSubmit()"
+      #todoInput
+    />
+    @if (!todoService.lastWriteSuccess()) {
+      <div class="warning-inline" role="alert">
+        Storage full — new items may not be saved.
+      </div>
+    }
+  </div>
+
+  <div class="filter-bar">
+    <span class="items-left">{{ itemsLeftText() }}</span>
+    <div class="filter-buttons" role="group" aria-label="Filter todos">
+      @for (f of ['all', 'active', 'completed']; track f) {
+        <button
+          class="filter-btn"
+          [class.active]="filter() === f"
+          [attr.aria-pressed]="filter() === f"
+          (click)="setFilter($any(f))"
+        >{{ f === 'all' ? 'All' : f === 'active' ? 'Active' : 'Completed' }}</button>
+      }
+    </div>
+  </div>
+
+  <div class="todo-list">
+    @for (todo of filteredTodos(); track todo.id) {
+      <app-todo-item
+        [todo]="todo"
+        (toggled)="onToggle($event)"
+        (deleted)="onDelete($event)"
+      />
+    } @empty {
+      @if (emptyStateMessage()) {
+        <div class="empty-state">{{ emptyStateMessage() }}</div>
+      }
+    }
+  </div>
+</section>

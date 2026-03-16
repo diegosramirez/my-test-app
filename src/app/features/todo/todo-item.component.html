@@ -1,0 +1,17 @@
+<div class="todo-item" [class.completed]="todo().completed">
+  <input
+    type="checkbox"
+    [id]="'todo-' + todo().id"
+    [checked]="todo().completed"
+    (change)="toggled.emit(todo().id)"
+    class="todo-checkbox"
+  />
+  <label [for]="'todo-' + todo().id" class="todo-label" [title]="todo().title">
+    {{ todo().title }}
+  </label>
+  <button
+    class="todo-delete"
+    (click)="deleted.emit(todo().id)"
+    [attr.aria-label]="'Delete todo: ' + todo().title"
+  >&times;</button>
+</div>
