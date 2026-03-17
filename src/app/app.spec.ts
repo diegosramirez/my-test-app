@@ -1,10 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { NotificationDataSource } from './notifications/services/notification-data-source';
+import { StaticNotificationDataSource } from './notifications/services/static-notification-data-source';
+import { AnalyticsService, ConsoleAnalyticsService } from './notifications/services/analytics.service';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [
+        { provide: NotificationDataSource, useClass: StaticNotificationDataSource },
+        { provide: AnalyticsService, useClass: ConsoleAnalyticsService },
+      ],
     }).compileComponents();
   });
 
