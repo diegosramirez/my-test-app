@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, Renderer2, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, HostListener, inject, Renderer2, ElementRef, AfterViewInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavItem } from '../../models/nav-item.model';
@@ -9,16 +9,17 @@ import { AnalyticsService } from '../../services/analytics.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css',
+  styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent implements AfterViewInit, OnDestroy {
   private renderer = inject(Renderer2);
   private el = inject(ElementRef);
   private analytics = inject(AnalyticsService);
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+  private focusTimeout: ReturnType<typeof setTimeout> | null = null;
   private hamburgerButton: HTMLElement | null = null;
 
-  isSidebarOpen = false;
+  isSidebarOpen = signal(false);
 
   readonly navItems: NavItem[] = [
     { label: 'Dashboard', route: '/', icon: '\u{1F4CA}' },
@@ -35,6 +36,9 @@ export class SidebarComponent implements AfterViewInit, OnDestroy {
     if (this.resizeTimeout) {
       clearTimeout(this.resizeTimeout);
     }
+    if (this.focusTimeout) {
+      clearTimeout(this.focusTimeout);
+    }
     this.removeBodyScrollLock();
   }
 
@@ -44,17 +48,17 @@ export class SidebarComponent implements AfterViewInit, OnDestroy {
       clearTimeout(this.resizeTimeout);
     }
     this.resizeTimeout = setTimeout(() => {
-      if (window.innerWidth >= 768 && this.isSidebarOpen) {
+      if (window.innerWidth >= 768 && this.isSidebarOpen()) {
         this.closeSidebar();
       }
     }, 150);
   }
 
   toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen;
-    if (this.isSidebarOpen) {
+    this.isSidebarOpen.set(!this.isSidebarOpen());
+    if (this.isSidebarOpen()) {
       this.applyBodyScrollLock();
-      queueMicrotask(() => {
+      this.focusTimeout = setTimeout(() => {
         const firstLink = this.el.nativeElement.querySelector('.sidebar a');
         if (firstLink) {
           firstLink.focus();
@@ -66,7 +70,7 @@ export class SidebarComponent implements AfterViewInit, OnDestroy {
   }
 
   closeSidebar(): void {
-    this.isSidebarOpen = false;
+    this.isSidebarOpen.set(false);
     this.removeBodyScrollLock();
     if (this.hamburgerButton) {
       this.hamburgerButton.focus();

@@ -1,8 +1,9 @@
-import { TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { SettingsPageComponent } from './settings-page.component';
 
 describe('SettingsPageComponent', () => {
   beforeEach(async () => {
+    vi.useFakeTimers();
     localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [SettingsPageComponent],
@@ -11,6 +12,7 @@ describe('SettingsPageComponent', () => {
 
   afterEach(() => {
     localStorage.clear();
+    vi.useRealTimers();
   });
 
   it('should create', () => {
@@ -86,16 +88,16 @@ describe('SettingsPageComponent', () => {
     expect(msg.textContent).toContain('Settings saved!');
   });
 
-  it('should hide confirmation after 3 seconds', fakeAsync(() => {
+  it('should hide confirmation after 3 seconds', () => {
     const fixture = TestBed.createComponent(SettingsPageComponent);
     fixture.detectChanges();
     fixture.componentInstance.onSave();
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('.save-confirmation')).toBeTruthy();
-    tick(3000);
+    vi.advanceTimersByTime(3000);
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('.save-confirmation')).toBeNull();
-  }));
+  });
 
   it('should persist settings to localStorage on save', () => {
     const fixture = TestBed.createComponent(SettingsPageComponent);
@@ -123,13 +125,13 @@ describe('SettingsPageComponent', () => {
     expect(comp.notificationsEnabled).toBe(false);
   });
 
-  it('should set saved signal to true on save then false after timeout', fakeAsync(() => {
+  it('should set saved signal to true on save then false after timeout', () => {
     const fixture = TestBed.createComponent(SettingsPageComponent);
     const comp = fixture.componentInstance;
     expect(comp.saved()).toBe(false);
     comp.onSave();
     expect(comp.saved()).toBe(true);
-    tick(3000);
+    vi.advanceTimersByTime(3000);
     expect(comp.saved()).toBe(false);
-  }));
+  });
 });

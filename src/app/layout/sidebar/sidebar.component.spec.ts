@@ -82,16 +82,16 @@ describe('SidebarComponent', () => {
   it('should toggle isSidebarOpen on toggleSidebar()', () => {
     const fixture = createComponent();
     const comp = fixture.componentInstance;
-    expect(comp.isSidebarOpen).toBe(false);
+    expect(comp.isSidebarOpen()).toBe(false);
     comp.toggleSidebar();
-    expect(comp.isSidebarOpen).toBe(true);
+    expect(comp.isSidebarOpen()).toBe(true);
     comp.toggleSidebar();
-    expect(comp.isSidebarOpen).toBe(false);
+    expect(comp.isSidebarOpen()).toBe(false);
   });
 
   it('should update aria-expanded when sidebar opens', () => {
     const fixture = createComponent();
-    fixture.componentInstance.toggleSidebar();
+    fixture.componentInstance.isSidebarOpen.set(true);
     fixture.detectChanges();
     const btn = fixture.nativeElement.querySelector('.hamburger-btn');
     expect(btn.getAttribute('aria-expanded')).toBe('true');
@@ -101,7 +101,7 @@ describe('SidebarComponent', () => {
     const fixture = createComponent();
     const sidebar = fixture.nativeElement.querySelector('.sidebar');
     expect(sidebar.classList.contains('open')).toBe(false);
-    fixture.componentInstance.toggleSidebar();
+    fixture.componentInstance.isSidebarOpen.set(true);
     fixture.detectChanges();
     expect(sidebar.classList.contains('open')).toBe(true);
   });
@@ -109,19 +109,19 @@ describe('SidebarComponent', () => {
   it('should render backdrop when sidebar is open', () => {
     const fixture = createComponent();
     expect(fixture.nativeElement.querySelector('.backdrop')).toBeNull();
-    fixture.componentInstance.toggleSidebar();
+    fixture.componentInstance.isSidebarOpen.set(true);
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('.backdrop')).toBeTruthy();
   });
 
   it('should close sidebar when backdrop is clicked', () => {
     const fixture = createComponent();
-    fixture.componentInstance.toggleSidebar();
+    fixture.componentInstance.isSidebarOpen.set(true);
     fixture.detectChanges();
     const backdrop = fixture.nativeElement.querySelector('.backdrop');
     backdrop.click();
     fixture.detectChanges();
-    expect(fixture.componentInstance.isSidebarOpen).toBe(false);
+    expect(fixture.componentInstance.isSidebarOpen()).toBe(false);
     expect(fixture.nativeElement.querySelector('.backdrop')).toBeNull();
   });
 
@@ -186,9 +186,9 @@ describe('SidebarComponent', () => {
 
   it('closeSidebarOnMobile should not close on desktop width', () => {
     const fixture = createComponent();
-    fixture.componentInstance.isSidebarOpen = true;
+    fixture.componentInstance.isSidebarOpen.set(true);
     // Default jsdom innerWidth is 1024, which is >= 768
     fixture.componentInstance.closeSidebarOnMobile();
-    expect(fixture.componentInstance.isSidebarOpen).toBe(true);
+    expect(fixture.componentInstance.isSidebarOpen()).toBe(true);
   });
 });

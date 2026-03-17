@@ -3,7 +3,7 @@
   <button
     class="hamburger-btn"
     (click)="toggleSidebar()"
-    [attr.aria-expanded]="isSidebarOpen"
+    [attr.aria-expanded]="isSidebarOpen()"
     aria-controls="sidebar-nav"
     aria-label="Toggle navigation menu"
   >
@@ -16,7 +16,7 @@
 <nav
   id="sidebar-nav"
   class="sidebar"
-  [class.open]="isSidebarOpen"
+  [class.open]="isSidebarOpen()"
   aria-label="Main navigation"
 >
   <div class="sidebar-header">Finance Tracker</div>
@@ -35,6 +35,6 @@
 </nav>
 
 <!-- Backdrop for mobile overlay -->
-@if (isSidebarOpen) {
+@if (isSidebarOpen()) {
   <div class="backdrop" (click)="closeSidebar()"></div>
 }
