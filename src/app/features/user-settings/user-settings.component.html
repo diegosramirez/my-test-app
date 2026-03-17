@@ -1,0 +1,33 @@
+<div class="settings-page">
+  <h1>Settings</h1>
+
+  <section class="settings-section">
+    <h2 class="section-header">Appearance</h2>
+
+    <div class="setting-row">
+      <span id="dark-mode-label" class="setting-label">Dark Mode</span>
+      <div class="setting-control">
+        <span class="state-text">{{ theme.darkMode() ? 'On' : 'Off' }}</span>
+        <button
+          role="switch"
+          [attr.aria-checked]="theme.darkMode()"
+          aria-labelledby="dark-mode-label"
+          class="toggle-switch"
+          [class.active]="theme.darkMode()"
+          (click)="onToggle()"
+          (keydown.space)="$event.preventDefault(); onToggle()">
+          <span class="toggle-knob"></span>
+        </button>
+      </div>
+    </div>
+
+    @if (!theme.storageAvailable) {
+      <p class="storage-warning">Your preference can't be saved in this browser.</p>
+    }
+
+    <div class="setting-row disabled">
+      <span class="setting-label">Language</span>
+      <span class="coming-soon">Coming soon</span>
+    </div>
+  </section>
+</div>
