@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, Renderer2, ElementRef, AfterViewInit, OnDestroy, NgZone } from '@angular/core';
+import { Component, HostListener, inject, Renderer2, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavItem } from '../../models/nav-item.model';
@@ -15,7 +15,6 @@ export class SidebarComponent implements AfterViewInit, OnDestroy {
   private renderer = inject(Renderer2);
   private el = inject(ElementRef);
   private analytics = inject(AnalyticsService);
-  private ngZone = inject(NgZone);
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
   private hamburgerButton: HTMLElement | null = null;
 
@@ -55,13 +54,11 @@ export class SidebarComponent implements AfterViewInit, OnDestroy {
     this.isSidebarOpen = !this.isSidebarOpen;
     if (this.isSidebarOpen) {
       this.applyBodyScrollLock();
-      this.ngZone.runOutsideAngular(() => {
-        setTimeout(() => {
-          const firstLink = this.el.nativeElement.querySelector('.sidebar a');
-          if (firstLink) {
-            firstLink.focus();
-          }
-        });
+      queueMicrotask(() => {
+        const firstLink = this.el.nativeElement.querySelector('.sidebar a');
+        if (firstLink) {
+          firstLink.focus();
+        }
       });
     } else {
       this.removeBodyScrollLock();
