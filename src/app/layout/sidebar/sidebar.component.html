@@ -1,0 +1,40 @@
+<!-- Mobile top bar -->
+<div class="mobile-header">
+  <button
+    class="hamburger-btn"
+    (click)="toggleSidebar()"
+    [attr.aria-expanded]="isSidebarOpen"
+    aria-controls="sidebar-nav"
+    aria-label="Toggle navigation menu"
+  >
+    <span class="hamburger-icon">&#9776;</span>
+  </button>
+  <span class="mobile-title">Finance Tracker</span>
+</div>
+
+<!-- Sidebar / drawer -->
+<nav
+  id="sidebar-nav"
+  class="sidebar"
+  [class.open]="isSidebarOpen"
+  aria-label="Main navigation"
+>
+  <div class="sidebar-header">Finance Tracker</div>
+  @for (item of navItems; track item.route) {
+    <a
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+      (click)="onNavLinkClick(item)"
+      class="nav-link"
+    >
+      <span class="nav-icon">{{ item.icon }}</span>
+      <span class="nav-label">{{ item.label }}</span>
+    </a>
+  }
+</nav>
+
+<!-- Backdrop for mobile overlay -->
+@if (isSidebarOpen) {
+  <div class="backdrop" (click)="closeSidebar()"></div>
+}
