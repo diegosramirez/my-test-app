@@ -8,6 +8,18 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
+  <script>
+    try {
+      var stored = localStorage.getItem('darkModeEnabled');
+      if (stored === 'true') {
+        document.body.classList.add('dark-mode');
+      } else if (stored !== 'false') {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.body.classList.add('dark-mode');
+        }
+      }
+    } catch (e) {}
+  </script>
   <app-root></app-root>
 </body>
 </html>
