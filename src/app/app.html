@@ -339,4 +339,13 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
 
+<nav class="top-nav">
+  <button class="palette-trigger" (click)="openPalette()">
+    Search or jump to&hellip;
+    <kbd class="palette-trigger-shortcut">{{ isMac ? '⌘K' : 'Ctrl+K' }}</kbd>
+  </button>
+</nav>
+
 <router-outlet />
+
+<app-command-palette />
