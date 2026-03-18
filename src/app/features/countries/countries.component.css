@@ -1,0 +1,214 @@
+/* ===== Utility ===== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===== Card ===== */
+.card {
+  max-width: 540px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* ===== Header ===== */
+.card-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+/* ===== Toggle Button ===== */
+.toggle-btn {
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  border: 1.5px solid #4361ee;
+  background: transparent;
+  color: #4361ee;
+  white-space: nowrap;
+}
+
+.toggle-btn--show-all {
+  background: #4361ee;
+  color: #fff;
+}
+
+.toggle-btn:focus-visible {
+  outline: 2px solid #4361ee;
+  outline-offset: 2px;
+}
+
+/* ===== Placeholder ===== */
+.placeholder {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  color: #6b7280;
+  opacity: 1;
+}
+
+.placeholder--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ===== Country List ===== */
+.country-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.country-row {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-left: 4px solid transparent;
+  border-radius: 4px;
+}
+
+.country-row:focus-visible {
+  outline: 2px solid #4361ee;
+  outline-offset: 2px;
+}
+
+.country-row--selected {
+  border-left-color: #4361ee;
+  background: #eef2ff;
+}
+
+.country-row__content {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0.5rem 0.75rem;
+  gap: 0.5rem;
+}
+
+.country-row__flag {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.country-row__name {
+  flex: 1;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #1a1a2e;
+}
+
+.country-row__check {
+  color: #4361ee;
+  margin-right: 0.25rem;
+  font-weight: 700;
+}
+
+.country-row__chevron {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: #6b7280;
+  display: inline-block;
+}
+
+.country-row__chevron--open {
+  transform: rotate(90deg);
+}
+
+/* ===== Capital Wrapper — always in DOM, animated via CSS class ===== */
+.capital-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.capital-wrapper.open {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+
+.capital-wrapper__inner {
+  overflow: hidden;
+}
+
+.capital-text {
+  display: block;
+  padding: 0 0.75rem 10px 2rem;
+  font-size: 0.875rem;
+  color: #4361ee;
+  font-weight: 600;
+}
+
+/* ===== Show-All Table ===== */
+.capitals-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.capitals-table thead th {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.capitals-table__row {
+  cursor: default;
+}
+
+.capitals-table__row:nth-child(even) {
+  background: #f9fafb;
+}
+
+.capitals-table__row td {
+  padding: 0.5rem 0.75rem;
+  color: #374151;
+}
+
+/* ===== Animations — only when user has no motion preference ===== */
+@media (prefers-reduced-motion: no-preference) {
+  .capital-wrapper {
+    transition: grid-template-rows 180ms ease-out, visibility 0s 180ms;
+  }
+
+  .capital-wrapper.open {
+    transition: grid-template-rows 180ms ease-out, visibility 0s 0s;
+  }
+
+  .placeholder {
+    transition: opacity 180ms ease-out;
+  }
+
+  .country-row__chevron {
+    transition: transform 180ms ease-out;
+  }
+}

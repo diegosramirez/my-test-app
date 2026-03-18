@@ -1,0 +1,90 @@
+<div class="card">
+  <div class="card-header">
+    <h2>Capitales de Sudam&#233;rica</h2>
+    <button
+      type="button"
+      class="toggle-btn"
+      [class.toggle-btn--show-all]="showAll()"
+      [attr.aria-expanded]="showAll()"
+      (click)="toggleShowAll()"
+    >
+      @if (showAll()) {
+        Explorar una por una
+      } @else {
+        Ver todas las capitales
+      }
+    </button>
+  </div>
+
+  <!-- Persistent aria-live region — never removed from DOM -->
+  <div aria-live="polite" class="sr-only">{{ liveRegionText() }}</div>
+
+  <!-- Placeholder text — always in DOM, toggled via CSS opacity -->
+  <p
+    class="placeholder"
+    [class.placeholder--hidden]="!showPlaceholder()"
+    [attr.aria-hidden]="!showPlaceholder()"
+  >
+    Selecciona un pa&#237;s para ver su capital
+  </p>
+
+  @if (!showAll()) {
+    <!-- Explore mode: interactive list -->
+    <ul role="listbox" class="country-list" aria-label="Pa&#237;ses de Sudam&#233;rica">
+      @for (country of countries; track country.name; let i = $index) {
+        <li
+          #countryRow
+          role="option"
+          class="country-row"
+          [class.country-row--selected]="isSelected(country.name)"
+          [attr.aria-selected]="isSelected(country.name)"
+          [attr.aria-expanded]="isSelected(country.name)"
+          [attr.tabindex]="focusedIndex() === i ? 0 : -1"
+          (click)="selectCountry(country.name)"
+          (keydown)="onCountryKeydown($event, i)"
+        >
+          <div class="country-row__content">
+            <span class="country-row__flag">{{ country.flag }}</span>
+            <span class="country-row__name">
+              @if (isSelected(country.name)) {
+                <span class="country-row__check" aria-hidden="true">&#10003;</span>
+              }
+              {{ country.name }}
+            </span>
+            <span class="country-row__chevron" aria-hidden="true" [class.country-row__chevron--open]="isSelected(country.name)">&#9656;</span>
+          </div>
+          <!-- Capital wrapper: always in DOM, toggled via .open CSS class for reliable transitions -->
+          <!-- grid-template-rows animation requires Chrome 107+, Firefox 66+, Safari 16.4+. Older browsers degrade to instant reveal. -->
+          <div
+            class="capital-wrapper"
+            [class.open]="isSelected(country.name)"
+            [attr.aria-hidden]="!isSelected(country.name)"
+          >
+            <div class="capital-wrapper__inner">
+              <span class="capital-text">{{ country.capital }}</span>
+            </div>
+          </div>
+        </li>
+      }
+    </ul>
+  } @else {
+    <!-- Show-all mode: semantic table -->
+    <table class="capitals-table">
+      <caption class="sr-only">Pa&#237;ses y capitales de Sudam&#233;rica</caption>
+      <thead>
+        <tr>
+          <th scope="col">Pa&#237;s</th>
+          <th scope="col">Capital</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (country of countries; track country.name) {
+          <tr class="capitals-table__row">
+            <td>{{ country.flag }} {{ country.name }}</td>
+            <td>{{ country.capital }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
