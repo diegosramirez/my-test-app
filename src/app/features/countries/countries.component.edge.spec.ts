@@ -1,8 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
 import { CountriesComponent } from './countries.component';
 import { SOUTH_AMERICAN_COUNTRIES } from './country.model';
 
 describe('CountriesComponent — edge cases & failure modes', () => {
+  setupTestBed();
+
   let fixture: ComponentFixture<CountriesComponent>;
   let component: CountriesComponent;
   let el: HTMLElement;
@@ -113,7 +116,6 @@ describe('CountriesComponent — edge cases & failure modes', () => {
   // ===== Checkmark on selection =====
   describe('checkmark indicator', () => {
     it('should show checkmark on selected row only', () => {
-      // Verify no row has a checkmark before selection
       const rowsBefore = el.querySelectorAll('.country-row');
       rowsBefore.forEach((row) => {
         expect(row.querySelector('.country-row__check')).toBeNull();
@@ -123,7 +125,6 @@ describe('CountriesComponent — edge cases & failure modes', () => {
       rows[0].click();
       fixture.detectChanges();
 
-      // Verify only the selected row contains a checkmark
       const updatedRows = el.querySelectorAll('.country-row');
       updatedRows.forEach((row, i) => {
         const check = row.querySelector('.country-row__check');
@@ -181,7 +182,7 @@ describe('CountriesComponent — edge cases & failure modes', () => {
     it('should clear selection and switch to table cleanly', () => {
       const rows = el.querySelectorAll('.country-row') as NodeListOf<HTMLElement>;
       rows[4].click(); // Colombia
-      fixture.detectChanges(); // Ensure selection state is applied before toggling mid-animation
+      fixture.detectChanges();
 
       const btn = el.querySelector('.toggle-btn') as HTMLButtonElement;
       btn.click();
@@ -194,21 +195,26 @@ describe('CountriesComponent — edge cases & failure modes', () => {
     });
   });
 
-  // ===== liveRegionText computed signal =====
+  // ===== liveRegionText computed signal (tested via DOM) =====
   describe('liveRegionText signal', () => {
     it('should return empty string when no selection and no announcement', () => {
-      expect((component as any).liveRegionText()).toBe('');
+      const liveRegion = el.querySelector('[aria-live="polite"]');
+      expect(liveRegion?.textContent?.trim()).toBe('');
     });
 
     it('should return capital text when a country is selected', () => {
       component.selectCountry('Perú');
-      expect((component as any).liveRegionText()).toBe('Capital: Lima');
+      fixture.detectChanges();
+      const liveRegion = el.querySelector('[aria-live="polite"]');
+      expect(liveRegion?.textContent).toContain('Capital: Lima');
     });
 
     it('should prioritize modeAnnouncement over capital text', () => {
       component.selectCountry('Chile');
       component.modeAnnouncement.set('Mostrando todas las capitales');
-      expect((component as any).liveRegionText()).toBe('Mostrando todas las capitales');
+      fixture.detectChanges();
+      const liveRegion = el.querySelector('[aria-live="polite"]');
+      expect(liveRegion?.textContent).toContain('Mostrando todas las capitales');
     });
   });
 
@@ -264,10 +270,8 @@ describe('CountriesComponent — edge cases & failure modes', () => {
       btn.click();
       fixture.detectChanges();
 
-      // Verify no country-row elements exist (table uses different markup)
       expect(el.querySelectorAll('.country-row').length).toBe(0);
 
-      // Table rows exist
       const tableRows = el.querySelectorAll('.capitals-table__row');
       expect(tableRows.length).toBe(12);
     });
@@ -301,21 +305,27 @@ describe('CountriesComponent — edge cases & failure modes', () => {
   // ===== Double toggle show-all restores explore with no pre-selection =====
   describe('double toggle show-all', () => {
     it('should return to explore with no country selected and placeholder visible', () => {
-      // Select a country first
+      vi.useFakeTimers();
+
       const rows = el.querySelectorAll('.country-row') as NodeListOf<HTMLElement>;
       rows[2].click();
       fixture.detectChanges();
 
       const btn = el.querySelector('.toggle-btn') as HTMLButtonElement;
-      btn.click(); // to show-all
+      btn.click();
       fixture.detectChanges();
-      btn.click(); // back to explore
+      vi.runAllTimers(); // flush modeAnnouncement clear from first toggle
+
+      btn.click();
       fixture.detectChanges();
+      vi.runAllTimers(); // flush modeAnnouncement clear from second toggle
 
       expect(component.selectedCountry()).toBeNull();
       expect(component.showAll()).toBe(false);
       const placeholder = el.querySelector('.placeholder');
       expect(placeholder?.getAttribute('aria-hidden')).toBe('false');
+
+      vi.useRealTimers();
     });
   });
 
