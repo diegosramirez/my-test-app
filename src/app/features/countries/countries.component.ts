@@ -2,6 +2,7 @@ import {
   Component,
   computed,
   signal,
+  viewChild,
   viewChildren,
   ElementRef,
   AfterViewInit,
@@ -28,6 +29,9 @@ export class CountriesComponent implements AfterViewInit {
 
   /** Transient mode-switch announcement, cleared after a tick. */
   readonly modeAnnouncement = signal('');
+
+  /** Toggle button ref for focus management after mode switch. */
+  readonly toggleButtonRef = viewChild<ElementRef<HTMLElement>>('toggleButton');
 
   /** Row element refs for programmatic focus management. */
   readonly countryRows = viewChildren<ElementRef<HTMLElement>>('countryRow');
@@ -96,6 +100,17 @@ export class CountriesComponent implements AfterViewInit {
 
     // Clear after a tick so screen readers pick it up
     setTimeout(() => this.modeAnnouncement.set(''), 0);
+
+    // After switching back to explore mode, ensure focus lands on toggle button
+    // (DOM swap via @if can cause focus to fall to <body>)
+    if (!newShowAll) {
+      setTimeout(() => {
+        const btn = this.toggleButtonRef();
+        if (btn) {
+          btn.nativeElement.focus();
+        }
+      }, 0);
+    }
 
     // TODO: emit analytics event — show_all_toggled { mode: string, previous_mode: string }
     void previousMode; // used for future analytics

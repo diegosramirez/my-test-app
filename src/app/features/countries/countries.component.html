@@ -2,6 +2,7 @@
   <div class="card-header">
     <h2>Capitales de Sudam&#233;rica</h2>
     <button
+      #toggleButton
       type="button"
       class="toggle-btn"
       [class.toggle-btn--show-all]="showAll()"
@@ -80,7 +81,7 @@
       <tbody>
         @for (country of countries; track country.name) {
           <tr class="capitals-table__row">
-            <td>{{ country.flag }} {{ country.name }}</td>
+            <td><span class="table-flag">{{ country.flag }}</span> {{ country.name }}</td>
             <td>{{ country.capital }}</td>
           </tr>
         }

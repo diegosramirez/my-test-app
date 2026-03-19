@@ -20,6 +20,8 @@
   background: #fff;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   font-family: system-ui, -apple-system, sans-serif;
+  /* Prevent visual collapse during @if structural swap between modes */
+  min-height: 640px;
 }
 
 /* ===== Header ===== */
@@ -113,6 +115,9 @@
 }
 
 .country-row__flag {
+  min-width: 1.5em;
+  text-align: center;
+  display: inline-block;
   font-size: 1.25rem;
   flex-shrink: 0;
 }
@@ -192,6 +197,13 @@
 .capitals-table__row td {
   padding: 0.5rem 0.75rem;
   color: #374151;
+}
+
+/* ===== Table flag emoji container ===== */
+.table-flag {
+  min-width: 1.5em;
+  text-align: center;
+  display: inline-block;
 }
 
 /* ===== Animations — only when user has no motion preference ===== */
