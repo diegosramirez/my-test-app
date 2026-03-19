@@ -1,7 +1,10 @@
 import { TestBed } from '@angular/core/testing';
+import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
 import { App } from './app';
 
 describe('App', () => {
+  setupTestBed();
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
