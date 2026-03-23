@@ -1,0 +1,18 @@
+<div class="counter-container">
+  <div class="counter-display" data-testid="counter-value" aria-live="polite">{{ counter }}</div>
+
+  <div class="counter-actions">
+    <button (click)="increment()" data-testid="increment-btn">Increment (+1)</button>
+    <button (click)="decrement()" data-testid="decrement-btn">Decrement (−1)</button>
+    <button (click)="reset()" class="reset-btn" data-testid="reset-btn">Reset</button>
+  </div>
+
+  <div class="history-section">
+    <p *ngIf="history.length === 0" class="empty-history" data-testid="empty-history">No actions yet</p>
+    <ul *ngIf="history.length > 0" class="history-list" data-testid="history-list">
+      <li *ngFor="let entry of history" data-testid="history-entry">
+        {{ entry.action }} → {{ entry.resultingValue }}
+      </li>
+    </ul>
+  </div>
+</div>
