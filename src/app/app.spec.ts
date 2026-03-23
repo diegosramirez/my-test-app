@@ -10,14 +10,24 @@ describe('App', () => {
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should render title', async () => {
+  it('should render counter and history components', () => {
     const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, my-test-app');
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('app-counter')).toBeTruthy();
+    expect(el.querySelector('app-history')).toBeTruthy();
+  });
+
+  it('should not contain scaffold remnants in template', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    const html = fixture.nativeElement.innerHTML;
+    expect(html).not.toContain('angular.dev');
+    expect(html).not.toContain('Hello,');
+    expect(html).not.toContain('<svg');
+    expect(html).not.toContain('class="content"');
   });
 });

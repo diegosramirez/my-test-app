@@ -1,12 +1,12 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { CounterComponent } from './components/counter/counter.component';
+import { HistoryComponent } from './components/history/history.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [CounterComponent, HistoryComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('my-test-app');
-}
+export class App {}

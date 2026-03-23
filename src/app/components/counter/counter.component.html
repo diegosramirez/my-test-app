@@ -1,0 +1,25 @@
+<section class="counter-section">
+  <div class="counter-display" aria-live="polite" data-testid="counter-value">
+    {{ service.count() }}
+  </div>
+  <div class="button-row">
+    <div class="button-group">
+      <button
+        data-testid="increment-btn"
+        aria-label="Increment counter by one"
+        (click)="service.increment()"
+      >+1</button>
+      <button
+        data-testid="decrement-btn"
+        aria-label="Decrement counter by one"
+        (click)="service.decrement()"
+      >-1</button>
+    </div>
+    <button
+      class="reset-btn"
+      data-testid="reset-btn"
+      aria-label="Reset counter to zero"
+      (click)="service.reset()"
+    >Reset</button>
+  </div>
+</section>
