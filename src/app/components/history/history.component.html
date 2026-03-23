@@ -1,0 +1,15 @@
+<section class="history-section">
+  <h2>History</h2>
+  @if (reversedHistory().length === 0) {
+    <p class="empty-state">No actions yet</p>
+  } @else {
+    <ul class="history-list" data-testid="history-list">
+      @for (entry of reversedHistory(); track entry.timestamp) {
+        <li class="history-entry" data-testid="history-entry">
+          <span class="action-label">{{ entry.action }}</span>
+          <span class="timestamp">{{ formatTime(entry.timestamp) }}</span>
+        </li>
+      }
+    </ul>
+  }
+</section>
