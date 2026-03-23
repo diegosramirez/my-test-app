@@ -1,0 +1,87 @@
+.counter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 480px;
+  margin: 2rem auto;
+  padding: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.counter-display {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  min-width: 200px;
+  text-align: center;
+  padding: 1rem;
+  line-height: 1.2;
+}
+
+.counter-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+.counter-actions button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.625rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 2px solid #1a1a1a;
+  border-radius: 6px;
+  background: #1a1a1a;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.counter-actions button:active {
+  transform: scale(0.96);
+  background: #333333;
+}
+
+.counter-actions button:focus-visible {
+  outline: 2px solid #4a90d9;
+  outline-offset: 2px;
+}
+
+.counter-actions .reset-btn {
+  background: transparent;
+  color: #555555;
+  border-color: #999999;
+}
+
+.counter-actions .reset-btn:active {
+  background: #e5e5e5;
+  transform: scale(0.96);
+}
+
+.history-section {
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.empty-history {
+  text-align: center;
+  font-style: italic;
+  color: #555555;
+  margin: 0;
+}
+
+.history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.history-list li {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+}
