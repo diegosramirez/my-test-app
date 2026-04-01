@@ -222,8 +222,13 @@ describe('LoginComponent', () => {
     });
 
     it('api error has role=alert', () => {
-      fixture.autoDetectChanges(true);
-      component.errorMessage = 'Some error';
+      // Trigger a real API error to set errorMessage via the component's own logic
+      component.form.get('email')!.setValue('test@example.com');
+      component.form.get('password')!.setValue('password1');
+      fixture.detectChanges();
+      component.onSubmit();
+      fixture.detectChanges();
+      httpMock.expectOne('/api/auth/login').flush('', { status: 500, statusText: 'Error' });
       fixture.detectChanges();
       const apiErr = fixture.nativeElement.querySelector('.api-error');
       expect(apiErr?.getAttribute('role')).toBe('alert');
