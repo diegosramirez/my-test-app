@@ -1,0 +1,49 @@
+@if (state === 'loading') {
+  <app-loading-spinner label="Loading note..."></app-loading-spinner>
+} @else if (state === 'error') {
+  <app-error-message [message]="errorMessage" (retry)="loadNote()"></app-error-message>
+} @else if (note) {
+  <article class="note-detail">
+    <header>
+      <h2>{{ note.title }}</h2>
+      <div class="timestamps">
+        <time>Created {{ note.createdAt | relativeTime }}</time>
+        @if (showUpdatedAt) {
+          <time> &middot; Updated {{ note.updatedAt | relativeTime }}</time>
+        }
+      </div>
+    </header>
+
+    <div class="note-content">{{ note.content }}</div>
+
+    @if (deleteState === 'error' && errorMessage) {
+      <app-error-message [message]="errorMessage" [retryable]="false"></app-error-message>
+    }
+
+    <div class="actions">
+      @if (!showDeleteConfirm) {
+        <button class="btn-primary" (click)="onEdit()">Edit</button>
+        <button class="btn-delete" (click)="onDeleteClick()">Delete</button>
+      } @else {
+        <div class="delete-confirm" role="alertdialog" aria-label="Confirm deletion">
+          <p>Delete this note? This cannot be undone.</p>
+          <div class="delete-confirm-actions">
+            <button
+              #confirmDeleteBtn
+              class="btn-danger"
+              (click)="onConfirmDelete()"
+              [disabled]="deleteState === 'loading'"
+            >
+              @if (deleteState === 'loading') {
+                Deleting...
+              } @else {
+                Confirm Delete
+              }
+            </button>
+            <button class="btn-secondary" (click)="onCancelDelete()">Cancel</button>
+          </div>
+        </div>
+      }
+    </div>
+  </article>
+}

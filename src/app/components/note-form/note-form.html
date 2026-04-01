@@ -1,0 +1,103 @@
+@if (state === 'loading') {
+  <app-loading-spinner label="Loading note..."></app-loading-spinner>
+} @else if (state === 'error') {
+  <app-error-message [message]="errorMessage" [retryable]="false"></app-error-message>
+} @else {
+  <div class="form-container">
+    <h2>{{ isEditMode ? 'Edit Note' : 'New Note' }}</h2>
+
+    @if (serverErrors.length > 0) {
+      <div class="server-errors" role="alert">
+        @for (err of serverErrors; track err) {
+          <p class="server-error">{{ err }}</p>
+        }
+      </div>
+    }
+
+    @if (submitState === 'error' && errorMessage) {
+      <app-error-message [message]="errorMessage" [retryable]="false"></app-error-message>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="field">
+        <label for="title">Title</label>
+        <input
+          #titleInput
+          id="title"
+          type="text"
+          formControlName="title"
+          [attr.aria-invalid]="titleControl.invalid && titleControl.touched"
+          [attr.aria-describedby]="'title-error title-counter'"
+        >
+        <div class="field-meta">
+          <span id="title-error" class="field-error" aria-live="polite">
+            @if (titleControl.touched && titleControl.errors) {
+              @if (titleControl.errors['required']) {
+                Title is required.
+              } @else if (titleControl.errors['maxlength']) {
+                Title must not exceed {{ TITLE_MAX }} characters.
+              }
+            }
+          </span>
+          <span id="title-counter" class="char-counter">
+            {{ (titleControl.value || '').length }}/{{ TITLE_MAX }}
+          </span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="content">Content</label>
+        <textarea
+          id="content"
+          formControlName="content"
+          rows="10"
+          [attr.aria-invalid]="contentControl.invalid && contentControl.touched"
+          [attr.aria-describedby]="'content-error content-counter'"
+        ></textarea>
+        <div class="field-meta">
+          <span id="content-error" class="field-error" aria-live="polite">
+            @if (contentControl.touched && contentControl.errors) {
+              @if (contentControl.errors['required']) {
+                Content is required.
+              } @else if (contentControl.errors['maxlength']) {
+                Content must not exceed {{ CONTENT_MAX }} characters.
+              }
+            }
+          </span>
+          <span id="content-counter" class="char-counter">
+            {{ (contentControl.value || '').length }}/{{ CONTENT_MAX }}
+          </span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="form.invalid || submitState === 'loading'"
+        >
+          @if (submitState === 'loading') {
+            Saving...
+          } @else {
+            {{ isEditMode ? 'Update Note' : 'Save Note' }}
+          }
+        </button>
+        <button type="button" class="btn-secondary" (click)="router.navigate(['/notes'])">
+          Cancel
+        </button>
+      </div>
+    </form>
+
+    @if (showDiscardConfirmation) {
+      <div class="discard-overlay">
+        <div class="discard-dialog" role="alertdialog" aria-label="Unsaved changes">
+          <p>You have unsaved changes. Discard?</p>
+          <div class="discard-actions">
+            <button class="btn-danger" (click)="onDiscard(true)">Discard</button>
+            <button class="btn-secondary" (click)="onDiscard(false)">Keep Editing</button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}
