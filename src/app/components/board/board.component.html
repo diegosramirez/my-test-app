@@ -1,0 +1,24 @@
+@if (board$ | async; as board) {
+  <div class="board">
+    @if (isBoardEmpty && !activeAddFormColumnId) {
+      <p class="board__empty">Your board is empty. Add a task to get started.</p>
+    }
+    <div class="board__columns">
+      @for (column of board.columns; track column.id) {
+        <app-column
+          [column]="column"
+          [allColumnIds]="allColumnIds"
+          [allColumnTitles]="allColumnTitles"
+          [isAddFormOpen]="activeAddFormColumnId === column.id"
+          (addFormToggled)="onAddFormToggled($event)"
+        />
+      }
+    </div>
+    @if (deleteBuffer) {
+      <div class="board__snackbar" role="status" aria-live="polite">
+        <span>Task deleted.</span>
+        <button class="board__undo-btn" (click)="undoDelete()" type="button">Undo</button>
+      </div>
+    }
+  </div>
+}

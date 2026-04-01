@@ -1,0 +1,92 @@
+<div class="column" [ngClass]="'column--' + column.id">
+  <div class="column__header">
+    <h3 class="column__title">{{ column.title }}</h3>
+    <span class="column__count">{{ column.tasks.length }}</span>
+  </div>
+
+  <div
+    cdkDropList
+    [id]="column.id"
+    [cdkDropListData]="column.tasks"
+    [cdkDropListConnectedTo]="allColumnIds"
+    (cdkDropListDropped)="onDrop($event)"
+    [attr.aria-label]="dropListLabel"
+    class="column__task-list"
+  >
+    @if (column.tasks.length === 0 && !isAddFormOpen) {
+      <p class="column__empty">No tasks yet</p>
+    }
+
+    @for (task of column.tasks; track task.id) {
+      <div
+        cdkDrag
+        [cdkDragData]="task"
+        [cdkDragDisabled]="editingTaskId === task.id"
+        class="column__card-wrapper"
+      >
+        <div class="column__placeholder" *cdkDragPlaceholder></div>
+        <app-card
+          #card
+          [task]="task"
+          [columnId]="column.id"
+          [allColumnIds]="allColumnIds"
+          [allColumnTitles]="allColumnTitles"
+          (taskUpdated)="onTaskUpdated(task.id, $event)"
+          (taskDeleted)="onTaskDeleted(task.id)"
+          (taskMoved)="onTaskMoved(task.id, $event)"
+          (editStarted)="editingTaskId = task.id"
+          (editEnded)="editingTaskId = null"
+        />
+      </div>
+    }
+  </div>
+
+  @if (isAddFormOpen) {
+    <div class="column__add-form">
+      <div class="column__field">
+        <input
+          #newTitleInput
+          class="column__input"
+          [class.column__input--invalid]="newTitleInvalid"
+          [(ngModel)]="newTitle"
+          (keydown)="onAddKeydown($event)"
+          (blur)="newTitleTouched = true"
+          [maxlength]="100"
+          placeholder="Task title"
+          aria-label="New task title"
+        />
+        @if (newTitleInvalid) {
+          <span class="column__error">Title is required</span>
+        }
+        <span class="column__counter">{{ newTitle.length }}/100</span>
+      </div>
+      <div class="column__field">
+        <textarea
+          class="column__textarea"
+          [(ngModel)]="newDescription"
+          (keydown.escape)="cancelAdd()"
+          [maxlength]="500"
+          placeholder="Description (optional)"
+          rows="2"
+          aria-label="New task description"
+        ></textarea>
+        <span class="column__counter">{{ newDescription.length }}/500</span>
+      </div>
+      <div class="column__form-actions">
+        <button class="column__btn column__btn--save" (click)="submitTask()" type="button">Save</button>
+        <button class="column__btn column__btn--cancel" (click)="cancelAdd()" type="button">Cancel</button>
+      </div>
+    </div>
+  }
+
+  @if (!isAddFormOpen) {
+    <button
+      class="column__add-btn"
+      (click)="toggleAddForm()"
+      [attr.aria-label]="'Add task to ' + column.title + ' column'"
+      type="button"
+    >
+      + Add Task
+    </button>
+  }
+</div>

@@ -1,0 +1,229 @@
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: var(--bg-card, #fff);
+  border-radius: var(--radius, 8px);
+  box-shadow: var(--shadow-card, 0 1px 3px rgba(0, 0, 0, 0.12));
+  padding: 12px;
+  position: relative;
+  animation: fadeSlideUp 150ms ease forwards;
+  flex-wrap: wrap;
+}
+
+.card--editing {
+  flex-direction: column;
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card__drag-handle {
+  cursor: grab;
+  color: #90a4ae;
+  flex-shrink: 0;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.card__drag-handle:active {
+  cursor: grabbing;
+}
+
+.card__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.card__title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #263238;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card__description {
+  font-size: 0.8rem;
+  color: #607d8b;
+  margin: 4px 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+.card__actions {
+  display: none;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.card:hover .card__actions {
+  display: flex;
+}
+
+.card__action-btn {
+  background: none;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 4px;
+  cursor: pointer;
+  color: #607d8b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card__action-btn:hover {
+  background: #f5f5f5;
+  color: #263238;
+}
+
+.card__action-btn--delete:hover {
+  color: #e53935;
+  border-color: #e53935;
+}
+
+.card__move-menu {
+  display: none;
+  width: 100%;
+  gap: 4px;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid #eee;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.card:hover .card__move-menu {
+  display: flex;
+}
+
+.card__move-label {
+  font-size: 0.7rem;
+  color: #90a4ae;
+}
+
+.card__move-btn {
+  font-size: 0.7rem;
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+  color: #455a64;
+}
+
+.card__move-btn:hover {
+  background: #e3f2fd;
+  border-color: #90caf9;
+}
+
+/* Edit form */
+.card__edit-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card__field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card__edit-input,
+.card__edit-textarea {
+  font-family: inherit;
+  font-size: 0.875rem;
+  border: 1px solid #cfd8dc;
+  border-radius: 4px;
+  padding: 6px 8px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.card__edit-input:focus,
+.card__edit-textarea:focus {
+  border-color: #42a5f5;
+  box-shadow: 0 0 0 2px rgba(66, 165, 245, 0.2);
+}
+
+.card__edit-input--invalid {
+  border-color: #e53935;
+}
+
+.card__edit-textarea {
+  resize: vertical;
+  min-height: 48px;
+  max-height: 96px;
+}
+
+.card__error {
+  font-size: 0.75rem;
+  color: #e53935;
+}
+
+.card__counter {
+  font-size: 0.7rem;
+  color: #b0bec5;
+  text-align: right;
+}
+
+.card__edit-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.card__btn {
+  font-size: 0.8rem;
+  font-family: inherit;
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.card__btn--save {
+  background: #42a5f5;
+  color: #fff;
+}
+
+.card__btn--save:hover {
+  background: #1e88e5;
+}
+
+.card__btn--cancel {
+  background: #eceff1;
+  color: #455a64;
+}
+
+.card__btn--cancel:hover {
+  background: #cfd8dc;
+}
+
+/* Mobile: always show actions */
+@media (max-width: 768px) {
+  .card__actions {
+    display: flex;
+  }
+
+  .card__move-menu {
+    display: flex;
+  }
+}
