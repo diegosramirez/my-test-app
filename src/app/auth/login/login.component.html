@@ -1,0 +1,87 @@
+<main class="auth-page">
+  <div class="auth-card">
+    <h1>Log in</h1>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-field">
+        <label for="login-email">Email</label>
+        <input
+          id="login-email"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          [attr.aria-invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+          [attr.aria-describedby]="form.get('email')?.invalid && form.get('email')?.touched ? 'login-email-error' : null"
+        />
+        @if (form.get('email')?.invalid && form.get('email')?.touched) {
+          <div id="login-email-error" class="field-error" role="alert">
+            <span class="error-icon" aria-hidden="true">&#9888;</span>
+            @if (form.get('email')?.hasError('required')) {
+              Email is required
+            } @else {
+              Please enter a valid email address
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="login-password">Password</label>
+        <div class="password-wrapper">
+          <input
+            id="login-password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            autocomplete="current-password"
+            [attr.aria-invalid]="form.get('password')?.invalid && form.get('password')?.touched"
+            [attr.aria-describedby]="form.get('password')?.invalid && form.get('password')?.touched ? 'login-password-error' : null"
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+          >
+            @if (showPassword) {
+              <span class="eye-icon" aria-hidden="true">&#128065;&#xFE0E;</span>
+            } @else {
+              <span class="eye-icon" aria-hidden="true">&#128065;&#xFE0E;</span>
+            }
+          </button>
+        </div>
+        @if (form.get('password')?.invalid && form.get('password')?.touched) {
+          <div id="login-password-error" class="field-error" role="alert">
+            <span class="error-icon" aria-hidden="true">&#9888;</span>
+            @if (form.get('password')?.hasError('required')) {
+              Password is required
+            } @else {
+              Password must be at least 8 characters
+            }
+          </div>
+        }
+      </div>
+
+      @if (errorMessage) {
+        <div class="api-error" role="alert">
+          <span class="error-icon" aria-hidden="true">&#9888;</span>
+          {{ errorMessage }}
+        </div>
+      }
+
+      <button type="submit" class="submit-btn" [disabled]="form.invalid || loading">
+        @if (loading) {
+          <span class="spinner" aria-hidden="true"></span>
+          Logging in...
+        } @else {
+          Log in
+        }
+      </button>
+    </form>
+
+    <!-- Reserved space for future "Forgot password?" link -->
+    <div class="forgot-password-placeholder"></div>
+
+    <p class="auth-link">
+      Don't have an account? <a routerLink="/register" [queryParams]="{ returnUrl: returnUrl }">Register</a>
+    </p>
+  </div>
+</main>
