@@ -1,0 +1,53 @@
+<div class="layout">
+  <aside class="sidebar" [class.hidden-mobile]="!showSidebar">
+    <header class="sidebar-header">
+      <h2>Notes</h2>
+      <button class="btn-new" (click)="onNewNote()" aria-label="Create new note">+ New Note</button>
+    </header>
+
+    @if (state === 'loading') {
+      <app-loading-spinner label="Loading notes..."></app-loading-spinner>
+    } @else if (state === 'error') {
+      <app-error-message [message]="errorMessage" (retry)="loadNotes()"></app-error-message>
+    } @else if (notes.length === 0) {
+      <div class="empty-state">
+        <p>No notes yet. Create your first one!</p>
+        <button class="btn-new" (click)="onNewNote()">+ New Note</button>
+      </div>
+    } @else {
+      <nav aria-label="Notes list">
+        <ul class="notes-list" role="list">
+          @for (note of notes; track note.id) {
+            <li>
+              <button
+                class="note-item"
+                [class.active]="selectedNoteId === note.id"
+                [attr.aria-current]="selectedNoteId === note.id ? 'true' : null"
+                (click)="onSelectNote(note.id)"
+              >
+                <span class="note-title">{{ note.title }}</span>
+                <span class="note-preview">{{ truncate(note.content) }}</span>
+                <span class="note-time">{{ note.updatedAt | relativeTime }}</span>
+              </button>
+            </li>
+          }
+        </ul>
+      </nav>
+    }
+  </aside>
+
+  <main class="detail-area" [class.hidden-mobile]="showSidebar && hasChildRoute === false">
+    @if (hasChildRoute) {
+      <button class="back-btn" (click)="onBackToList()" aria-label="Back to notes list">
+        &larr; Back
+      </button>
+    }
+    @if (hasChildRoute) {
+      <router-outlet></router-outlet>
+    } @else {
+      <div class="placeholder">
+        <p>Select a note to view it, or create a new one.</p>
+      </div>
+    }
+  </main>
+</div>
