@@ -55,8 +55,13 @@ export class WebSocketService {
   }
 
   send(envelope: WsEnvelope<unknown>): void {
-    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(JSON.stringify(envelope));
+    if (this.socket && this.socket.readyState === 1) { // 1 = OPEN state
+      try {
+        this.socket.send(JSON.stringify(envelope));
+      } catch (error) {
+        console.error('Failed to serialize WebSocket message:', error);
+        // Don't crash the service - silently handle the error
+      }
     }
   }
 
