@@ -1,59 +1,102 @@
-# MyTestApp
+# SAM1 Chat
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
+Full-stack chat application with an Angular frontend and TypeScript Express backend.
 
-## Development server
+## Prerequisites
 
-To start a local development server, run:
+- Node.js >= 18
+- npm >= 9
 
-```bash
-ng serve
-```
+## Install
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Install all dependencies (frontend + backend) from the project root:
 
 ```bash
-ng generate component component-name
+npm run install:all
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Run Frontend
 
 ```bash
-ng generate --help
+npm start
 ```
 
-## Building
+Frontend runs on **http://localhost:4200**. The Angular dev server proxies `/api` requests to the backend via `proxy.conf.json`.
 
-To build the project run:
+## Run Backend
 
 ```bash
-ng build
+cd server
+npm run dev
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Backend runs on **http://localhost:3000** by default. Override with the `PORT` environment variable:
 
 ```bash
-ng test
+PORT=8080 npm run dev
 ```
 
-## Running end-to-end tests
+## Run Both
 
-For end-to-end (e2e) testing, run:
+Start both frontend and backend concurrently from the project root:
 
 ```bash
-ng e2e
+npm run dev
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Run Tests
 
-## Additional Resources
+Frontend tests (from project root):
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```bash
+npx ng test --watch=false
+```
+
+Backend tests:
+
+```bash
+cd server
+npm test
+```
+
+## Project Structure
+
+```
+.
+├── proxy.conf.json              # Dev proxy: /api -> localhost:3000
+├── angular.json                 # Angular CLI configuration
+├── package.json                 # Root package.json (frontend + orchestration)
+├── tsconfig.json                # Frontend TypeScript config
+├── src/
+│   ├── index.html               # App shell (title: SAM1 Chat)
+│   ├── main.ts                  # Angular bootstrap
+│   ├── styles.css               # Global styles (minimal reset)
+│   └── app/
+│       ├── app.ts               # Root component (standalone, inline template)
+│       ├── app.spec.ts          # Root component tests
+│       ├── app.config.ts        # Application providers
+│       ├── app.routes.ts        # Route definitions
+│       ├── components/
+│       │   └── index.ts         # Barrel file
+│       ├── models/
+│       │   ├── health.interface.ts  # HealthResponse interface
+│       │   └── index.ts         # Barrel file
+│       ├── pages/
+│       │   └── index.ts         # Barrel file
+│       └── services/
+│           └── index.ts         # Barrel file
+└── server/
+    ├── package.json             # Backend dependencies
+    ├── tsconfig.json            # Backend TypeScript config
+    └── src/
+        ├── index.ts             # Express entry point
+        └── routes/
+            ├── health.ts        # GET /api/health endpoint
+            └── health.test.ts   # Health endpoint integration test
+```
+
+## Notes
+
+- The favicon was removed during scaffold cleanup. Add a custom favicon to `public/` when branding is finalized.
+- The Angular dev proxy (`proxy.conf.json`) forwards `/api` requests to the Express backend, avoiding CORS issues during development. The backend also configures CORS for `http://localhost:4200` for direct API testing (curl, Postman).
+- `provideHttpClient()` is configured without interceptors. When auth is added, switch to `provideHttpClient(withInterceptors([...]))`.
