@@ -28,15 +28,15 @@ describe('FormRendererPanelComponent', () => {
 
   it('should create FormGroup controls for new fields', () => {
     setSchema({ fields: [makeTextField('a'), makeTextField('b')], version: 1 });
-    expect(component.formGroup.contains('a')).toBe(true);
-    expect(component.formGroup.contains('b')).toBe(true);
+    expect(component.formGroup.get('a')).not.toBeNull();
+    expect(component.formGroup.get('b')).not.toBeNull();
   });
 
   it('should remove controls for deleted fields', () => {
     setSchema({ fields: [makeTextField('a'), makeTextField('b')], version: 1 });
     setSchema({ fields: [makeTextField('a')], version: 2 });
-    expect(component.formGroup.contains('a')).toBe(true);
-    expect(component.formGroup.contains('b')).toBe(false);
+    expect(component.formGroup.get('a')).not.toBeNull();
+    expect(component.formGroup.get('b')).toBeNull();
   });
 
   it('should preserve user values on label-only change', () => {
@@ -111,6 +111,7 @@ describe('FormRendererPanelComponent', () => {
   it('should set emptyOptions error for select with no options', () => {
     const selectField: FormFieldDefinition = { id: 's', type: 'select', label: 'S', validation: {}, options: [] };
     setSchema({ fields: [selectField], version: 1 });
+    setMode('fill');
     expect(component.getControl('s').hasError('emptyOptions')).toBe(true);
   });
 
