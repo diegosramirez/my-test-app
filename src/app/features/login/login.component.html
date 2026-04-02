@@ -1,0 +1,71 @@
+<div class="auth-card">
+  <h1 #pageTitle tabindex="-1">Log In</h1>
+
+  @if (successMessage()) {
+    <div class="banner banner-success" role="status" aria-live="polite">
+      <span>⚠ {{ successMessage() }}</span>
+      <button type="button" class="banner-dismiss" (click)="dismissSuccess()" aria-label="Dismiss message">×</button>
+    </div>
+  }
+
+  @if (sessionExpiredMessage()) {
+    <div class="banner banner-warning" role="status" aria-live="polite">
+      <span>⚠ {{ sessionExpiredMessage() }}</span>
+      <button type="button" class="banner-dismiss" (click)="dismissSessionExpired()" aria-label="Dismiss message">×</button>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="error-banner" role="alert" aria-live="polite" id="login-error">
+      <span>⚠ {{ errorMessage() }}</span>
+    </div>
+  }
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="form-field">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        autocomplete="email"
+        [attr.aria-describedby]="isFieldInvalid('email') ? 'email-error' : null"
+        [attr.aria-invalid]="isFieldInvalid('email')"
+      />
+      @if (isFieldInvalid('email')) {
+        <div class="field-error" id="email-error" aria-live="polite">
+          <span>⚠ Email is required and must be valid.</span>
+        </div>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        autocomplete="current-password"
+        [attr.aria-describedby]="isFieldInvalid('password') ? 'password-error' : null"
+        [attr.aria-invalid]="isFieldInvalid('password')"
+      />
+      @if (isFieldInvalid('password')) {
+        <div class="field-error" id="password-error" aria-live="polite">
+          <span>⚠ Password is required.</span>
+        </div>
+      }
+    </div>
+
+    <button type="submit" class="btn-primary" [disabled]="loading()">
+      @if (loading()) {
+        <span class="spinner" aria-hidden="true"></span> Logging in…
+      } @else {
+        Log In
+      }
+    </button>
+  </form>
+
+  <p class="auth-link">
+    Don't have an account? <a routerLink="/register">Register</a>
+  </p>
+</div>
