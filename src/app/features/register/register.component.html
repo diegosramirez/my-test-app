@@ -1,0 +1,100 @@
+<div class="auth-card">
+  <h1 #pageTitle tabindex="-1">Register</h1>
+
+  @if (errorMessage()) {
+    <div class="error-banner" role="alert" aria-live="polite">
+      <span>⚠ {{ errorMessage() }}</span>
+    </div>
+  }
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="form-field">
+      <label for="username">Username</label>
+      <input
+        id="username"
+        type="text"
+        formControlName="username"
+        autocomplete="username"
+        [attr.aria-describedby]="isFieldInvalid('username') ? 'username-error' : null"
+        [attr.aria-invalid]="isFieldInvalid('username')"
+      />
+      @if (isFieldInvalid('username') && getFieldError('username')) {
+        <div class="field-error" id="username-error" aria-live="polite">
+          <span>⚠ {{ getFieldError('username') }}</span>
+        </div>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        autocomplete="email"
+        [attr.aria-describedby]="isFieldInvalid('email') ? 'email-error' : null"
+        [attr.aria-invalid]="isFieldInvalid('email')"
+      />
+      @if (duplicateEmailError()) {
+        <div class="field-error" id="email-error" aria-live="polite">
+          <span>⚠ This email is already registered — try <a routerLink="/login">logging in</a> instead.</span>
+        </div>
+      } @else if (isFieldInvalid('email') && getFieldError('email')) {
+        <div class="field-error" id="email-error" aria-live="polite">
+          <span>⚠ {{ getFieldError('email') }}</span>
+        </div>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        autocomplete="new-password"
+        [attr.aria-describedby]="isFieldInvalid('password') ? 'password-error' : null"
+        [attr.aria-invalid]="isFieldInvalid('password')"
+      />
+      <div class="field-hint">Minimum 8 characters.</div>
+      @if (isFieldInvalid('password') && getFieldError('password')) {
+        <div class="field-error" id="password-error" aria-live="polite">
+          <span>⚠ {{ getFieldError('password') }}</span>
+        </div>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="confirmPassword">Confirm Password</label>
+      <input
+        id="confirmPassword"
+        type="password"
+        formControlName="confirmPassword"
+        autocomplete="new-password"
+        [attr.aria-describedby]="(isFieldInvalid('confirmPassword') || showPasswordMismatch()) ? 'confirmPassword-error' : null"
+        [attr.aria-invalid]="isFieldInvalid('confirmPassword') || showPasswordMismatch()"
+      />
+      @if (showPasswordMismatch()) {
+        <div class="field-error" id="confirmPassword-error" aria-live="polite">
+          <span>⚠ Passwords do not match.</span>
+        </div>
+      } @else if (isFieldInvalid('confirmPassword') && getFieldError('confirmPassword')) {
+        <div class="field-error" id="confirmPassword-error" aria-live="polite">
+          <span>⚠ {{ getFieldError('confirmPassword') }}</span>
+        </div>
+      }
+    </div>
+
+    <button type="submit" class="btn-primary" [disabled]="loading()">
+      @if (loading()) {
+        <span class="spinner" aria-hidden="true"></span> Registering…
+      } @else {
+        Register
+      }
+    </button>
+  </form>
+
+  <p class="auth-link">
+    Already have an account? <a routerLink="/login">Log In</a>
+  </p>
+</div>
