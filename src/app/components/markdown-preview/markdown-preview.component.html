@@ -1,0 +1,100 @@
+<div class="markdown-preview-container"
+     [class.mobile-view]="isMobileView"
+     [class.show-editor]="isMobileView && !mobileShowPreview"
+     [class.disabled]="disabled">
+  <!-- Error Alert (if any) -->
+  <div *ngIf="state.error && componentConfig.enableErrorIndicators"
+       class="error-alert">
+    <span class="error-icon">⚠️</span>
+    <span class="error-message">{{ state.error }}</span>
+  </div>
+
+  <!-- Main Content Panels -->
+  <div class="content-panels" [class.stacked]="isMobileView">
+
+    <!-- Input Panel -->
+    <div class="input-panel" [class.disabled]="disabled">
+      <div class="panel-header">
+        <h3 class="panel-title">Markdown</h3>
+        <div class="panel-info">
+          <span class="character-count">
+            {{ state.contentLength }}
+            <span *ngIf="componentConfig.maxContentLength">
+              / {{ componentConfig.maxContentLength }}
+            </span>
+            characters
+          </span>
+          <span *ngIf="state.isLoading" class="loading-indicator">
+            <span class="spinner"></span>
+            Parsing...
+          </span>
+        </div>
+      </div>
+
+      <div class="textarea-container">
+        <textarea
+          #textareaElement
+          [(ngModel)]="state.rawContent"
+          (ngModelChange)="onContentChange($event)"
+          [disabled]="disabled"
+          [placeholder]="componentConfig.placeholder"
+          class="markdown-textarea"
+          spellcheck="false"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off">
+        </textarea>
+
+        <!-- Resize handle for desktop -->
+        <div *ngIf="!isMobileView" class="resize-handle" title="Resize panels"></div>
+      </div>
+    </div>
+
+    <!-- Preview Panel -->
+    <div class="preview-panel">
+      <div class="panel-header">
+        <h3 class="panel-title">Preview</h3>
+        <div class="panel-info">
+          <span *ngIf="state.lastUpdated" class="last-updated">
+            Updated {{ getTimeAgo(state.lastUpdated) }}
+          </span>
+        </div>
+      </div>
+
+      <div class="preview-container">
+        <div
+          #previewElement
+          class="preview-content"
+          [class.has-error]="state.error"
+          [innerHTML]="state.parsedHtml">
+        </div>
+
+        <!-- Empty state -->
+        <div *ngIf="!state.parsedHtml && !state.error && !state.isLoading"
+             class="empty-state">
+          <div class="empty-state-icon">📝</div>
+          <p class="empty-state-text">Start typing markdown to see the preview</p>
+        </div>
+
+        <!-- Loading overlay -->
+        <div *ngIf="state.isLoading" class="loading-overlay">
+          <div class="loading-content">
+            <span class="spinner large"></span>
+            <p>Parsing markdown...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Toggle (for stacked view) -->
+  <div *ngIf="isMobileView" class="mobile-toggle">
+    <button
+      type="button"
+      class="toggle-button"
+      (click)="toggleMobileView()"
+      [class.active]="mobileShowPreview">
+      {{ mobileShowPreview ? 'Show Editor' : 'Show Preview' }}
+    </button>
+  </div>
+</div>
