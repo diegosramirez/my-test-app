@@ -1,0 +1,77 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.weather-app {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.main-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Global typography improvements */
+* {
+  box-sizing: border-box;
+}
+
+/* Smooth scrolling for keyboard navigation */
+:focus {
+  scroll-margin-top: 2rem;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :host {
+    background: #fff;
+    color: #000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :host {
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+    color: #e2e8f0;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .weather-app {
+    padding: 1rem 0.5rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+
+  .main-container {
+    max-width: none;
+    width: 100%;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .weather-app {
+    padding: 0.5rem;
+    padding-top: 1rem;
+  }
+}

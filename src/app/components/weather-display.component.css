@@ -1,0 +1,211 @@
+.weather-card {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.weather-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.3; }
+  50% { transform: rotate(180deg) scale(1.1); opacity: 0.1; }
+}
+
+.weather-header {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 1.5rem;
+}
+
+.city-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.weather-content {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2rem;
+}
+
+.temperature-section {
+  margin-bottom: 1.5rem;
+}
+
+.temperature {
+  font-size: 4rem;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.condition {
+  font-size: 1.25rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  opacity: 0.9;
+}
+
+.weather-details {
+  text-align: center;
+}
+
+.description {
+  font-size: 1rem;
+  text-transform: capitalize;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.additional-info {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+}
+
+.info-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+  margin-bottom: 0.25rem;
+}
+
+.info-value {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.weather-footer {
+  position: relative;
+  z-index: 1;
+}
+
+.new-search-button {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 0.75rem 2rem;
+  border-radius: 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  min-height: 44px; /* Accessibility: minimum touch target */
+}
+
+.new-search-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.new-search-button:active {
+  transform: translateY(0);
+}
+
+.new-search-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .weather-card {
+    margin: 1rem;
+    padding: 1.5rem;
+    max-width: none;
+  }
+
+  .temperature {
+    font-size: 3rem;
+  }
+
+  .city-name {
+    font-size: 1.25rem;
+  }
+
+  .additional-info {
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .new-search-button {
+    width: 100%;
+    padding: 1rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .weather-card {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  }
+
+  .new-search-button {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+
+  .new-search-button:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .weather-card::before {
+    animation: none;
+  }
+
+  .new-search-button:hover {
+    transform: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .weather-card {
+    background: #000;
+    border: 2px solid #fff;
+  }
+
+  .new-search-button {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+  }
+}
