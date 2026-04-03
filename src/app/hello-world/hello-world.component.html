@@ -1,0 +1,12 @@
+<div class="hello-world-container">
+  <main class="hello-world-content">
+    <h1 class="greeting">Hello World</h1>
+    <div class="date-container">
+      <p class="date-text" [attr.aria-label]="currentDate && !dateError ? 'Current date: ' + (currentDate | date:'MMMM d, yyyy') : 'Current date: Date unavailable'">
+        <span class="visually-hidden">Today is </span>
+        <span *ngIf="currentDate && !dateError">{{ currentDate | date:'MMMM d, yyyy' }}</span>
+        <span *ngIf="dateError || !currentDate" class="date-fallback">Date unavailable</span>
+      </p>
+    </div>
+  </main>
+</div>
