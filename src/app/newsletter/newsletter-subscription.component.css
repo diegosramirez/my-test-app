@@ -1,0 +1,355 @@
+.newsletter-subscription {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 3rem 1rem;
+  margin: 2rem auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  position: relative;
+  overflow: hidden;
+}
+
+.newsletter-subscription::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+}
+
+.newsletter-container {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.newsletter-title {
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.025em;
+}
+
+.newsletter-description {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0 0 2rem 0;
+}
+
+.newsletter-form {
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.email-label {
+  display: block;
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.email-input {
+  width: 100%;
+  padding: 0.875rem 3rem 0.875rem 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #334155;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.email-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  background: white;
+}
+
+.email-input.valid {
+  border-color: #10b981;
+  background: rgba(236, 253, 245, 0.95);
+}
+
+.email-input.error {
+  border-color: #ef4444;
+  background: rgba(254, 242, 242, 0.95);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.email-input::placeholder {
+  color: #94a3b8;
+}
+
+.input-icons {
+  position: absolute;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.success-icon {
+  color: #10b981;
+  font-size: 1.25rem;
+  font-weight: bold;
+  animation: successPulse 0.3s ease;
+}
+
+@keyframes successPulse {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.loading-spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #e2e8f0;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(254, 242, 242, 0.9);
+  border-radius: 6px;
+  border-left: 4px solid #ef4444;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+  transform: translateY(-1px);
+}
+
+.submit-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+.submit-button:focus {
+  outline: none;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3), 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+.success-message {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+  animation: successSlideIn 0.4s ease;
+  margin-top: 1rem;
+}
+
+@keyframes successSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.success-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  text-align: left;
+}
+
+.success-content .success-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.success-text {
+  flex: 1;
+}
+
+.success-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+}
+
+.success-description {
+  font-size: 0.875rem;
+  margin: 0 0 0.5rem 0;
+  opacity: 0.95;
+}
+
+.success-next-steps {
+  font-size: 0.75rem;
+  margin: 0;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .newsletter-subscription {
+    margin: 1rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .newsletter-title {
+    font-size: 1.75rem;
+  }
+
+  .newsletter-description {
+    font-size: 0.875rem;
+  }
+
+  .email-input {
+    padding: 0.75rem 3rem 0.75rem 0.875rem;
+  }
+
+  .submit-button {
+    padding: 0.75rem 1.25rem;
+  }
+
+  .success-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .success-content .success-icon {
+    margin-top: 0;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .newsletter-subscription {
+    background: #000;
+    border: 2px solid #fff;
+  }
+
+  .email-input {
+    background: #fff;
+    border-color: #000;
+  }
+
+  .email-input:focus {
+    border-color: #0066cc;
+  }
+
+  .submit-button {
+    background: #0066cc;
+    border: 2px solid #fff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .newsletter-subscription *,
+  .newsletter-subscription *::before,
+  .newsletter-subscription *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus visible polyfill support */
+.email-input:focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.submit-button:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 2px;
+}
