@@ -1,0 +1,1 @@
+export type PasswordStrength = 'weak' | 'medium' | 'strong' | '';
