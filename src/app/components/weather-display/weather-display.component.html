@@ -1,0 +1,187 @@
+<div class="weather-display">
+  <!-- Loading State with Skeleton UI -->
+  @if (isLoading()) {
+    <div class="weather-card skeleton" role="status" aria-label="Loading weather data">
+      <div class="skeleton-header">
+        <div class="skeleton-line skeleton-title"></div>
+        <div class="skeleton-line skeleton-subtitle"></div>
+      </div>
+
+      <div class="skeleton-main">
+        <div class="skeleton-circle skeleton-temperature"></div>
+        <div class="skeleton-line skeleton-condition"></div>
+      </div>
+
+      <div class="skeleton-details">
+        <div class="skeleton-line skeleton-detail"></div>
+        <div class="skeleton-line skeleton-detail"></div>
+        <div class="skeleton-line skeleton-detail"></div>
+      </div>
+
+      <div class="sr-only" aria-live="polite">
+        Loading weather information, please wait...
+      </div>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (hasError() && hasSearched()) {
+    <div class="weather-card error-card" role="alert" aria-live="assertive">
+      <div class="error-content">
+        <div class="error-icon" role="img" [attr.aria-label]="'Error: ' + getErrorIcon()">
+          {{ getErrorIcon() }}
+        </div>
+
+        <h2 class="error-title">Unable to Get Weather Data</h2>
+
+        <p class="error-message">{{ error() }}</p>
+
+        <p class="error-suggestion">{{ getSuggestionText() }}</p>
+
+        <div class="error-actions">
+          <button
+            type="button"
+            class="retry-button"
+            (click)="onRetryClick()"
+            aria-label="Retry weather search"
+          >
+            {{ getRetryButtonText() }}
+          </button>
+
+          <button
+            type="button"
+            class="clear-button"
+            (click)="onClearClick()"
+            aria-label="Clear search results and start over"
+          >
+            Start Over
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Weather Data Display -->
+  @else if (hasData()) {
+    <div class="weather-card" role="main" [attr.aria-label]="'Weather for ' + weatherData()!.cityName">
+      <!-- Location Header -->
+      <header class="weather-header">
+        <h1 class="location-name">
+          {{ weatherData()!.cityName }}
+          @if (weatherData()!.country) {
+            <span class="country-code">, {{ weatherData()!.country }}</span>
+          }
+        </h1>
+
+        <button
+          type="button"
+          class="clear-button-small"
+          (click)="onClearClick()"
+          aria-label="Clear weather data and search for a different city"
+          title="Search for a different city"
+        >
+          ✕
+        </button>
+      </header>
+
+      <!-- Main Weather Info -->
+      <div class="weather-main">
+        <div class="temperature-section">
+          <div
+            class="temperature"
+            [style.color]="getTemperatureColor(weatherData()!.temperature)"
+            role="text"
+            [attr.aria-label]="'Current temperature is ' + formatTemperature(weatherData()!.temperature)"
+          >
+            {{ formatTemperature(weatherData()!.temperature) }}
+          </div>
+
+          <div class="condition">
+            <div class="condition-main">{{ weatherData()!.condition }}</div>
+            <div class="condition-description">
+              {{ capitalizeFirst(weatherData()!.description) }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Weather Icon -->
+        @if (weatherData()!.icon) {
+          <div class="weather-icon">
+            <img
+              [src]="'https://openweathermap.org/img/wn/' + weatherData()!.icon + '@2x.png'"
+              [alt]="weatherData()!.condition + ' weather icon'"
+              width="80"
+              height="80"
+              loading="eager"
+            />
+          </div>
+        }
+      </div>
+
+      <!-- Additional Details -->
+      <div class="weather-details">
+        <div class="details-grid">
+          @if (weatherData()!.humidity !== undefined) {
+            <div class="detail-item">
+              <div class="detail-label">Humidity</div>
+              <div class="detail-value">
+                {{ weatherData()!.humidity }}%
+                <span class="detail-description">
+                  ({{ getHumidityDescription(weatherData()!.humidity!) }})
+                </span>
+              </div>
+            </div>
+          }
+
+          @if (weatherData()!.windSpeed !== undefined) {
+            <div class="detail-item">
+              <div class="detail-label">Wind Speed</div>
+              <div class="detail-value">
+                {{ (weatherData()!.windSpeed! * 3.6).toFixed(1) }} km/h
+                <span class="detail-description">
+                  ({{ getWindDescription(weatherData()!.windSpeed!) }})
+                </span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="weather-actions">
+        <button
+          type="button"
+          class="search-again-button"
+          (click)="onClearClick()"
+          aria-label="Search for weather in a different city"
+        >
+          Search Another City
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Initial State -->
+  @else if (!hasSearched()) {
+    <div class="welcome-state">
+      <div class="welcome-content">
+        <div class="welcome-icon" role="img" aria-label="Weather search icon">
+          🌤️
+        </div>
+        <h2 class="welcome-title">Get Current Weather</h2>
+        <p class="welcome-description">
+          Enter a city name above to get current weather conditions, temperature, and more details.
+        </p>
+      </div>
+    </div>
+  }
+
+  <!-- Screen reader live region for weather updates -->
+  <div class="sr-only" aria-live="polite" aria-atomic="true">
+    @if (hasData()) {
+      Weather data loaded for {{ weatherData()!.cityName }}.
+      Current temperature is {{ formatTemperature(weatherData()!.temperature) }}
+      with {{ weatherData()!.condition }} conditions.
+    }
+  </div>
+</div>

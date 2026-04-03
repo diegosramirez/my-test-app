@@ -1,0 +1,115 @@
+<div class="search-container">
+  <form (ngSubmit)="onSubmit()" class="search-form" role="search">
+    <div class="input-wrapper">
+      <label for="city-search" class="search-label">
+        Search for weather by city name
+      </label>
+      <input
+        id="city-search"
+        type="text"
+        [formControl]="searchControl"
+        placeholder="Enter city name (e.g., London, New York)"
+        class="search-input"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+        aria-describedby="search-help validation-errors"
+        (focus)="onInputFocus()"
+        (blur)="onInputBlur()"
+        (keydown)="onKeyDown($event)"
+        [attr.aria-invalid]="searchControl.invalid && searchControl.touched"
+        [attr.aria-expanded]="showRecentSearches()"
+      />
+
+      <button
+        type="submit"
+        class="search-button"
+        [disabled]="searchControl.invalid || !searchControl.value?.trim()"
+        aria-label="Search for weather data"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          role="img"
+          aria-label="Search icon"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <span class="sr-only">Search</span>
+      </button>
+    </div>
+
+    <!-- Recent searches dropdown -->
+    @if (showRecentSearches() && recentSearches().length > 0) {
+      <div
+        class="recent-searches"
+        role="listbox"
+        aria-label="Recent searches"
+        id="recent-searches-list"
+      >
+        <div class="recent-searches-header">
+          <span class="recent-searches-title">Recent searches</span>
+          <button
+            type="button"
+            class="clear-recent-button"
+            (click)="clearRecentSearches()"
+            aria-label="Clear recent searches"
+          >
+            Clear
+          </button>
+        </div>
+
+        <ul class="recent-searches-list" role="none">
+          @for (city of recentSearches(); track city) {
+            <li role="none">
+              <button
+                type="button"
+                class="recent-search-item"
+                (click)="onRecentSearchClick(city)"
+                role="option"
+                [attr.aria-label]="'Search for weather in ' + city"
+              >
+                {{ city }}
+              </button>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+
+    <!-- Validation errors -->
+    @if (validationErrors().length > 0) {
+      <div
+        class="validation-errors"
+        id="validation-errors"
+        role="alert"
+        aria-live="polite"
+      >
+        @for (error of validationErrors(); track error) {
+          <div class="error-message">{{ error }}</div>
+        }
+      </div>
+    }
+
+    <!-- Help text -->
+    <div id="search-help" class="search-help">
+      Enter the name of a city to get current weather information
+    </div>
+  </form>
+
+  <!-- Screen reader announcements -->
+  <div
+    id="validation-announcer"
+    class="sr-only"
+    aria-live="polite"
+    aria-atomic="true"
+  ></div>
+</div>
