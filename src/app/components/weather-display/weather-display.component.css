@@ -1,0 +1,479 @@
+.weather-display {
+  width: 100%;
+  max-width: 500px;
+  margin: 2rem auto 0;
+}
+
+/* Base Weather Card */
+.weather-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.weather-card:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Weather Header */
+.weather-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.5rem 1.5rem 0;
+}
+
+.location-name {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.2;
+  flex: 1;
+}
+
+.country-code {
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.clear-button-small {
+  background: #f3f4f6;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.clear-button-small:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.clear-button-small:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-color: #3b82f6;
+}
+
+/* Main Weather Section */
+.weather-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  gap: 1rem;
+}
+
+.temperature-section {
+  flex: 1;
+}
+
+.temperature {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.condition-main {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+}
+
+.condition-description {
+  font-size: 1rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.weather-icon img {
+  width: 80px;
+  height: 80px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Weather Details */
+.weather-details {
+  padding: 0 1.5rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 1rem;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.detail-item {
+  text-align: center;
+}
+
+.detail-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.detail-value {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.detail-description {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #9ca3af;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+/* Weather Actions */
+.weather-actions {
+  padding: 0 1.5rem 1.5rem;
+}
+
+.search-again-button {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background: #f3f4f6;
+  color: #374151;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px;
+}
+
+.search-again-button:hover {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.search-again-button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-color: #3b82f6;
+}
+
+/* Error Card */
+.error-card {
+  background: #fef2f2;
+  border: 2px solid #fecaca;
+}
+
+.error-content {
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.error-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #dc2626;
+  margin: 0 0 1rem 0;
+}
+
+.error-message {
+  font-size: 1rem;
+  color: #7f1d1d;
+  margin: 0 0 0.75rem 0;
+  font-weight: 500;
+}
+
+.error-suggestion {
+  font-size: 0.875rem;
+  color: #991b1b;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.5;
+}
+
+.error-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.retry-button {
+  background: #dc2626;
+  color: white;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 0.875rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px;
+  min-width: 120px;
+}
+
+.retry-button:hover {
+  background: #b91c1c;
+}
+
+.retry-button:focus {
+  outline: 2px solid #7f1d1d;
+  outline-offset: 2px;
+}
+
+.clear-button {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px;
+}
+
+.clear-button:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.clear-button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Welcome State */
+.welcome-state {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  border: 2px solid #e0f7fa;
+}
+
+.welcome-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+}
+
+.welcome-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 1rem 0;
+}
+
+.welcome-description {
+  font-size: 1rem;
+  color: #475569;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Skeleton Loading States */
+.skeleton {
+  background: #f9fafb !important;
+  border: 2px solid #e5e7eb !important;
+  pointer-events: none;
+}
+
+.skeleton-header {
+  padding: 1.5rem 1.5rem 0;
+}
+
+.skeleton-main {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.skeleton-details {
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.skeleton-line {
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+.skeleton-title {
+  height: 1.5rem;
+  width: 60%;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-subtitle {
+  height: 1rem;
+  width: 40%;
+}
+
+.skeleton-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skeleton-temperature {
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-condition {
+  height: 1.25rem;
+  width: 50%;
+  flex: 1;
+}
+
+.skeleton-detail {
+  height: 1rem;
+  width: 80%;
+  margin: 0 auto 0.75rem;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Mobile responsive design */
+@media (max-width: 640px) {
+  .weather-display {
+    margin: 1rem;
+  }
+
+  .weather-header {
+    padding: 1.25rem 1.25rem 0;
+  }
+
+  .location-name {
+    font-size: 1.25rem;
+  }
+
+  .weather-main {
+    padding: 1.25rem;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .temperature {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .weather-icon img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .error-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .retry-button,
+  .clear-button {
+    width: 100%;
+  }
+
+  .welcome-state {
+    padding: 2rem 1.5rem;
+  }
+
+  .welcome-icon {
+    font-size: 3rem;
+  }
+
+  .skeleton-main {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .weather-card {
+    border: 3px solid #000;
+  }
+
+  .error-card {
+    border: 3px solid #dc2626;
+  }
+
+  .clear-button-small,
+  .search-again-button,
+  .retry-button,
+  .clear-button {
+    border-width: 3px;
+  }
+
+  .skeleton-line {
+    border: 2px solid #000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
