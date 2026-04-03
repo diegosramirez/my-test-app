@@ -1,0 +1,291 @@
+.error-container {
+  max-width: 500px;
+  margin: 1.5rem auto;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 2px solid;
+  background-color: #fef2f2;
+  border-color: #fecaca;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.error-icon {
+  flex-shrink: 0;
+  color: #dc2626;
+  margin-top: 0.125rem;
+}
+
+.error-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.error-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #991b1b;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.error-message {
+  font-size: 1rem;
+  color: #7f1d1d;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.error-suggestions {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #fca5a5;
+}
+
+.suggestions-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #991b1b;
+  margin: 0 0 0.5rem 0;
+}
+
+.error-suggestions ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  list-style-type: disc;
+}
+
+.error-suggestions li {
+  font-size: 0.875rem;
+  color: #7f1d1d;
+  margin-bottom: 0.25rem;
+  line-height: 1.4;
+}
+
+.error-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.retry-button,
+.dismiss-button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px; /* Accessibility: minimum touch target */
+  border: 2px solid;
+}
+
+.retry-button {
+  background-color: #dc2626;
+  color: white;
+  border-color: #dc2626;
+}
+
+.retry-button:hover {
+  background-color: #b91c1c;
+  border-color: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.retry-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3);
+}
+
+.dismiss-button {
+  background-color: transparent;
+  color: #991b1b;
+  border-color: #f87171;
+}
+
+.dismiss-button:hover {
+  background-color: #f87171;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.dismiss-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.3);
+}
+
+.retry-button:active,
+.dismiss-button:active {
+  transform: translateY(0);
+}
+
+/* Error type specific styling */
+.error-type-network {
+  background-color: #fef3c7;
+  border-color: #fbbf24;
+}
+
+.error-type-network .error-icon {
+  color: #d97706;
+}
+
+.error-type-network .error-title {
+  color: #92400e;
+}
+
+.error-type-network .error-message,
+.error-type-network .error-suggestions li {
+  color: #78350f;
+}
+
+.error-type-network .suggestions-title {
+  color: #92400e;
+}
+
+.error-type-network .error-suggestions {
+  border-top-color: #fcd34d;
+}
+
+.error-type-not_found {
+  background-color: #ede9fe;
+  border-color: #c4b5fd;
+}
+
+.error-type-not_found .error-icon {
+  color: #8b5cf6;
+}
+
+.error-type-not_found .error-title {
+  color: #6d28d9;
+}
+
+.error-type-not_found .error-message,
+.error-type-not_found .error-suggestions li {
+  color: #581c87;
+}
+
+.error-type-not_found .suggestions-title {
+  color: #6d28d9;
+}
+
+.error-type-not_found .error-suggestions {
+  border-top-color: #ddd6fe;
+}
+
+.error-type-rate_limit {
+  background-color: #fef7ff;
+  border-color: #f0abfc;
+}
+
+.error-type-rate_limit .error-icon {
+  color: #e879f9;
+}
+
+.error-type-rate_limit .error-title {
+  color: #a21caf;
+}
+
+.error-type-rate_limit .error-message,
+.error-type-rate_limit .error-suggestions li {
+  color: #86198f;
+}
+
+.error-type-rate_limit .suggestions-title {
+  color: #a21caf;
+}
+
+.error-type-rate_limit .error-suggestions {
+  border-top-color: #f5d0fe;
+}
+
+.error-type-timeout {
+  background-color: #ecfdf5;
+  border-color: #86efac;
+}
+
+.error-type-timeout .error-icon {
+  color: #22c55e;
+}
+
+.error-type-timeout .error-title {
+  color: #15803d;
+}
+
+.error-type-timeout .error-message,
+.error-type-timeout .error-suggestions li {
+  color: #14532d;
+}
+
+.error-type-timeout .suggestions-title {
+  color: #15803d;
+}
+
+.error-type-timeout .error-suggestions {
+  border-top-color: #bbf7d0;
+}
+
+/* Mobile responsive design */
+@media (max-width: 640px) {
+  .error-container {
+    margin: 1rem;
+    padding: 1rem;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .error-icon {
+    align-self: center;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .error-actions {
+    margin-top: 1.5rem;
+  }
+
+  .retry-button,
+  .dismiss-button {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .error-container {
+    border-width: 3px;
+    background-color: #fff;
+  }
+
+  .error-title,
+  .error-message,
+  .error-suggestions li {
+    color: #000;
+  }
+
+  .retry-button {
+    background-color: #000;
+    border-color: #000;
+  }
+
+  .dismiss-button {
+    background-color: #fff;
+    color: #000;
+    border-color: #000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .retry-button:hover,
+  .dismiss-button:hover {
+    transform: none;
+  }
+
+  .retry-button:active,
+  .dismiss-button:active {
+    transform: none;
+  }
+}
