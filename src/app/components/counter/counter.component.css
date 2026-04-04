@@ -1,0 +1,322 @@
+/* Counter Component Styles - Mobile First Approach */
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Main container */
+.counter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Counter title */
+.counter-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333333;
+  text-align: center;
+}
+
+/* Count display area */
+.count-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  min-width: 200px;
+  text-align: center;
+}
+
+.count-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.count-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Button group */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+/* Counter buttons */
+.counter-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  min-height: 44px; /* WCAG touch target minimum */
+  min-width: 44px;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  touch-action: manipulation; /* Improve touch responsiveness */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.counter-btn:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-color: #3b82f6;
+}
+
+.counter-btn:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.counter-btn:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-color: #3b82f6;
+}
+
+.counter-btn:active {
+  transform: translateY(1px);
+  transition-duration: 0.05s;
+}
+
+/* Button variants */
+.counter-btn--increment {
+  background: #10b981;
+  border-color: #059669;
+  color: #ffffff;
+}
+
+.counter-btn--increment:hover {
+  background: #059669;
+  border-color: #047857;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.counter-btn--increment:active {
+  background: #047857;
+  transform: translateY(0);
+}
+
+.counter-btn--decrement {
+  background: #ef4444;
+  border-color: #dc2626;
+  color: #ffffff;
+}
+
+.counter-btn--decrement:hover {
+  background: #dc2626;
+  border-color: #b91c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.counter-btn--decrement:active {
+  background: #b91c1c;
+  transform: translateY(0);
+}
+
+.counter-btn--reset {
+  background: #6b7280;
+  border-color: #4b5563;
+  color: #ffffff;
+}
+
+.counter-btn--reset:hover {
+  background: #4b5563;
+  border-color: #374151;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.counter-btn--reset:active {
+  background: #374151;
+  transform: translateY(0);
+}
+
+/* Button icons */
+.btn-icon {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.btn-text {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .counter-container {
+    border: 3px solid #000000;
+  }
+
+  .counter-btn {
+    border-width: 3px;
+  }
+
+  .count-display {
+    border-width: 3px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .counter-btn,
+  .count-value {
+    transition: none;
+  }
+
+  .counter-btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .counter-btn:active {
+    transform: none;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .counter-container {
+    background: #1f2937;
+    color: #f9fafb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .counter-title {
+    color: #f9fafb;
+  }
+
+  .count-display {
+    background: #374151;
+    border-color: #4b5563;
+  }
+
+  .count-label {
+    color: #9ca3af;
+  }
+
+  .count-value {
+    color: #f9fafb;
+  }
+}
+
+/* Tablet styles (768px and up) */
+@media screen and (min-width: 48rem) {
+  .counter-container {
+    padding: 3rem 2rem;
+    max-width: 500px;
+    gap: 2rem;
+  }
+
+  .counter-title {
+    font-size: 1.875rem;
+  }
+
+  .count-display {
+    padding: 2rem;
+    min-width: 250px;
+  }
+
+  .count-value {
+    font-size: 4rem;
+  }
+
+  .button-group {
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .counter-btn {
+    flex: 1;
+    padding: 1rem 1.5rem;
+  }
+
+  .btn-text {
+    display: block;
+  }
+}
+
+/* Desktop styles (1024px and up) */
+@media screen and (min-width: 64rem) {
+  .counter-container {
+    padding: 4rem 3rem;
+    max-width: 600px;
+    gap: 2.5rem;
+  }
+
+  .counter-title {
+    font-size: 2.25rem;
+  }
+
+  .count-display {
+    padding: 2.5rem;
+    min-width: 300px;
+  }
+
+  .count-value {
+    font-size: 5rem;
+  }
+
+  .counter-btn {
+    padding: 1.25rem 2rem;
+    font-size: 1.125rem;
+  }
+
+  .btn-icon {
+    font-size: 1.5rem;
+  }
+
+  .btn-text {
+    font-size: 1rem;
+  }
+}
+
+/* Large screen optimizations */
+@media screen and (min-width: 80rem) {
+  .count-value {
+    font-size: 6rem;
+  }
+}
