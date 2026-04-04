@@ -1,0 +1,86 @@
+<div class="form-field-container">
+  <!-- Label -->
+  <label [id]="getLabelId()" [for]="getFieldId()" [class]="getLabelClasses()">
+    {{ label }}
+    @if (required) {
+      <span class="required-indicator" aria-label="required">*</span>
+    }
+  </label>
+
+  <!-- Input Field -->
+  <div class="input-container">
+    @if (type === 'textarea') {
+      <!-- Textarea -->
+      <textarea
+        [id]="getFieldId()"
+        [class]="getInputClasses()"
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        [required]="required"
+        [rows]="rows"
+        [attr.maxlength]="maxlength || null"
+        [autocomplete]="autocomplete"
+        [value]="value()"
+        [attr.aria-labelledby]="getLabelId()"
+        [attr.aria-describedby]="getDescribedByIds() || null"
+        [attr.aria-invalid]="hasError()"
+        [attr.aria-required]="required"
+        (input)="onInput($event)"
+        (focus)="onFocus()"
+        (blur)="onBlur()"
+      ></textarea>
+    } @else {
+      <!-- Input -->
+      <input
+        [id]="getFieldId()"
+        [type]="type"
+        [class]="getInputClasses()"
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        [required]="required"
+        [attr.maxlength]="maxlength || null"
+        [autocomplete]="autocomplete"
+        [value]="value()"
+        [attr.aria-labelledby]="getLabelId()"
+        [attr.aria-describedby]="getDescribedByIds() || null"
+        [attr.aria-invalid]="hasError()"
+        [attr.aria-required]="required"
+        (input)="onInput($event)"
+        (focus)="onFocus()"
+        (blur)="onBlur()"
+      />
+    }
+
+    <!-- Validation State Indicators -->
+    <div class="validation-indicator" aria-hidden="true">
+      @if (isValid()) {
+        <svg class="valid-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.236 4.53L7.53 10.53a.75.75 0 00-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+        </svg>
+      }
+      @if (hasError()) {
+        <svg class="invalid-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+        </svg>
+      }
+    </div>
+  </div>
+
+  <!-- Character Count (if applicable) -->
+  @if (shouldShowCharacterCount()) {
+    <div
+      class="character-count"
+      [class.near-limit]="isCharacterLimitNearExceeded()"
+      [attr.aria-live]="isCharacterLimitNearExceeded() ? 'polite' : 'off'"
+    >
+      {{ getCharacterCountText() }}
+    </div>
+  }
+
+  <!-- Validation Messages -->
+  <app-validation-message
+    [errors]="errors"
+    [fieldName]="fieldName"
+    [show]="showValidation()"
+  ></app-validation-message>
+</div>

@@ -1,0 +1,179 @@
+<div class="contact-form-container">
+  <!-- Header -->
+  <div class="form-header">
+    <h1 id="contact-form-title">Contact Us</h1>
+    <p class="form-description">
+      We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+    </p>
+  </div>
+
+  <!-- Success Modal/Overlay -->
+  @if (showSuccess()) {
+    <div class="success-overlay" role="dialog" aria-labelledby="success-title" aria-modal="true">
+      <div class="success-content">
+        <div class="success-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.236 4.53L7.53 10.53a.75.75 0 00-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <h2 id="success-title">Message Sent!</h2>
+        <p>{{ successMessage() }}</p>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="onDismissSuccess()"
+          autofocus
+        >
+          Send Another Message
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Error Alert -->
+  @if (submissionState().submissionError) {
+    <div class="error-alert" role="alert" aria-live="polite">
+      <div class="error-content">
+        <div class="error-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="error-text">
+          <p><strong>Unable to send message</strong></p>
+          <p>{{ submissionState().submissionError }}</p>
+        </div>
+        <div class="error-actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="onRetry()"
+            [disabled]="submissionState().isSubmitting"
+          >
+            Try Again
+          </button>
+          <button
+            type="button"
+            class="btn-text"
+            (click)="onDismissError()"
+            aria-label="Dismiss error message"
+          >
+            ×
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Contact Form -->
+  <form
+    [formGroup]="contactForm"
+    (ngSubmit)="onSubmit()"
+    class="contact-form"
+    aria-labelledby="contact-form-title"
+    novalidate
+  >
+    <!-- Name Field -->
+    <app-form-field
+      label="Full Name"
+      fieldName="name"
+      type="text"
+      placeholder="Enter your full name"
+      autocomplete="name"
+      [required]="true"
+      [maxlength]="100"
+      [errors]="getFieldErrors('name')"
+      [touched]="isFieldTouched('name')"
+      formControlName="name"
+    ></app-form-field>
+
+    <!-- Email Field -->
+    <app-form-field
+      label="Email Address"
+      fieldName="email"
+      type="email"
+      placeholder="Enter your email address"
+      autocomplete="email"
+      [required]="true"
+      [maxlength]="255"
+      [errors]="getFieldErrors('email')"
+      [touched]="isFieldTouched('email')"
+      formControlName="email"
+    ></app-form-field>
+
+    <!-- Phone Field (Optional) -->
+    <app-form-field
+      label="Phone Number"
+      fieldName="phone"
+      type="tel"
+      placeholder="Enter your phone number (optional)"
+      autocomplete="tel"
+      [required]="false"
+      [maxlength]="20"
+      [errors]="getFieldErrors('phone')"
+      [touched]="isFieldTouched('phone')"
+      formControlName="phone"
+    ></app-form-field>
+
+    <!-- Message Field -->
+    <app-form-field
+      label="Message"
+      fieldName="message"
+      type="textarea"
+      placeholder="Tell us how we can help you..."
+      [required]="true"
+      [maxlength]="1000"
+      [rows]="6"
+      [errors]="getFieldErrors('message')"
+      [touched]="isFieldTouched('message')"
+      formControlName="message"
+    ></app-form-field>
+
+    <!-- Submit Button -->
+    <div class="submit-section">
+      <button
+        id="submit-button"
+        type="submit"
+        class="btn btn-primary btn-submit"
+        [disabled]="!canSubmit()"
+        [attr.aria-describedby]="submissionState().isSubmitting ? 'submit-loading' : null"
+      >
+        @if (submissionState().isSubmitting) {
+          <span class="loading-spinner" aria-hidden="true"></span>
+          <span id="submit-loading">Sending...</span>
+        } @else {
+          Send Message
+        }
+      </button>
+
+      <!-- Form Status -->
+      <div class="form-status" aria-live="polite">
+        @if (!isFormValid() && contactForm.touched) {
+          <p class="status-text">Please fix the errors above to continue.</p>
+        } @else if (isFormValid() && contactForm.touched) {
+          <p class="status-text status-valid">All fields are valid. Ready to send!</p>
+        }
+      </div>
+    </div>
+
+    <!-- Retry Count (for debugging in development) -->
+    @if (submissionState().retryCount > 0) {
+      <div class="retry-info" aria-live="polite">
+        <small>Retry attempt {{ submissionState().retryCount }}</small>
+      </div>
+    }
+  </form>
+
+  <!-- Form Help Text -->
+  <div class="form-help">
+    <p>
+      <small>
+        Your information is secure and will only be used to respond to your inquiry.
+        Fields marked with <span class="required-indicator" aria-label="required">*</span> are required.
+      </small>
+    </p>
+  </div>
+
+  <!-- Live Region for Dynamic Announcements -->
+  <div id="announcements" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+</div>
