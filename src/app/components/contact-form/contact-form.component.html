@@ -1,0 +1,236 @@
+<div class="contact-form-container">
+  <div class="contact-form-wrapper">
+    <!-- Form Header -->
+    <div class="form-header">
+      <h1 class="form-title">Contact Us</h1>
+      <p class="form-description">
+        We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+      </p>
+    </div>
+
+    <!-- Success Message -->
+    <div *ngIf="submissionSuccess" class="success-message" role="alert" aria-live="polite">
+      <div class="success-icon" aria-hidden="true">✓</div>
+      <div class="success-content">
+        <h2>Message Sent Successfully!</h2>
+        <p>{{ submissionMessage }}</p>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onSendAnother()"
+          aria-label="Send another message">
+          Send Another Message
+        </button>
+      </div>
+    </div>
+
+    <!-- Network Error Message -->
+    <div *ngIf="networkError && !submissionSuccess" class="error-message" role="alert" aria-live="polite">
+      <div class="error-icon" aria-hidden="true">⚠</div>
+      <div class="error-content">
+        <h2>Connection Error</h2>
+        <p>{{ submissionMessage }}</p>
+        <button
+          *ngIf="retryCount < 3"
+          type="button"
+          class="btn btn-primary"
+          (click)="onRetrySubmission()"
+          [disabled]="isSubmitting"
+          aria-label="Retry sending message">
+          <span *ngIf="isSubmitting">Retrying...</span>
+          <span *ngIf="!isSubmitting">Retry ({{ 3 - retryCount }} attempts left)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <form
+      *ngIf="!submissionSuccess"
+      [formGroup]="contactForm"
+      (ngSubmit)="onSubmit()"
+      class="contact-form"
+      novalidate>
+
+      <!-- Name Field -->
+      <div class="form-group">
+        <label [for]="getFieldId('name')" class="form-label required">
+          Full Name
+          <span class="required-indicator" aria-label="required">*</span>
+        </label>
+
+        <input
+          type="text"
+          [id]="getFieldId('name')"
+          formControlName="name"
+          class="form-input"
+          [class.error]="shouldShowError('name')"
+          [attr.aria-invalid]="shouldShowError('name')"
+          [attr.aria-describedby]="getAriaDescribedBy('name')"
+          (blur)="onFieldBlur('name')"
+          (input)="onFieldInput('name')"
+          placeholder="Enter your full name"
+          autocomplete="name"
+          maxlength="50">
+
+        <div [id]="getFieldId('name') + '-help'" class="field-help">
+          Your first and last name
+        </div>
+
+        <div class="field-footer">
+          <div
+            *ngIf="shouldShowError('name')"
+            [id]="getErrorId('name')"
+            class="error-text"
+            role="alert"
+            aria-live="polite">
+            <span class="error-icon" aria-hidden="true">⚠</span>
+            {{ getFieldError('name') }}
+          </div>
+
+          <div class="character-count" [class.warning]="isCharacterLimitApproaching('name')">
+            {{ getCharacterCountMessage('name') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label [for]="getFieldId('email')" class="form-label required">
+          Email Address
+          <span class="required-indicator" aria-label="required">*</span>
+        </label>
+
+        <input
+          type="email"
+          [id]="getFieldId('email')"
+          formControlName="email"
+          class="form-input"
+          [class.error]="shouldShowError('email')"
+          [attr.aria-invalid]="shouldShowError('email')"
+          [attr.aria-describedby]="getAriaDescribedBy('email')"
+          (blur)="onFieldBlur('email')"
+          placeholder="Enter your email address"
+          autocomplete="email">
+
+        <div [id]="getFieldId('email') + '-help'" class="field-help">
+          We'll use this to respond to your message
+        </div>
+
+        <div
+          *ngIf="shouldShowError('email')"
+          [id]="getErrorId('email')"
+          class="error-text"
+          role="alert"
+          aria-live="polite">
+          <span class="error-icon" aria-hidden="true">⚠</span>
+          {{ getFieldError('email') }}
+        </div>
+      </div>
+
+      <!-- Phone Field -->
+      <div class="form-group">
+        <label [for]="getFieldId('phone')" class="form-label optional">
+          Phone Number
+          <span class="optional-indicator">(optional)</span>
+        </label>
+
+        <input
+          type="tel"
+          [id]="getFieldId('phone')"
+          formControlName="phone"
+          class="form-input"
+          [class.error]="shouldShowError('phone')"
+          [attr.aria-invalid]="shouldShowError('phone')"
+          [attr.aria-describedby]="getAriaDescribedBy('phone')"
+          (blur)="onFieldBlur('phone')"
+          placeholder="+1 (555) 123-4567"
+          autocomplete="tel">
+
+        <div [id]="getFieldId('phone') + '-help'" class="field-help">
+          International format supported (e.g., +1 555-123-4567)
+        </div>
+
+        <div
+          *ngIf="shouldShowError('phone')"
+          [id]="getErrorId('phone')"
+          class="error-text"
+          role="alert"
+          aria-live="polite">
+          <span class="error-icon" aria-hidden="true">⚠</span>
+          {{ getFieldError('phone') }}
+        </div>
+      </div>
+
+      <!-- Message Field -->
+      <div class="form-group">
+        <label [for]="getFieldId('message')" class="form-label required">
+          Message
+          <span class="required-indicator" aria-label="required">*</span>
+        </label>
+
+        <textarea
+          [id]="getFieldId('message')"
+          formControlName="message"
+          class="form-textarea"
+          [class.error]="shouldShowError('message')"
+          [attr.aria-invalid]="shouldShowError('message')"
+          [attr.aria-describedby]="getAriaDescribedBy('message')"
+          (blur)="onFieldBlur('message')"
+          (input)="onFieldInput('message')"
+          placeholder="Tell us how we can help you..."
+          rows="6"
+          maxlength="1000"></textarea>
+
+        <div [id]="getFieldId('message') + '-help'" class="field-help">
+          Please provide detailed information about your inquiry
+        </div>
+
+        <div class="field-footer">
+          <div
+            *ngIf="shouldShowError('message')"
+            [id]="getErrorId('message')"
+            class="error-text"
+            role="alert"
+            aria-live="polite">
+            <span class="error-icon" aria-hidden="true">⚠</span>
+            {{ getFieldError('message') }}
+          </div>
+
+          <div class="character-count" [class.warning]="isCharacterLimitApproaching('message')">
+            {{ getCharacterCountMessage('message') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Section -->
+      <div class="form-submit">
+        <button
+          type="submit"
+          class="btn btn-primary submit-btn"
+          [disabled]="contactForm.invalid || isSubmitting"
+          [attr.aria-describedby]="contactForm.invalid ? 'form-validation-help' : null">
+
+          <span *ngIf="isSubmitting" class="loading-spinner" aria-hidden="true"></span>
+          <span *ngIf="isSubmitting">Sending...</span>
+          <span *ngIf="!isSubmitting">Send Message</span>
+        </button>
+
+        <div
+          *ngIf="contactForm.invalid && contactForm.touched"
+          id="form-validation-help"
+          class="form-validation-message"
+          role="alert"
+          aria-live="polite">
+          Please fix the errors above before submitting.
+        </div>
+
+        <div class="form-note">
+          <p>
+            <span class="required-indicator">*</span> indicates required fields.
+            We'll respond to your message within 24 hours.
+          </p>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
