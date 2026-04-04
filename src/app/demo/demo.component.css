@@ -1,0 +1,378 @@
+/* Demo Component Styles */
+
+.demo-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+}
+
+h1 {
+  color: #1f2937;
+  margin-bottom: 16px;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+h2 {
+  color: #374151;
+  margin: 32px 0 16px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+h3 {
+  color: #4b5563;
+  margin: 20px 0 12px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+p {
+  color: #6b7280;
+  margin-bottom: 20px;
+  font-size: 1rem;
+}
+
+/* Demo Sections */
+.demo-section {
+  margin-bottom: 48px;
+  padding: 24px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+/* Selection Display */
+.selection-display {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+.user-card,
+.product-card {
+  padding: 12px;
+  background-color: #f8fafc;
+  border-radius: 4px;
+  border-left: 4px solid #3b82f6;
+}
+
+.user-card .email {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.user-card .department,
+.product-card .category {
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+
+.product-card .price {
+  color: #059669;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* Product Result Template */
+.product-result {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.product-info {
+  flex: 1;
+}
+
+.product-name {
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.product-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.product-details .category {
+  color: #6b7280;
+  background-color: #f3f4f6;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+}
+
+.product-details .price {
+  color: #059669;
+  font-weight: 600;
+}
+
+/* Form Styles */
+.demo-form {
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-values {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #f8fafc;
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
+}
+
+.form-values pre {
+  margin: 0;
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 0.85rem;
+  color: #4b5563;
+  overflow-x: auto;
+}
+
+/* Event Log */
+.event-log {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.clear-button {
+  background-color: #6b7280;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin: 16px;
+  border-radius: 4px;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.clear-button:hover {
+  background-color: #4b5563;
+}
+
+.log-entries {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.log-entry {
+  padding: 8px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 0.8rem;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.log-entry.info {
+  background-color: #eff6ff;
+  color: #1e40af;
+}
+
+.log-entry.search {
+  background-color: #f0fdf4;
+  color: #166534;
+}
+
+.log-entry.select {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.log-entry.error {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.timestamp {
+  font-weight: 500;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.event-type {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+.event-data {
+  flex: 1;
+  word-break: break-word;
+}
+
+/* Performance Metrics */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}
+
+.metric {
+  padding: 12px;
+  text-align: center;
+  background-color: #f8fafc;
+  border-radius: 6px;
+}
+
+.metric strong {
+  display: block;
+  color: #374151;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .demo-container {
+    padding: 16px;
+  }
+
+  .demo-section {
+    padding: 16px;
+    margin-bottom: 32px;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  .product-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .log-entry {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .demo-container {
+    background-color: #111827;
+    color: #f9fafb;
+  }
+
+  h1, h2, h3 {
+    color: #f9fafb;
+  }
+
+  h2 {
+    border-bottom-color: #374151;
+  }
+
+  p {
+    color: #d1d5db;
+  }
+
+  .demo-section {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+
+  .selection-display,
+  .demo-form,
+  .event-log,
+  .metrics {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+
+  .user-card,
+  .product-card {
+    background-color: #374151;
+  }
+
+  .form-values {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .form-values pre {
+    color: #d1d5db;
+  }
+
+  .metric {
+    background-color: #374151;
+  }
+
+  .metric strong {
+    color: #f9fafb;
+  }
+
+  .log-entry {
+    border-bottom-color: #374151;
+  }
+
+  .log-entry.info {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: #93c5fd;
+  }
+
+  .log-entry.search {
+    background-color: rgba(34, 197, 94, 0.1);
+    color: #86efac;
+  }
+
+  .log-entry.select {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #fcd34d;
+  }
+
+  .log-entry.error {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #fca5a5;
+  }
+}
