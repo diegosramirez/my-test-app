@@ -1,0 +1,222 @@
+.form-field-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #374151;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.form-label.required .required-indicator {
+  color: #dc2626;
+  margin-left: 0.125rem;
+  font-weight: bold;
+}
+
+.form-label.error {
+  color: #dc2626;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.form-input {
+  width: 100%;
+  min-height: 44px; /* Ensure minimum touch target size */
+  padding: 0.75rem 2.5rem 0.75rem 0.75rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #1f2937;
+  background-color: #ffffff;
+  transition: all 0.2s ease-in-out;
+  appearance: none;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-input.focused {
+  border-color: #3b82f6;
+}
+
+.form-input.valid {
+  border-color: #10b981;
+  padding-right: 2.5rem;
+}
+
+.form-input.invalid {
+  border-color: #dc2626;
+  padding-right: 2.5rem;
+}
+
+.form-input.disabled {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.form-input::placeholder {
+  color: #9ca3af;
+}
+
+/* Textarea specific styles */
+textarea.form-input {
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+.validation-indicator {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* For textarea, position the icon at the top */
+.input-container:has(textarea) .validation-indicator {
+  top: 1rem;
+  transform: none;
+}
+
+.valid-icon,
+.invalid-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.valid-icon {
+  color: #10b981;
+}
+
+.invalid-icon {
+  color: #dc2626;
+}
+
+.character-count {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-align: right;
+  margin-top: 0.25rem;
+}
+
+.character-count.near-limit {
+  color: #d97706;
+  font-weight: 500;
+}
+
+/* Focus management */
+.form-input:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .form-label {
+    color: #e5e7eb;
+  }
+
+  .form-label.error {
+    color: #fca5a5;
+  }
+
+  .form-input {
+    background-color: #1f2937;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+
+  .form-input:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+  }
+
+  .form-input.valid {
+    border-color: #34d399;
+  }
+
+  .form-input.invalid {
+    border-color: #f87171;
+  }
+
+  .form-input.disabled {
+    background-color: #374151;
+    color: #9ca3af;
+  }
+
+  .form-input::placeholder {
+    color: #6b7280;
+  }
+
+  .character-count {
+    color: #9ca3af;
+  }
+
+  .character-count.near-limit {
+    color: #fbbf24;
+  }
+
+  .valid-icon {
+    color: #34d399;
+  }
+
+  .invalid-icon {
+    color: #f87171;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .form-input {
+    border-width: 3px;
+  }
+
+  .form-input:focus {
+    border-width: 3px;
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
+  .validation-indicator {
+    background-color: white;
+    border-radius: 50%;
+    padding: 0.125rem;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .form-input {
+    transition: none;
+  }
+
+  .validation-indicator {
+    transition: none;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .form-input {
+    font-size: 16px; /* Prevent zoom on iOS */
+    min-height: 48px; /* Larger touch target on mobile */
+  }
+}
