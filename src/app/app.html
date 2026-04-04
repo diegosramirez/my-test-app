@@ -185,6 +185,18 @@
 <main class="main">
   <div class="content">
     <div class="left-side">
+      <!-- Typeahead Search Component Demo -->
+      <div style="margin-bottom: 2rem;">
+        <h2 style="margin-bottom: 1rem; color: var(--gray-900);">Typeahead Search Demo</h2>
+        <app-typeahead-search
+          placeholder="Search for documentation, tutorials, or guides..."
+          searchEndpoint="/api/search"
+          (resultSelected)="onResultSelected($event)">
+        </app-typeahead-search>
+        <p style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--gray-700);">
+          Note: This demo component is configured but requires a backend API at /api/search to function.
+        </p>
+      </div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 982 239"

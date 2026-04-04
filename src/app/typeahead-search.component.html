@@ -1,0 +1,81 @@
+<div class="typeahead-search" role="combobox" aria-expanded="{{ showDropdown }}" aria-haspopup="listbox">
+  <!-- Search Input -->
+  <div class="search-input-container">
+    <input
+      #searchInput
+      type="text"
+      class="search-input"
+      [formControl]="searchControl"
+      [placeholder]="placeholder"
+      (keydown)="onKeyDown($event)"
+      autocomplete="off"
+      aria-label="Search input"
+      aria-describedby="search-status"
+      [attr.aria-activedescendant]="selectedIndex >= 0 ? 'result-' + selectedIndex : null"
+    />
+
+    <!-- Loading Spinner -->
+    <div
+      class="loading-spinner"
+      *ngIf="searchState.loading"
+      aria-hidden="true">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <!-- Screen Reader Status -->
+  <div
+    id="search-status"
+    class="sr-only"
+    aria-live="polite"
+    aria-atomic="true">
+    <span *ngIf="searchState.loading">Searching...</span>
+    <span *ngIf="!searchState.loading && searchState.results.length > 0">
+      {{ searchState.results.length }} results found
+    </span>
+    <span *ngIf="!searchState.loading && searchState.results.length === 0 && searchState.query">
+      No results found
+    </span>
+    <span *ngIf="searchState.error">Error: {{ searchState.error }}</span>
+  </div>
+
+  <!-- Dropdown Results -->
+  <div
+    #dropdown
+    class="search-dropdown"
+    *ngIf="showDropdown"
+    role="listbox"
+    aria-label="Search results">
+
+    <div
+      *ngFor="let result of searchState.results; let i = index"
+      class="search-result"
+      [class.selected]="selectedIndex === i"
+      [attr.id]="'result-' + i"
+      [attr.data-index]="i"
+      role="option"
+      [attr.aria-selected]="selectedIndex === i"
+      (click)="selectResult(result)"
+      (mouseenter)="selectedIndex = i">
+
+      <div class="result-title" [innerHTML]="result.title | highlight:searchState.query"></div>
+      <div class="result-description" [innerHTML]="result.description | highlight:searchState.query"></div>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div
+    class="search-error"
+    *ngIf="searchState.error"
+    role="alert"
+    aria-live="assertive">
+    <span class="error-message">{{ searchState.error }}</span>
+    <button
+      type="button"
+      class="retry-button"
+      (click)="retrySearch()"
+      aria-label="Retry search">
+      Retry
+    </button>
+  </div>
+</div>
