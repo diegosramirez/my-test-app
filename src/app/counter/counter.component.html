@@ -1,0 +1,53 @@
+<!-- Counter Component with Signal-based State Management -->
+<div class="counter-container" role="main" aria-labelledby="counter-title">
+  <h1 id="counter-title" class="counter-title">Counter</h1>
+
+  <!-- Count Display with ARIA Live Region -->
+  <div
+    class="count-display"
+    aria-live="polite"
+    aria-atomic="true"
+    aria-label="Current count value"
+  >
+    <span class="count-value" id="count-value">{{ countValue() }}</span>
+    <span class="visually-hidden">Current count is {{ countValue() }}</span>
+  </div>
+
+  <!-- Button Controls -->
+  <div class="button-group" role="group" aria-labelledby="counter-controls">
+    <h2 id="counter-controls" class="visually-hidden">Counter Controls</h2>
+
+    <button
+      class="counter-button counter-button--decrement"
+      type="button"
+      (click)="decrement()"
+      aria-label="Decrease count by one"
+      [attr.aria-describedby]="'count-value'"
+    >
+      <span class="button-text">-</span>
+      <span class="visually-hidden">Decrement</span>
+    </button>
+
+    <button
+      class="counter-button counter-button--reset"
+      type="button"
+      (click)="reset()"
+      aria-label="Reset count to zero"
+      [attr.aria-describedby]="'count-value'"
+    >
+      <span class="button-text">Reset</span>
+    </button>
+
+    <button
+      class="counter-button counter-button--increment"
+      type="button"
+      (click)="increment()"
+      aria-label="Increase count by one"
+      [attr.aria-describedby]="'count-value'"
+    >
+      <span class="button-text">+</span>
+      <span class="visually-hidden">Increment</span>
+    </button>
+  </div>
+
+</div>

@@ -1,0 +1,211 @@
+/* Counter Component Styles */
+
+.counter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.counter-title {
+  font-size: 3rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Count Display Styles */
+.count-display {
+  background: white;
+  border-radius: 16px;
+  padding: 3rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.count-value {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #2d3748;
+  display: block;
+  text-align: center;
+  min-width: 3ch;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Button Group Styles */
+.button-group {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Button Base Styles */
+.counter-button {
+  min-height: 44px; /* Minimum touch target size */
+  min-width: 44px;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  outline: none;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.counter-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.counter-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus styles for accessibility */
+.counter-button:focus-visible {
+  outline: 3px solid #4299e1;
+  outline-offset: 2px;
+}
+
+/* Button Variant Styles */
+.counter-button--increment {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  font-size: 2rem;
+}
+
+.counter-button--increment:hover {
+  background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+}
+
+.counter-button--decrement {
+  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+  font-size: 2rem;
+}
+
+.counter-button--decrement:hover {
+  background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+}
+
+.counter-button--reset {
+  background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+  padding: 0.75rem 2rem;
+}
+
+.counter-button--reset:hover {
+  background: linear-gradient(135deg, #dd6b20 0%, #c05621 100%);
+}
+
+.button-text {
+  display: inline-block;
+}
+
+/* Visually Hidden Class for Screen Readers */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .counter-container {
+    padding: 1rem;
+  }
+
+  .counter-title {
+    font-size: 2rem;
+  }
+
+  .count-display {
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .count-value {
+    font-size: 3rem;
+  }
+
+  .button-group {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .counter-button {
+    width: 100%;
+    min-height: 48px; /* Larger touch target for mobile */
+    font-size: 1.125rem;
+  }
+
+  .counter-button--increment,
+  .counter-button--decrement {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .counter-title {
+    font-size: 1.75rem;
+  }
+
+  .count-display {
+    padding: 1.5rem;
+  }
+
+  .count-value {
+    font-size: 2.5rem;
+  }
+}
+
+/* Animation for count changes */
+@keyframes countChange {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.count-display:focus-within {
+  animation: countChange 0.3s ease;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .counter-button {
+    border: 2px solid;
+  }
+
+  .count-display {
+    border-width: 3px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
