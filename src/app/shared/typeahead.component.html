@@ -1,0 +1,146 @@
+<div class="typeahead-container" [class.loading]="(state$ | async)?.loading">
+  <div class="input-wrapper">
+    <input
+      #inputRef
+      type="text"
+      [placeholder]="placeholder"
+      [attr.maxlength]="maxLength"
+      [value]="(state$ | async)?.query || ''"
+      (input)="onInput($event)"
+      (blur)="onTouched()"
+      class="typeahead-input"
+      [class.has-results]="(state$ | async)?.isDropdownVisible"
+      [class.error]="(state$ | async)?.error"
+      [attr.aria-expanded]="(state$ | async)?.isDropdownVisible"
+      [attr.aria-haspopup]="'listbox'"
+      [attr.aria-autocomplete]="'list'"
+      [attr.aria-owns]="'typeahead-results'"
+      aria-label="Search input with autocomplete"
+      role="combobox"
+      autocomplete="off"
+    />
+
+    <div class="input-indicators">
+      <span
+        class="character-count"
+        [class.warning]="(state$ | async)?.characterCount! > maxLength * 0.8"
+        [class.error]="(state$ | async)?.characterCount! >= maxLength"
+        aria-live="polite"
+      >
+        {{ (state$ | async)?.characterCount }}/{{ maxLength }}
+      </span>
+
+      <div
+        class="loading-spinner"
+        [class.visible]="(state$ | async)?.showSpinner"
+        aria-hidden="true"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20">
+          <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round">
+            <animate attributeName="stroke-dasharray" values="0 50;25 25;0 50" dur="1s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" values="0 10 10;360 10 10" dur="1s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div
+    #dropdownRef
+    class="typeahead-dropdown"
+    [class.visible]="(state$ | async)?.isDropdownVisible"
+    role="listbox"
+    id="typeahead-results"
+    aria-label="Search results"
+  >
+    <!-- Loading state -->
+    <div
+      *ngIf="(state$ | async)?.loading && !(state$ | async)?.results?.length"
+      class="loading-message"
+      role="status"
+      aria-live="polite"
+    >
+      <span>Searching...</span>
+    </div>
+
+    <!-- Error state -->
+    <div
+      *ngIf="(state$ | async)?.error && !(state$ | async)?.loading"
+      class="error-message"
+      role="alert"
+      aria-live="assertive"
+    >
+      <div class="error-content">
+        <span class="error-text">{{ (state$ | async)?.error?.message }}</span>
+        <button
+          type="button"
+          class="retry-button"
+          (click)="retry()"
+          [disabled]="(state$ | async)?.loading"
+          aria-label="Retry search"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M8 3V1.5L6 3.5L8 5.5V4c2.2 0 4 1.8 4 4 0 .4-.1.8-.2 1.2l1.5.8c.5-.7.7-1.5.7-2.4 0-3.3-2.7-6-6-6z"/>
+            <path d="M8 12c-2.2 0-4-1.8-4-4 0-.4.1-.8.2-1.2L2.7 6c-.5.7-.7 1.5-.7 2.4 0 3.3 2.7 6 6 6v1.5l2-2-2-2V12z"/>
+          </svg>
+          Retry
+        </button>
+      </div>
+      <div class="error-details">
+        Attempt {{ (state$ | async)?.retryCount }} of 3
+      </div>
+    </div>
+
+    <!-- Results -->
+    <ul
+      *ngIf="(state$ | async)?.results?.length && !(state$ | async)?.error"
+      class="results-list"
+      role="listbox"
+    >
+      <li
+        *ngFor="let result of (state$ | async)?.results; trackBy: trackByResultId; let i = index"
+        class="result-item"
+        [class.selected]="i === (state$ | async)?.selectedIndex"
+        [id]="getResultId(i)"
+        role="option"
+        [attr.aria-selected]="i === (state$ | async)?.selectedIndex"
+        (click)="selectResult(result, 'mouse')"
+        (mouseenter)="onResultHover(i)"
+      >
+        <div class="result-content">
+          <div
+            class="result-title"
+            [innerHTML]="result.title | highlight:(state$ | async)?.query!"
+          ></div>
+          <div
+            *ngIf="result.description"
+            class="result-description"
+            [innerHTML]="result.description | highlight:(state$ | async)?.query!"
+          ></div>
+        </div>
+      </li>
+    </ul>
+
+    <!-- No results -->
+    <div
+      *ngIf="!(state$ | async)?.loading && !(state$ | async)?.error &&
+             (state$ | async)?.query!.length >= minQueryLength &&
+             !(state$ | async)?.results?.length"
+      class="no-results"
+      role="status"
+      aria-live="polite"
+    >
+      No results found for "{{ (state$ | async)?.query }}"
+    </div>
+  </div>
+</div>
+
+<!-- Screen reader announcements -->
+<div aria-live="polite" aria-atomic="true" class="sr-only">
+  <span *ngIf="(state$ | async)?.loading">
+    Searching for {{ (state$ | async)?.query }}
+  </span>
+  <span *ngIf="(state$ | async)?.results?.length">
+    {{ (state$ | async)?.results?.length }} results found
+  </span>
+</div>
