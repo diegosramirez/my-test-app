@@ -1,0 +1,93 @@
+<div class="qr-generator-container">
+  <div class="qr-generator-header">
+    <h1>QR Code Generator</h1>
+    <p class="description">Enter any text to generate a QR code instantly</p>
+  </div>
+
+  <div class="input-section">
+    <label for="qr-text-input" class="input-label">
+      Text to encode <span class="required">*</span>
+    </label>
+
+    <textarea
+      id="qr-text-input"
+      [(ngModel)]="inputText"
+      (ngModelChange)="onInputChange($event)"
+      [maxlength]="characterLimit"
+      placeholder="Enter text, URL, WiFi credentials, or contact info..."
+      class="text-input"
+      [class.at-limit]="isAtCharacterLimit"
+      rows="4"
+      aria-describedby="char-counter help-text"
+      [attr.aria-invalid]="errorMessage ? 'true' : null"
+    ></textarea>
+
+    <div class="input-footer">
+      <div
+        id="char-counter"
+        class="character-counter"
+        [class.at-limit]="isAtCharacterLimit"
+        aria-live="polite"
+      >
+        {{ characterCountDisplay }}
+      </div>
+
+      <div id="help-text" class="help-text">
+        {{ isAtCharacterLimit ? 'Character limit reached' : 'Enter text to generate QR code' }}
+      </div>
+    </div>
+  </div>
+
+  <div class="sample-buttons-section" *ngIf="!inputText.trim()">
+    <h2 class="sample-title">Try these examples:</h2>
+    <div class="sample-buttons">
+      <button
+        *ngFor="let sample of sampleData"
+        (click)="useSample(sample.value)"
+        class="sample-button"
+        [attr.aria-label]="'Generate QR code for ' + sample.label"
+        type="button"
+      >
+        <span class="sample-type">{{ sample.type }}</span>
+        <span class="sample-label">{{ sample.label }}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="qr-display-section" *ngIf="inputText.trim() || isLoading || errorMessage">
+
+    <!-- Loading state -->
+    <div *ngIf="isLoading" class="loading-container" role="status" aria-live="polite">
+      <div class="loading-spinner" aria-hidden="true"></div>
+      <span class="loading-text">Generating QR code...</span>
+    </div>
+
+    <!-- Error state -->
+    <div *ngIf="errorMessage" class="error-container" role="alert">
+      <div class="error-icon" aria-hidden="true">⚠</div>
+      <div class="error-message">
+        <strong>Generation Failed:</strong> {{ errorMessage }}
+      </div>
+    </div>
+
+    <!-- Success state with QR code -->
+    <div *ngIf="qrCodeDataUrl && !isLoading" class="qr-code-container">
+      <div class="qr-code-wrapper">
+        <img
+          [src]="qrCodeDataUrl"
+          [alt]="'QR code containing: ' + (inputText.length > 50 ? inputText.substring(0, 50) + '...' : inputText)"
+          class="qr-code-image"
+          (click)="onQRCodeClick()"
+          [class.clickable]="isMobileViewport"
+          loading="lazy"
+        />
+        <div class="qr-code-info" *ngIf="inputText.length <= 100">
+          <small>Scan to access: {{ inputText }}</small>
+        </div>
+        <div class="qr-code-info" *ngIf="inputText.length > 100">
+          <small>Tap on mobile to enlarge</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
