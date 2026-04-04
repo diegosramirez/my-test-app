@@ -1,0 +1,45 @@
+<div class="counter-container">
+  <div class="counter-display">
+    <h1 class="counter-title">Counter</h1>
+    <div class="count-value" aria-label="Current count">
+      {{ count() }}
+    </div>
+    <!-- ARIA live region for screen reader announcements -->
+    <div
+      class="sr-only"
+      aria-live="polite"
+      aria-atomic="true"
+      [attr.aria-label]="'Count is now ' + count()">
+      Count: {{ count() }}
+    </div>
+  </div>
+
+  <div class="button-group" role="group" aria-label="Counter controls">
+    <button
+      class="counter-btn increment-btn"
+      type="button"
+      (click)="increment()"
+      aria-label="Increase count by 1">
+      <span aria-hidden="true">+</span>
+      Increment
+    </button>
+
+    <button
+      class="counter-btn decrement-btn"
+      type="button"
+      (click)="decrement()"
+      aria-label="Decrease count by 1">
+      <span aria-hidden="true">-</span>
+      Decrement
+    </button>
+
+    <button
+      class="counter-btn reset-btn"
+      type="button"
+      (click)="reset()"
+      aria-label="Reset count to zero">
+      <span aria-hidden="true">↺</span>
+      Reset
+    </button>
+  </div>
+</div>
