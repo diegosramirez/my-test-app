@@ -1,0 +1,89 @@
+<div class="qr-generator-container">
+  <h1>QR Code Generator</h1>
+
+  <!-- Input Section -->
+  <div class="input-section">
+    <label for="text-input" class="input-label">Enter text to generate QR code:</label>
+
+    <textarea
+      id="text-input"
+      class="text-input"
+      [class.near-limit]="isNearLimit()"
+      placeholder="Enter any text to generate a QR code..."
+      [value]="state().inputText"
+      (input)="onInputChange($any($event.target).value)"
+      maxlength="1000"
+      rows="4"
+      aria-describedby="character-count error-message"
+    ></textarea>
+
+    <div class="input-meta">
+      <span
+        id="character-count"
+        class="character-count"
+        [class.near-limit]="isNearLimit()"
+        aria-live="polite"
+      >
+        {{ characterDisplay() }}
+      </span>
+    </div>
+
+    @if (state().error) {
+      <div
+        id="error-message"
+        class="error-message"
+        role="alert"
+        aria-live="assertive"
+      >
+        {{ state().error }}
+      </div>
+    }
+  </div>
+
+  <!-- QR Code Display Section -->
+  <div class="qr-section">
+    @if (state().isGenerating) {
+      <div class="loading-container" role="status" aria-live="polite">
+        <div class="loading-spinner" aria-hidden="true"></div>
+        <span class="loading-text">Generating QR code...</span>
+      </div>
+    }
+
+    @if (hasQrCode() && !state().isGenerating) {
+      <div class="qr-display">
+        <img
+          [src]="state().qrCodeDataUrl!"
+          [alt]="'QR code containing: ' + state().inputText"
+          class="qr-image"
+          role="img"
+        />
+
+        <div class="qr-actions">
+          <button
+            type="button"
+            class="action-button copy-button"
+            (click)="copyImage()"
+            [attr.aria-label]="'Copy QR code image for: ' + state().inputText"
+          >
+            📋 Copy Image
+          </button>
+
+          <button
+            type="button"
+            class="action-button download-button"
+            (click)="downloadImage()"
+            [attr.aria-label]="'Download QR code image for: ' + state().inputText"
+          >
+            💾 Download
+          </button>
+        </div>
+      </div>
+    }
+
+    @if (!state().inputText.trim() && !state().isGenerating) {
+      <div class="empty-state" aria-live="polite">
+        <p class="empty-message">Enter text above to generate a QR code</p>
+      </div>
+    }
+  </div>
+</div>
