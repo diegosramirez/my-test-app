@@ -1,0 +1,82 @@
+<div class="counter-container" role="region" aria-labelledby="counter-title">
+  <!-- Screen reader announcement area -->
+  <div
+    class="sr-only"
+    aria-live="polite"
+    aria-atomic="true"
+    [attr.aria-label]="countAriaLabel()"
+  >
+    Count changed to {{ formattedCount() }}
+  </div>
+
+  <!-- Counter title -->
+  <h2 id="counter-title" class="counter-title">
+    Interactive Counter
+  </h2>
+
+  <!-- Current count display -->
+  <div class="count-display" role="status" aria-live="polite">
+    <span class="count-label">Current Count:</span>
+    <span
+      class="count-value"
+      [attr.aria-label]="countAriaLabel()"
+    >
+      {{ formattedCount() }}
+    </span>
+  </div>
+
+  <!-- Action buttons -->
+  <div class="button-group" role="group" aria-label="Counter controls">
+    <!-- Decrement button -->
+    <button
+      type="button"
+      class="counter-btn counter-btn--decrement"
+      data-action="decrement"
+      aria-label="Decrease count by 1"
+      [attr.aria-describedby]="'current-count-' + count()"
+      (click)="onDecrement()"
+    >
+      <span class="btn-icon" aria-hidden="true">−</span>
+      <span class="btn-text">Decrement</span>
+    </button>
+
+    <!-- Reset button -->
+    <button
+      type="button"
+      class="counter-btn counter-btn--reset"
+      data-action="reset"
+      aria-label="Reset count to zero"
+      [attr.aria-describedby]="'current-count-' + count()"
+      (click)="onReset()"
+    >
+      <span class="btn-icon" aria-hidden="true">↻</span>
+      <span class="btn-text">Reset</span>
+    </button>
+
+    <!-- Increment button -->
+    <button
+      type="button"
+      class="counter-btn counter-btn--increment"
+      data-action="increment"
+      aria-label="Increase count by 1"
+      [attr.aria-describedby]="'current-count-' + count()"
+      (click)="onIncrement()"
+    >
+      <span class="btn-icon" aria-hidden="true">+</span>
+      <span class="btn-text">Increment</span>
+    </button>
+  </div>
+
+  <!-- Hidden element for aria-describedby reference -->
+  <div
+    [id]="'current-count-' + count()"
+    class="sr-only"
+  >
+    Current count is {{ formattedCount() }}
+  </div>
+
+  <!-- Keyboard instructions for screen readers -->
+  <div class="sr-only">
+    Use Tab to navigate between buttons. Press Enter or Space to activate buttons.
+  </div>
+</div>
