@@ -1,0 +1,196 @@
+:host {
+  display: block;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.progress-bar {
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.steps {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  margin: 0;
+}
+
+.step-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  min-width: 80px;
+}
+
+.step-button:enabled:hover {
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+.step-button:enabled:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.step-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  border: 2px solid #d1d5db;
+  background: #ffffff;
+  color: #6b7280;
+}
+
+.checkmark {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.step-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-align: center;
+  transition: color 0.2s ease;
+}
+
+.step-connector {
+  position: absolute;
+  top: 1.25rem;
+  left: calc(50% + 1.25rem);
+  right: calc(-50% + 1.25rem);
+  height: 2px;
+  background: #e5e7eb;
+  z-index: -1;
+  transition: background-color 0.2s ease;
+}
+
+/* Step states */
+.step--active .step-number {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+.step--active .step-label {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.step--completed .step-number {
+  background: #10b981;
+  border-color: #10b981;
+  color: #ffffff;
+}
+
+.step--completed .step-label {
+  color: #10b981;
+}
+
+.step--completed .step-connector {
+  background: #10b981;
+}
+
+.step--disabled {
+  opacity: 0.5;
+}
+
+.progress-text {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 6px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .progress-bar {
+    padding: 1rem;
+  }
+
+  .step-button {
+    min-width: 60px;
+    gap: 0.25rem;
+  }
+
+  .step-number {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
+  }
+
+  .step-label {
+    font-size: 0.75rem;
+  }
+
+  .checkmark {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .step-connector {
+    top: 1rem;
+  }
+
+  .progress-text {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .step-number {
+    border-width: 3px;
+  }
+
+  .step--active .step-number,
+  .step--completed .step-number {
+    border-color: transparent;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .step-number,
+  .step-label,
+  .step-connector,
+  .step-button {
+    transition: none;
+  }
+}
