@@ -1,0 +1,217 @@
+/* Mobile-first responsive design */
+.progress-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+
+.progress-container {
+  max-width: 768px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.progress-track {
+  position: absolute;
+  top: 22px;
+  left: 32px;
+  right: 32px;
+  height: 2px;
+  background: #e5e7eb;
+  border-radius: 1px;
+  z-index: 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #059669;
+  border-radius: 1px;
+  transition: width 0.3s ease-in-out;
+}
+
+.steps-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.step-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+  min-height: 44px; /* Minimum touch target */
+  min-width: 44px;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.step-button:disabled {
+  cursor: not-allowed;
+}
+
+.step-button:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.step-wrapper.clickable .step-button:not(:disabled):hover {
+  color: #374151;
+  background: #f9fafb;
+}
+
+.step-wrapper.active .step-button {
+  color: #059669;
+}
+
+.step-wrapper.completed .step-button {
+  color: #059669;
+}
+
+.step-indicator {
+  position: relative;
+  z-index: 2;
+}
+
+.step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.step-wrapper.active .step-icon {
+  background: #059669;
+  color: white;
+}
+
+.step-wrapper.completed .step-icon {
+  background: #059669;
+  color: white;
+}
+
+.step-label {
+  text-align: center;
+  line-height: 1.25;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .progress-bar {
+    padding: 1.5rem 2rem;
+  }
+
+  .step-button {
+    font-size: 1rem;
+    gap: 0.75rem;
+  }
+
+  .step-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .progress-track {
+    top: 28px;
+    left: 40px;
+    right: 40px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .progress-bar {
+    padding: 2rem;
+  }
+
+  .progress-container {
+    max-width: 1024px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .progress-track {
+    background: #000;
+  }
+
+  .progress-fill {
+    background: #000;
+  }
+
+  .step-icon {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .progress-fill,
+  .step-button,
+  .step-icon {
+    transition: none;
+  }
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+  .progress-bar {
+    background: #1f2937;
+    border-bottom-color: #374151;
+  }
+
+  .progress-track {
+    background: #374151;
+  }
+
+  .step-button {
+    color: #d1d5db;
+  }
+
+  .step-button:hover {
+    color: #f9fafb;
+    background: #374151;
+  }
+
+  .step-icon {
+    background: #374151;
+  }
+}
