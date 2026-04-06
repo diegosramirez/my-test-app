@@ -1,0 +1,138 @@
+<div class="todo-app" role="main">
+  <header class="todo-header">
+    <h1>Todo List</h1>
+    <p class="todo-stats" aria-live="polite">
+      {{ getActiveCount() }} active, {{ getCompletedCount() }} completed
+    </p>
+    <div class="storage-warning" *ngIf="isStorageUnavailable" role="alert">
+      ⚠️ Local storage unavailable. Changes will not persist after page reload.
+    </div>
+  </header>
+
+  <section class="todo-input-section">
+    <div class="input-container">
+      <label for="new-todo" class="visually-hidden">Add new todo</label>
+      <input
+        id="new-todo"
+        type="text"
+        class="todo-input"
+        [(ngModel)]="newTodoText"
+        (ngModelChange)="onTextChange()"
+        (keydown.enter)="addTodo()"
+        placeholder="What needs to be done?"
+        maxlength="{{ maxCharacters + 10 }}"
+        aria-describedby="character-count add-todo-help"
+        [attr.aria-invalid]="isCharacterLimitExceeded()"
+      />
+      <button
+        type="button"
+        class="add-button"
+        (click)="addTodo()"
+        [disabled]="!canAddTodo()"
+        aria-label="Add todo item"
+      >
+        Add
+      </button>
+    </div>
+
+    <div class="input-meta">
+      <div
+        id="character-count"
+        [class]="getCharacterCountClass()"
+        aria-live="polite"
+      >
+        {{ characterCount }}/{{ maxCharacters }}
+      </div>
+      <div id="add-todo-help" class="help-text">
+        Press Ctrl+Enter to add quickly
+      </div>
+    </div>
+  </section>
+
+  <nav class="filter-nav" role="navigation" aria-label="Filter todos">
+    <button
+      *ngFor="let option of filterOptions"
+      type="button"
+      class="filter-button"
+      [class.active]="currentFilter === option.value"
+      (click)="setFilter(option.value)"
+      [attr.aria-label]="option.ariaLabel"
+      [attr.aria-pressed]="currentFilter === option.value"
+    >
+      {{ option.label }}
+    </button>
+  </nav>
+
+  <main class="todo-list-container">
+    <div *ngIf="filteredTodos.length === 0" class="empty-state">
+      <div class="empty-icon">📝</div>
+      <h2>{{ currentFilter === 'all' ? 'No todos yet' : 'No ' + currentFilter + ' todos' }}</h2>
+      <p *ngIf="currentFilter === 'all'">
+        Add your first todo above to get started!
+      </p>
+      <p *ngIf="currentFilter !== 'all'">
+        Try switching to "All" to see your other todos.
+      </p>
+    </div>
+
+    <ul
+      *ngIf="filteredTodos.length > 0"
+      class="todo-list"
+      role="list"
+      aria-label="Todo items"
+    >
+      <li
+        *ngFor="let todo of filteredTodos; trackBy: trackByTodo"
+        class="todo-item"
+        [class.completed]="todo.completed"
+        role="listitem"
+      >
+        <div class="todo-content">
+          <button
+            type="button"
+            class="toggle-button"
+            (click)="toggleTodo(todo.id)"
+            [attr.aria-label]="todo.completed ? 'Mark as incomplete: ' + todo.text : 'Mark as complete: ' + todo.text"
+            [attr.aria-pressed]="todo.completed"
+          >
+            <span class="checkbox" [class.checked]="todo.completed">
+              <span *ngIf="todo.completed" class="checkmark">✓</span>
+            </span>
+          </button>
+
+          <div
+            class="todo-text"
+            [attr.tabindex]="0"
+            [attr.aria-label]="'Todo: ' + todo.text + (todo.completed ? ', completed' : ', incomplete')"
+            (keydown)="onKeydown($event, todo)"
+            role="button"
+          >
+            {{ todo.text }}
+          </div>
+
+          <button
+            type="button"
+            class="delete-button"
+            (click)="deleteTodo(todo.id)"
+            (keydown)="onDeleteButtonKeydown($event, todo.id)"
+            [attr.aria-label]="'Delete todo: ' + todo.text"
+          >
+            <span class="delete-icon">×</span>
+          </button>
+        </div>
+
+        <div class="todo-meta">
+          <time [attr.datetime]="todo.createdAt.toISOString()">
+            Created {{ todo.createdAt.toLocaleDateString() }}
+          </time>
+        </div>
+      </li>
+    </ul>
+  </main>
+
+  <footer class="todo-footer" *ngIf="todos.length > 0">
+    <p class="todo-summary">
+      {{ todos.length }} total todo{{ todos.length !== 1 ? 's' : '' }}
+    </p>
+  </footer>
+</div>
