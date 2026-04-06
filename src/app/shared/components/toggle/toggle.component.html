@@ -1,0 +1,22 @@
+<button
+  #toggleButton
+  type="button"
+  class="toggle-switch"
+  role="switch"
+  [attr.aria-checked]="ariaChecked"
+  [attr.aria-label]="ariaLabel || null"
+  [attr.aria-labelledby]="ariaLabelledBy || null"
+  [disabled]="disabled"
+  [class.checked]="isChecked"
+  [class.disabled]="disabled"
+  (click)="onToggleClick($event)"
+  (keydown)="onKeyDown($event)"
+  (focus)="onFocus()">
+
+  <span class="toggle-track">
+    <span
+      class="toggle-circle"
+      [style.transform]="circleTransform">
+    </span>
+  </span>
+</button>

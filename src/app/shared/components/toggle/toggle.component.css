@@ -1,0 +1,137 @@
+/* CSS Custom Properties for theming */
+:host {
+  --toggle-width: 48px;
+  --toggle-height: 24px;
+  --toggle-border-radius: 12px;
+  --toggle-transition-duration: 200ms;
+  --toggle-transition-timing: ease-in-out;
+  --toggle-active-color: #2196f3;
+  --toggle-inactive-color: #ccc;
+  --toggle-circle-color: #ffffff;
+  --toggle-disabled-opacity: 0.5;
+  --toggle-focus-color: #1976d2;
+  --toggle-circle-size: 20px;
+  --toggle-circle-margin: 2px;
+}
+
+.toggle-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+  border: none;
+  border-radius: var(--toggle-border-radius);
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+
+  /* Ensure minimum 44px touch target */
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.toggle-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--toggle-border-radius);
+  background-color: var(--toggle-inactive-color);
+  transition: background-color var(--toggle-transition-duration) var(--toggle-transition-timing);
+  overflow: hidden;
+}
+
+.toggle-circle {
+  position: absolute;
+  top: var(--toggle-circle-margin);
+  left: var(--toggle-circle-margin);
+  width: var(--toggle-circle-size);
+  height: var(--toggle-circle-size);
+  background-color: var(--toggle-circle-color);
+  border-radius: 50%;
+  transition: transform var(--toggle-transition-duration) var(--toggle-transition-timing);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  /* Hardware acceleration for smooth 60fps animation */
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Checked state */
+.toggle-switch.checked .toggle-track {
+  background-color: var(--toggle-active-color);
+}
+
+/* Focus state */
+.toggle-switch:focus {
+  box-shadow: 0 0 0 2px var(--toggle-focus-color);
+}
+
+.toggle-switch:focus:not(:focus-visible) {
+  box-shadow: none;
+}
+
+.toggle-switch:focus-visible {
+  box-shadow: 0 0 0 2px var(--toggle-focus-color);
+}
+
+/* Disabled state */
+.toggle-switch.disabled {
+  opacity: var(--toggle-disabled-opacity);
+  cursor: not-allowed;
+}
+
+.toggle-switch:disabled {
+  opacity: var(--toggle-disabled-opacity);
+  cursor: not-allowed;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .toggle-switch {
+    --toggle-inactive-color: #000;
+    --toggle-active-color: #000;
+  }
+
+  .toggle-track {
+    border: 2px solid currentColor;
+  }
+
+  .toggle-circle {
+    border: 1px solid currentColor;
+  }
+
+  .toggle-switch.checked .toggle-track {
+    background-color: currentColor;
+  }
+
+  .toggle-switch.checked .toggle-circle {
+    background-color: white;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .toggle-circle {
+    transition-duration: 0ms;
+  }
+
+  .toggle-track {
+    transition-duration: 0ms;
+  }
+
+  :host {
+    --toggle-transition-duration: 0ms;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :host {
+    --toggle-inactive-color: #555;
+    --toggle-active-color: #64b5f6;
+    --toggle-focus-color: #90caf9;
+  }
+}
