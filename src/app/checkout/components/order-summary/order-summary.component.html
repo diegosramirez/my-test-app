@@ -1,0 +1,185 @@
+<div class="order-summary-container">
+  <div class="form-header">
+    <h2 class="form-title" #formTitle>Review Your Order</h2>
+    <p class="form-subtitle">Please review your order details before completing your purchase</p>
+  </div>
+
+  <div class="summary-sections">
+    <!-- Order Items -->
+    <section class="summary-section" aria-labelledby="order-items-title">
+      <h3 id="order-items-title" class="section-title">Order Items</h3>
+      <div class="order-items">
+        <div
+          *ngFor="let item of checkoutData?.orderSummary?.lineItems; trackBy: trackByItemId"
+          class="order-item">
+          <div class="item-details">
+            <h4 class="item-name">{{ item.name }}</h4>
+            <p class="item-meta">Quantity: {{ item.quantity }} × ${{ formatPrice(item.price) }}</p>
+          </div>
+          <div class="item-total">
+            ${{ formatPrice(item.total) }}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shipping Information -->
+    <section class="summary-section" aria-labelledby="shipping-title">
+      <h3 id="shipping-title" class="section-title">
+        Shipping Address
+        <button
+          type="button"
+          class="edit-button"
+          (click)="onEditShipping()"
+          [attr.aria-label]="'Edit shipping address'">
+          Edit
+        </button>
+      </h3>
+      <div class="shipping-info" *ngIf="checkoutData?.shippingAddress">
+        <address class="address">
+          {{ checkoutData?.shippingAddress?.firstName }} {{ checkoutData?.shippingAddress?.lastName }}<br>
+          {{ checkoutData?.shippingAddress?.address }}<br>
+          {{ checkoutData?.shippingAddress?.city }}, {{ checkoutData?.shippingAddress?.state }} {{ checkoutData?.shippingAddress?.zipCode }}<br>
+          {{ getCountryName(checkoutData?.shippingAddress?.country || '') }}
+        </address>
+      </div>
+    </section>
+
+    <!-- Payment Information -->
+    <section class="summary-section" aria-labelledby="payment-title">
+      <h3 id="payment-title" class="section-title">
+        Payment Method
+        <button
+          type="button"
+          class="edit-button"
+          (click)="onEditPayment()"
+          [attr.aria-label]="'Edit payment method'">
+          Edit
+        </button>
+      </h3>
+      <div class="payment-info" *ngIf="checkoutData?.paymentMethod">
+        <!-- Credit Card Display -->
+        <div *ngIf="checkoutData?.paymentMethod?.type === 'credit_card'" class="payment-method">
+          <div class="payment-icon">💳</div>
+          <div class="payment-details">
+            <p class="payment-type">Credit Card</p>
+            <p class="payment-meta">
+              **** **** **** {{ getLastFourDigits(getCreditCardPayment(checkoutData?.paymentMethod)?.cardNumber || '') }}
+            </p>
+            <p class="payment-meta">
+              Expires {{ getCreditCardPayment(checkoutData?.paymentMethod)?.expiryMonth }}/{{ getCreditCardPayment(checkoutData?.paymentMethod)?.expiryYear }}
+            </p>
+          </div>
+          <div class="security-badge">🔒 Secure</div>
+        </div>
+
+        <!-- PayPal Display -->
+        <div *ngIf="checkoutData?.paymentMethod?.type === 'paypal'" class="payment-method">
+          <div class="payment-icon">🅿️</div>
+          <div class="payment-details">
+            <p class="payment-type">PayPal</p>
+            <p class="payment-meta">{{ getMaskedEmail(getPayPalPayment(checkoutData?.paymentMethod)?.email || '') }}</p>
+          </div>
+          <div class="security-badge">✓ Protected</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Order Total -->
+    <section class="summary-section total-section" aria-labelledby="total-title">
+      <h3 id="total-title" class="section-title">Order Total</h3>
+      <div class="order-totals">
+        <div class="total-line">
+          <span>Subtotal:</span>
+          <span>${{ formatPrice(checkoutData?.orderSummary.subtotal || 0) }}</span>
+        </div>
+        <div class="total-line">
+          <span>Shipping:</span>
+          <span>${{ formatPrice(checkoutData?.orderSummary.shipping || 0) }}</span>
+        </div>
+        <div class="total-line">
+          <span>Tax:</span>
+          <span>${{ formatPrice(checkoutData?.orderSummary.tax || 0) }}</span>
+        </div>
+        <div class="total-line final-total">
+          <span>Total:</span>
+          <span>${{ formatPrice(checkoutData?.orderSummary.total || 0) }}</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Terms and Conditions -->
+  <section class="terms-section">
+    <label class="terms-checkbox">
+      <input
+        type="checkbox"
+        [(ngModel)]="termsAccepted"
+        (change)="onTermsChange()"
+        [attr.aria-describedby]="'terms-description'">
+      <span class="checkmark" aria-hidden="true"></span>
+      <span class="terms-text">
+        I agree to the
+        <a href="/terms" target="_blank" rel="noopener" class="terms-link">Terms & Conditions</a>
+        and
+        <a href="/privacy" target="_blank" rel="noopener" class="terms-link">Privacy Policy</a>
+      </span>
+    </label>
+    <div id="terms-description" class="sr-only">
+      You must agree to the terms and conditions to complete your order
+    </div>
+  </section>
+
+  <!-- Form Actions -->
+  <div class="form-actions">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="onBack()"
+      [attr.aria-label]="'Go back to payment method'">
+      ← Back
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="!termsAccepted || isSubmitting"
+      (click)="onCompleteOrder()"
+      [attr.aria-describedby]="!termsAccepted ? 'submit-help' : null">
+      <span *ngIf="isSubmitting" class="loading-spinner" aria-hidden="true"></span>
+      {{ isSubmitting ? 'Processing Order...' : 'Complete Order' }}
+    </button>
+  </div>
+
+  <!-- Help text for submit button -->
+  <div
+    *ngIf="!termsAccepted"
+    id="submit-help"
+    class="submit-help"
+    role="status"
+    aria-live="polite">
+    Please accept the terms and conditions to complete your order
+  </div>
+
+  <!-- Error Display -->
+  <div
+    *ngIf="errorMessage"
+    class="error-alert"
+    role="alert"
+    aria-live="assertive">
+    <div class="error-content">
+      <span class="error-icon" aria-hidden="true">⚠️</span>
+      <div class="error-text">
+        <h4 class="error-title">Order Submission Failed</h4>
+        <p class="error-message">{{ errorMessage }}</p>
+      </div>
+    </div>
+    <button
+      type="button"
+      class="error-dismiss"
+      (click)="clearError()"
+      [attr.aria-label]="'Dismiss error message'">
+      ×
+    </button>
+  </div>
+</div>
