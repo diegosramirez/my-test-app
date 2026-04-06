@@ -1,0 +1,202 @@
+// CSS Custom Properties for theming
+:host {
+  --toggle-track-width: 48px;
+  --toggle-track-height: 24px;
+  --toggle-handle-size: 20px;
+  --toggle-track-padding: 2px;
+  --toggle-border-radius: 12px;
+
+  // Colors
+  --toggle-track-off: #e2e8f0;
+  --toggle-track-on: #3b82f6;
+  --toggle-handle-color: #ffffff;
+  --toggle-track-disabled: #f1f5f9;
+  --toggle-handle-disabled: #cbd5e1;
+  --toggle-focus-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+
+  // Transition duration
+  --toggle-transition-duration: 200ms;
+
+  // Labels
+  --toggle-label-font-size: 10px;
+  --toggle-label-font-weight: 600;
+
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  position: relative;
+
+  // Ensure minimum touch target
+  min-width: 44px;
+  min-height: 44px;
+  justify-content: center;
+}
+
+// Size variants
+:host(.toggle--small) {
+  --toggle-track-width: 32px;
+  --toggle-track-height: 18px;
+  --toggle-handle-size: 14px;
+  --toggle-border-radius: 9px;
+  --toggle-label-font-size: 8px;
+}
+
+:host(.toggle--large) {
+  --toggle-track-width: 64px;
+  --toggle-track-height: 32px;
+  --toggle-handle-size: 28px;
+  --toggle-border-radius: 16px;
+  --toggle-label-font-size: 12px;
+}
+
+// Disabled state
+:host(.toggle--disabled) {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+// Focus state
+:host(:focus) {
+  .toggle-track {
+    box-shadow: var(--toggle-focus-shadow);
+  }
+}
+
+// Main toggle container
+.toggle-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+// Track (background)
+.toggle-track {
+  position: relative;
+  width: var(--toggle-track-width);
+  height: var(--toggle-track-height);
+  background-color: var(--toggle-track-off);
+  border-radius: var(--toggle-border-radius);
+  transition: background-color var(--toggle-transition-duration) ease-in-out;
+  overflow: hidden;
+
+  // Checked state
+  :host(.toggle--checked) & {
+    background-color: var(--toggle-track-on);
+  }
+
+  // Disabled state
+  :host(.toggle--disabled) & {
+    background-color: var(--toggle-track-disabled);
+  }
+}
+
+// Handle (circle)
+.toggle-handle {
+  position: absolute;
+  top: var(--toggle-track-padding);
+  left: var(--toggle-track-padding);
+  width: var(--toggle-handle-size);
+  height: var(--toggle-handle-size);
+  background-color: var(--toggle-handle-color);
+  border-radius: 50%;
+  transition: transform var(--toggle-transition-duration) ease-in-out;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  // Checked state - move handle to right
+  :host(.toggle--checked) & {
+    transform: translateX(calc(var(--toggle-track-width) - var(--toggle-handle-size) - 2 * var(--toggle-track-padding)));
+  }
+
+  // Disabled state
+  :host(.toggle--disabled) & {
+    background-color: var(--toggle-handle-disabled);
+  }
+}
+
+// Labels
+.toggle-labels {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  font-size: var(--toggle-label-font-size);
+  font-weight: var(--toggle-label-font-weight);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.toggle-label {
+  opacity: 0;
+  transition: opacity var(--toggle-transition-duration) ease-in-out;
+  color: rgba(255, 255, 255, 0.8);
+
+  &--visible {
+    opacity: 1;
+  }
+
+  &--off {
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  :host {
+    --toggle-track-off: #000000;
+    --toggle-track-on: #ffffff;
+    --toggle-handle-color: #000000;
+    --toggle-focus-shadow: 0 0 0 3px #0066cc;
+  }
+
+  :host(.toggle--checked) {
+    --toggle-handle-color: #ffffff;
+  }
+
+  .toggle-track {
+    border: 2px solid #000000;
+  }
+
+  .toggle-label--off {
+    color: #ffffff;
+  }
+
+  .toggle-label--on {
+    color: #000000;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    --toggle-transition-duration: 0ms;
+  }
+
+  .toggle-track,
+  .toggle-handle,
+  .toggle-label {
+    transition: none !important;
+  }
+}
+
+// Prevent interaction during animation
+:host(.toggle--animating) {
+  pointer-events: none;
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  :host {
+    --toggle-track-off: #374151;
+    --toggle-track-on: #3b82f6;
+    --toggle-handle-color: #ffffff;
+    --toggle-track-disabled: #1f2937;
+    --toggle-handle-disabled: #6b7280;
+  }
+}
