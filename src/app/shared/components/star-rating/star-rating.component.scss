@@ -1,0 +1,366 @@
+// CSS Custom Properties for theming
+:host {
+  --star-color-empty: #e5e7eb;
+  --star-color-filled: #fbbf24;
+  --star-color-hover: #f59e0b;
+  --star-color-focus: #3b82f6;
+  --star-color-half: #fbbf24;
+
+  // Size variants
+  --star-size-small: 16px;
+  --star-size-medium: 24px;
+  --star-size-large: 32px;
+
+  // Touch target sizes
+  --touch-target-small: 44px;
+  --touch-target-medium: 48px;
+  --touch-target-large: 52px;
+
+  // Spacing
+  --star-gap-small: 2px;
+  --star-gap-medium: 4px;
+  --star-gap-large: 6px;
+
+  // Transition timing
+  --transition-duration: 200ms;
+  --transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Border radius for focus indicators
+  --focus-border-radius: 4px;
+  --focus-outline-width: 2px;
+
+  display: inline-block;
+  position: relative;
+}
+
+// Container styles
+.star-rating-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+
+  &:focus-within {
+    outline: none;
+  }
+}
+
+// Stars container
+.star-rating__stars {
+  display: flex;
+  align-items: center;
+  gap: var(--star-gap-medium);
+  position: relative;
+}
+
+// Individual star button
+.star-rating__star-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform var(--transition-duration) var(--transition-easing);
+  border-radius: var(--focus-border-radius);
+
+  // Ensure minimum touch target size
+  min-width: var(--touch-target-medium);
+  min-height: var(--touch-target-medium);
+
+  &:disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &:not(:disabled):hover {
+    transform: scale(1.1);
+  }
+
+  &:not(:disabled):active {
+    transform: scale(0.95);
+  }
+
+  // Focus styles
+  &:focus-visible {
+    outline: var(--focus-outline-width) solid var(--star-color-focus);
+    outline-offset: 2px;
+  }
+
+  // Remove default focus outline in favor of custom styling
+  &:focus {
+    outline: none;
+  }
+}
+
+// Star icon SVG
+.star-rating__star-icon {
+  width: var(--star-size-medium);
+  height: var(--star-size-medium);
+  display: block;
+  pointer-events: none;
+  transition: all var(--transition-duration) var(--transition-easing);
+}
+
+// Star path styling
+.star-rating__star-path {
+  fill: var(--star-color-empty);
+  stroke: none;
+  transition: fill var(--transition-duration) var(--transition-easing);
+}
+
+// Star states
+.star-rating__star--filled .star-rating__star-path {
+  fill: var(--star-color-filled);
+}
+
+.star-rating__star--half-filled .star-rating__star-path {
+  fill: var(--star-color-half);
+}
+
+.star-rating__star--hovered .star-rating__star-path {
+  fill: var(--star-color-hover);
+}
+
+// Focused state for keyboard navigation
+.star-rating__star--focused {
+  &::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border: var(--focus-outline-width) solid var(--star-color-focus);
+    border-radius: var(--focus-border-radius);
+    pointer-events: none;
+    opacity: 0.8;
+  }
+}
+
+// Unicode half-star fallback
+.star-rating__star-unicode {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.7em;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+// Numeric rating display
+.star-rating__numeric {
+  display: flex;
+  align-items: baseline;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  min-width: 2rem;
+}
+
+.star-rating__rating-value {
+  font-weight: 600;
+}
+
+.star-rating__max-rating {
+  opacity: 0.6;
+  font-size: 0.9em;
+  margin-left: 1px;
+}
+
+// Focus indicator for keyboard navigation
+.star-rating__focus-indicator {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: calc(100% / var(--max-stars, 5));
+  border: 2px solid var(--star-color-focus);
+  border-radius: var(--focus-border-radius);
+  pointer-events: none;
+  transition: left var(--transition-duration) var(--transition-easing);
+  opacity: 0.8;
+}
+
+// Screen reader only text
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Size variants
+.star-rating--small {
+  .star-rating__stars {
+    gap: var(--star-gap-small);
+  }
+
+  .star-rating__star-button {
+    min-width: var(--touch-target-small);
+    min-height: var(--touch-target-small);
+  }
+
+  .star-rating__star-icon {
+    width: var(--star-size-small);
+    height: var(--star-size-small);
+  }
+
+  .star-rating__numeric {
+    font-size: 12px;
+  }
+}
+
+.star-rating--large {
+  .star-rating__stars {
+    gap: var(--star-gap-large);
+  }
+
+  .star-rating__star-button {
+    min-width: var(--touch-target-large);
+    min-height: var(--touch-target-large);
+  }
+
+  .star-rating__star-icon {
+    width: var(--star-size-large);
+    height: var(--star-size-large);
+  }
+
+  .star-rating__numeric {
+    font-size: 16px;
+  }
+}
+
+// Read-only mode
+.star-rating--readonly {
+  .star-rating__star-button {
+    cursor: default;
+
+    &:hover {
+      transform: none;
+    }
+  }
+
+  .star-rating__numeric {
+    color: #6b7280;
+  }
+}
+
+// Hovering state
+.star-rating--hovering {
+  .star-rating__star-path {
+    transition: fill 150ms var(--transition-easing);
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  :host {
+    --star-color-empty: #000000;
+    --star-color-filled: #000000;
+    --star-color-hover: #000000;
+    --star-color-focus: #0000ff;
+    --star-color-half: #000000;
+  }
+
+  .star-rating__star-path {
+    stroke: #000000;
+    stroke-width: 1px;
+  }
+
+  .star-rating__star--filled .star-rating__star-path {
+    fill: #000000;
+  }
+
+  .star-rating__star--empty .star-rating__star-path {
+    fill: #ffffff;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .star-rating__star-button,
+  .star-rating__star-icon,
+  .star-rating__star-path,
+  .star-rating__focus-indicator {
+    transition: none;
+  }
+
+  .star-rating__star-button:not(:disabled):hover {
+    transform: none;
+  }
+}
+
+// Mobile-specific styles
+@media (max-width: 768px) {
+  :host {
+    // Increase touch targets on mobile
+    --touch-target-small: 48px;
+    --touch-target-medium: 52px;
+    --touch-target-large: 56px;
+  }
+
+  .star-rating__stars {
+    gap: var(--star-gap-large);
+  }
+
+  // Increase star size slightly on mobile for better visibility
+  .star-rating--small .star-rating__star-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .star-rating--medium .star-rating__star-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .star-rating--large .star-rating__star-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+// Dark mode support (if using CSS variables or classes)
+@media (prefers-color-scheme: dark) {
+  :host {
+    --star-color-empty: #4b5563;
+    --star-color-filled: #fbbf24;
+    --star-color-hover: #f59e0b;
+    --star-color-focus: #60a5fa;
+    --star-color-half: #fbbf24;
+  }
+
+  .star-rating__numeric {
+    color: #d1d5db;
+  }
+
+  .star-rating--readonly .star-rating__numeric {
+    color: #9ca3af;
+  }
+}
+
+// CSS Masks support check and fallback
+@supports not (mask: url()) {
+  .star-rating__star-path[mask] {
+    mask: none;
+  }
+
+  .star-rating__star--half-filled .star-rating__star-unicode {
+    display: block;
+  }
+}
+
+@supports (mask: url()) {
+  .star-rating__star-unicode {
+    display: none;
+  }
+}
