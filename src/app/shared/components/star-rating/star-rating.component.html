@@ -1,0 +1,76 @@
+<div class="star-rating"
+     [class.readonly]="readonly"
+     [class.touch-device]="isTouchDevice"
+     role="radiogroup"
+     [attr.aria-label]="getAriaLabel()"
+     [attr.aria-valuenow]="displayRating"
+     [attr.aria-valuemin]="0"
+     [attr.aria-valuemax]="maxRating"
+     (mouseleave)="onMouseLeave()">
+
+  <!-- Star buttons container -->
+  <div class="stars-container">
+    <button
+      #starButton
+      *ngFor="let star of stars; let i = index; trackBy: trackByStarIndex"
+      type="button"
+      class="star-button"
+      [class.hovered]="hoveredRating >= star.value"
+      [class.selected]="displayRating >= star.value"
+      [disabled]="readonly"
+      [attr.aria-label]="getStarAriaLabel(i)"
+      [attr.aria-pressed]="displayRating >= star.value"
+      role="radio"
+      [tabindex]="readonly ? -1 : (i === 0 ? 0 : -1)"
+      (click)="onStarClick(star.value)"
+      (mouseenter)="onStarHover(star.value)"
+      (keydown)="onKeyDown($event, star.value)">
+
+      <!-- SVG Star with clip-path for half-star support -->
+      <svg class="star-icon"
+           viewBox="0 0 24 24"
+           width="24"
+           height="24"
+           [attr.aria-hidden]="true">
+
+        <!-- Define clip paths for half stars -->
+        <defs>
+          <clipPath [id]="'half-clip-' + i">
+            <rect x="0" y="0" width="12" height="24" />
+          </clipPath>
+        </defs>
+
+        <!-- Background (empty) star -->
+        <path class="star-empty"
+              d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+
+        <!-- Full star (shows when star.state is 'full') -->
+        <path *ngIf="getStarState(i) === 'full'"
+              class="star-filled"
+              d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+
+        <!-- Half star (shows when star.state is 'half') -->
+        <path *ngIf="getStarState(i) === 'half'"
+              class="star-filled"
+              [attr.clip-path]="'url(#half-clip-' + i + ')'"
+              d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Numeric rating display -->
+  <div class="rating-numeric"
+       *ngIf="showNumeric"
+       [attr.aria-hidden]="true">
+    {{ getFormattedRating() }}
+  </div>
+
+  <!-- Screen reader only description -->
+  <div class="sr-only"
+       [attr.aria-live]="readonly ? 'off' : 'polite'"
+       [attr.aria-atomic]="true">
+    <ng-container *ngIf="!readonly">
+      Use arrow keys to change rating, Enter or Space to select, Home to clear, End for maximum rating.
+    </ng-container>
+  </div>
+</div>

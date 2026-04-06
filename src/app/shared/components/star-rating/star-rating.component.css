@@ -1,0 +1,253 @@
+/* Host component styles */
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Main container */
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Stars container */
+.stars-container {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Individual star button */
+.star-button {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+
+  /* Default desktop sizing */
+  width: 24px;
+  height: 24px;
+
+  /* Ensure minimum touch target size */
+  min-width: 44px;
+  min-height: 44px;
+
+  /* Center the star icon within the button */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  .star-button {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Touch device optimizations */
+.touch-device .star-button {
+  /* Ensure consistent touch targets */
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.touch-device .star-button:hover {
+  /* Prevent hover state persistence on touch */
+  transform: none;
+}
+
+/* Star button states */
+.star-button:not(:disabled):hover {
+  transform: scale(1.1);
+}
+
+.star-button:not(:disabled):active {
+  transform: scale(0.95);
+}
+
+/* Focus styles for keyboard navigation */
+.star-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #007bff;
+  border-radius: 4px;
+}
+
+.star-button:focus:not(:focus-visible) {
+  box-shadow: none;
+}
+
+/* Disabled state for readonly mode */
+.star-button:disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+.readonly .star-button {
+  cursor: default;
+}
+
+/* Star icon styles */
+.star-icon {
+  width: 100%;
+  height: 100%;
+  max-width: 24px;
+  max-height: 24px;
+  display: block;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .star-icon {
+    max-width: 20px;
+    max-height: 20px;
+  }
+}
+
+/* Star fill states */
+.star-empty {
+  fill: #d1d5db; /* Gray-300 */
+  transition: fill 200ms ease;
+}
+
+.star-filled {
+  fill: #fbbf24; /* Amber-400 - Gold color */
+  transition: fill 200ms ease;
+}
+
+/* Hover effects for interactive mode */
+.star-button:not(:disabled):hover .star-empty,
+.star-button.hovered .star-empty {
+  fill: #9ca3af; /* Gray-400 - darker on hover */
+}
+
+.star-button:not(:disabled):hover .star-filled,
+.star-button.hovered .star-filled {
+  fill: #f59e0b; /* Amber-500 - darker gold on hover */
+}
+
+/* Selected state styling */
+.star-button.selected .star-filled {
+  fill: #fbbf24; /* Amber-400 */
+}
+
+/* Numeric rating display */
+.rating-numeric {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151; /* Gray-700 */
+  white-space: nowrap;
+  margin-left: 4px;
+  min-width: 48px;
+  text-align: right;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Loading skeleton state (for future enhancement) */
+.star-rating.loading .star-button {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.star-rating.loading .star-icon {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .star-empty {
+    fill: #000000;
+    stroke: #ffffff;
+    stroke-width: 1;
+  }
+
+  .star-filled {
+    fill: #ffff00;
+    stroke: #000000;
+    stroke-width: 1;
+  }
+
+  .star-button:focus {
+    box-shadow: 0 0 0 3px #ffffff, 0 0 0 5px #000000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .star-button,
+  .star-empty,
+  .star-filled {
+    transition: none;
+  }
+
+  .star-rating.loading .star-icon {
+    animation: none;
+  }
+
+  .star-button:not(:disabled):hover {
+    transform: none;
+  }
+
+  .star-button:not(:disabled):active {
+    transform: none;
+  }
+}
+
+/* RTL support */
+:host-context([dir="rtl"]) .stars-container {
+  flex-direction: row-reverse;
+}
+
+:host-context([dir="rtl"]) .rating-numeric {
+  margin-left: 0;
+  margin-right: 4px;
+  text-align: left;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .star-empty {
+    fill: #4b5563; /* Gray-600 */
+  }
+
+  .star-button:not(:disabled):hover .star-empty,
+  .star-button.hovered .star-empty {
+    fill: #6b7280; /* Gray-500 */
+  }
+
+  .rating-numeric {
+    color: #d1d5db; /* Gray-300 */
+  }
+
+  .star-button:focus {
+    box-shadow: 0 0 0 2px #60a5fa; /* Blue-400 */
+  }
+}
