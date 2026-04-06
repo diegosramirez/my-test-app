@@ -1,0 +1,278 @@
+// Variables
+$primary-color: #2196f3;
+$text-color: #333;
+$border-color: #e0e0e0;
+$background-light: #f5f5f5;
+$success-color: #4caf50;
+
+.demo-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: $text-color;
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: $primary-color;
+  }
+
+  > p {
+    font-size: 1.125rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #666;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: $text-color;
+    border-bottom: 2px solid $border-color;
+    padding-bottom: 0.5rem;
+  }
+
+  .demo-section {
+    margin-bottom: 4rem;
+
+    > p {
+      margin-bottom: 2rem;
+      font-size: 1rem;
+      color: #666;
+    }
+  }
+
+  .features-section {
+    background-color: $background-light;
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 4rem 0;
+
+    h2 {
+      border-bottom: 2px solid $primary-color;
+      color: $primary-color;
+    }
+
+    .features-list {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0 0 0;
+
+      li {
+        background: white;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: $success-color;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        // Checkmark styling
+        &::before {
+          content: '✓';
+          color: $success-color;
+          font-weight: bold;
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+
+  .instructions-section {
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 4rem 0;
+
+    h2 {
+      border-bottom: 2px solid $primary-color;
+      color: $primary-color;
+    }
+
+    .keyboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+
+      .key-instruction {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: white;
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        transition: box-shadow 0.2s ease;
+
+        &:hover {
+          box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        kbd {
+          background: #333;
+          color: white;
+          padding: 0.5rem 0.75rem;
+          border-radius: 6px;
+          font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+          font-size: 0.875rem;
+          font-weight: 600;
+          min-width: 60px;
+          text-align: center;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),
+                      0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+        }
+
+        span {
+          font-size: 0.95rem;
+          color: $text-color;
+          font-weight: 500;
+          flex: 1;
+        }
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .demo-container {
+    padding: 1rem;
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    .features-section {
+      padding: 1.5rem;
+
+      .features-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .instructions-section {
+      padding: 1.5rem;
+
+      .keyboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+
+        .key-instruction {
+          flex-direction: column;
+          text-align: center;
+          gap: 0.75rem;
+
+          kbd {
+            min-width: auto;
+            padding: 0.75rem 1rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .demo-container {
+    padding: 0.5rem;
+
+    h1 {
+      font-size: 1.75rem;
+    }
+
+    .demo-section {
+      margin-bottom: 2rem;
+    }
+
+    .features-section,
+    .instructions-section {
+      margin: 2rem 0;
+      padding: 1rem;
+    }
+  }
+}
+
+// Print styles
+@media print {
+  .demo-container {
+    max-width: none;
+    padding: 1rem;
+
+    .features-section {
+      background: white;
+      border: 1px solid #ccc;
+    }
+
+    .instructions-section {
+      page-break-inside: avoid;
+    }
+
+    .keyboard-grid {
+      .key-instruction {
+        page-break-inside: avoid;
+
+        kbd {
+          background: white;
+          color: black;
+          border: 1px solid #333;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .demo-container {
+    .features-section {
+      border: 2px solid currentColor;
+    }
+
+    .instructions-section {
+      border: 2px solid currentColor;
+    }
+
+    .keyboard-grid {
+      .key-instruction {
+        border: 2px solid currentColor;
+      }
+    }
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .demo-container {
+    .features-list li,
+    .keyboard-grid .key-instruction {
+      transition: none;
+
+      &:hover {
+        transform: none;
+      }
+    }
+  }
+}

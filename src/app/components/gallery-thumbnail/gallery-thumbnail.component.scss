@@ -1,0 +1,335 @@
+@use 'sass:color';
+
+// Variables
+$transition-duration: 300ms;
+$transition-timing: ease-in-out;
+$border-radius: 8px;
+
+// Colors
+$loading-bg: #f5f5f5;
+$error-bg: #ffebee;
+$error-color: #f44336;
+$caption-bg: rgba(0, 0, 0, 0.7);
+$caption-color: #ffffff;
+$focus-color: #2196f3;
+$hover-shadow: rgba(0, 0, 0, 0.15);
+
+.thumbnail-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: $loading-bg;
+  border-radius: $border-radius;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform $transition-duration $transition-timing,
+              box-shadow $transition-duration $transition-timing;
+
+  // Focus styles for accessibility
+  &:focus {
+    outline: 2px solid $focus-color;
+    outline-offset: 2px;
+  }
+
+  // Hover effects
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px $hover-shadow;
+  }
+
+  // Loading state
+  &.loading {
+    background-color: $loading-bg;
+
+    .loading-placeholder {
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+  }
+
+  // Error state
+  &.error {
+    background-color: $error-bg;
+    cursor: pointer; // Still clickable to retry
+
+    &:hover {
+      transform: none;
+      box-shadow: 0 2px 8px rgba(244, 67, 54, 0.2);
+    }
+  }
+
+  // Loaded state
+  &.loaded {
+    background-color: transparent;
+  }
+
+  // Thumbnail placeholder
+  .thumbnail-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  // Loading placeholder
+  .loading-placeholder {
+    .loading-spinner {
+      width: 32px;
+      height: 32px;
+      color: #9e9e9e;
+      margin-bottom: 8px;
+
+      .spinner {
+        width: 100%;
+        height: 100%;
+        animation: spin 1s linear infinite;
+      }
+    }
+  }
+
+  // Error placeholder
+  .error-placeholder {
+    padding: 1rem;
+    text-align: center;
+
+    .error-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .error-icon {
+      width: 24px;
+      height: 24px;
+      color: $error-color;
+    }
+
+    .error-text {
+      font-size: 12px;
+      color: $error-color;
+      font-weight: 500;
+    }
+
+    .retry-button {
+      padding: 4px 8px;
+      font-size: 11px;
+      background-color: $error-color;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      min-height: 24px; // Minimum touch target
+
+      &:hover {
+        background-color: color.adjust($error-color, $lightness: -10%);
+      }
+
+      &:focus {
+        outline: 2px solid $focus-color;
+        outline-offset: 1px;
+      }
+    }
+  }
+
+  // Actual thumbnail image
+  .thumbnail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    background-color: $loading-bg;
+    transition: opacity $transition-duration $transition-timing;
+
+    // Image load animation
+    animation: fadeIn $transition-duration $transition-timing;
+
+    // Ensure proper aspect ratio
+    display: block;
+  }
+
+  // Image caption
+  .thumbnail-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: $caption-bg;
+    color: $caption-color;
+    padding: 8px 12px;
+    font-size: 12px;
+    line-height: 1.4;
+    transform: translateY(100%);
+    transition: transform $transition-duration $transition-timing;
+    backdrop-filter: blur(4px);
+  }
+
+  // Show caption on hover/focus
+  &:hover .thumbnail-caption,
+  &:focus .thumbnail-caption {
+    transform: translateY(0);
+  }
+
+  // Loading progress indicator
+  .loading-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    .progress-bar {
+      height: 100%;
+      background-color: $focus-color;
+      animation: indeterminate 2s ease-in-out infinite;
+    }
+  }
+}
+
+// Animations
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 767px) {
+  .thumbnail-container {
+    // Reduce hover effects on touch devices
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    // Always show captions on small screens
+    .thumbnail-caption {
+      transform: translateY(0);
+      font-size: 11px;
+      padding: 6px 8px;
+    }
+
+    // Larger touch targets for retry button
+    .error-placeholder {
+      .retry-button {
+        padding: 8px 12px;
+        font-size: 12px;
+        min-height: 44px;
+      }
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .thumbnail-container {
+    &:focus {
+      outline-width: 3px;
+      outline-color: currentColor;
+    }
+
+    .error-placeholder {
+      .retry-button {
+        border: 2px solid currentColor;
+      }
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .thumbnail-container {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+
+    .thumbnail-image {
+      animation: none;
+    }
+
+    .loading-placeholder {
+      animation: none;
+    }
+
+    .loading-spinner .spinner {
+      animation: none;
+    }
+
+    .progress-bar {
+      animation: none;
+    }
+  }
+}
+
+// Print styles
+@media print {
+  .thumbnail-container {
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .thumbnail-caption {
+      transform: translateY(0);
+      background: white;
+      color: black;
+      border-top: 1px solid #ccc;
+    }
+
+    .loading-progress {
+      display: none;
+    }
+  }
+}
+
+// Screen reader only content
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
