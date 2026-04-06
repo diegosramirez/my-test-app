@@ -1,0 +1,9 @@
+<div class="toggle-switch">
+  <div class="toggle-track">
+    <div class="toggle-handle"></div>
+    <div class="toggle-labels" *ngIf="showLabels">
+      <span class="toggle-label toggle-label--off" [class.toggle-label--visible]="!isChecked">OFF</span>
+      <span class="toggle-label toggle-label--on" [class.toggle-label--visible]="isChecked">ON</span>
+    </div>
+  </div>
+</div>

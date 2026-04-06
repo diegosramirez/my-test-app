@@ -1,0 +1,295 @@
+<div class="demo-container">
+  <header class="demo-header">
+    <h1>Toggle Switch Component Demo</h1>
+    <p>Interactive demonstration of the Angular Toggle Switch component with all features.</p>
+  </header>
+
+  <div class="demo-grid">
+
+    <!-- Basic Usage -->
+    <section class="demo-section">
+      <h2>Basic Toggle Switch</h2>
+      <p>Default toggle switch with medium size and smooth animations.</p>
+
+      <div class="toggle-demo">
+        <app-toggle-switch
+          componentId="basic-demo"
+          [isChecked]="basicToggle"
+          (change)="onBasicToggleChange($event)">
+        </app-toggle-switch>
+        <span class="toggle-label">Basic Toggle</span>
+      </div>
+
+      <div class="status-info">
+        <strong>Current State:</strong> {{ basicToggle ? 'ON' : 'OFF' }}
+        <br>
+        <strong>Last Event:</strong> {{ lastEvent || 'None' }}
+      </div>
+    </section>
+
+    <!-- Size Variants -->
+    <section class="demo-section">
+      <h2>Size Variants</h2>
+      <p>Toggle switches available in small, medium (default), and large sizes.</p>
+
+      <div class="size-variants">
+        <div class="toggle-demo">
+          <app-toggle-switch
+            componentId="small-demo"
+            size="small"
+            [isChecked]="smallToggle"
+            (change)="smallToggle = $event.checked; onSizeToggleChange('Small', $event)">
+          </app-toggle-switch>
+          <span class="toggle-label">Small</span>
+        </div>
+
+        <div class="toggle-demo">
+          <app-toggle-switch
+            componentId="medium-demo"
+            size="medium"
+            [isChecked]="mediumToggle"
+            (change)="mediumToggle = $event.checked; onSizeToggleChange('Medium', $event)">
+          </app-toggle-switch>
+          <span class="toggle-label">Medium</span>
+        </div>
+
+        <div class="toggle-demo">
+          <app-toggle-switch
+            componentId="large-demo"
+            size="large"
+            [isChecked]="largeToggle"
+            (change)="largeToggle = $event.checked; onSizeToggleChange('Large', $event)">
+          </app-toggle-switch>
+          <span class="toggle-label">Large</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- With Labels -->
+    <section class="demo-section">
+      <h2>With Labels</h2>
+      <p>Toggle switches can display ON/OFF labels for enhanced clarity.</p>
+
+      <div class="toggle-demo">
+        <app-toggle-switch
+          componentId="labeled-demo"
+          [isChecked]="labeledToggle"
+          [showLabels]="true"
+          size="large"
+          (change)="labeledToggle = $event.checked">
+        </app-toggle-switch>
+        <span class="toggle-label">Labeled Toggle</span>
+      </div>
+    </section>
+
+    <!-- Disabled States -->
+    <section class="demo-section">
+      <h2>Disabled States</h2>
+      <p>Toggle switches in disabled state (both ON and OFF).</p>
+
+      <div class="disabled-variants">
+        <div class="toggle-demo">
+          <app-toggle-switch
+            componentId="disabled-off-demo"
+            [isChecked]="false"
+            [disabled]="true">
+          </app-toggle-switch>
+          <span class="toggle-label">Disabled OFF</span>
+        </div>
+
+        <div class="toggle-demo">
+          <app-toggle-switch
+            componentId="disabled-on-demo"
+            [isChecked]="true"
+            [disabled]="true">
+          </app-toggle-switch>
+          <span class="toggle-label">Disabled ON</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Accessibility Features -->
+    <section class="demo-section">
+      <h2>Accessibility Features</h2>
+      <p>Test keyboard navigation (Tab, Space, Enter) and screen reader support.</p>
+
+      <div class="accessibility-demo">
+        <div class="toggle-demo">
+          <app-toggle-switch
+            componentId="accessibility-test-1"
+            [isChecked]="accessibilityTest1"
+            (change)="onAccessibilityTestChange(1, $event)">
+          </app-toggle-switch>
+          <span class="toggle-label">Keyboard Test 1</span>
+        </div>
+
+        <div class="toggle-demo">
+          <app-toggle-switch
+            componentId="accessibility-test-2"
+            [isChecked]="accessibilityTest2"
+            (change)="onAccessibilityTestChange(2, $event)">
+          </app-toggle-switch>
+          <span class="toggle-label">Keyboard Test 2</span>
+        </div>
+      </div>
+
+      <div class="keyboard-events" *ngIf="keyboardEvents.length > 0">
+        <h4>Recent Keyboard Events:</h4>
+        <ul>
+          <li *ngFor="let event of keyboardEvents">{{ event }}</li>
+        </ul>
+      </div>
+
+      <div class="accessibility-info">
+        <h4>Accessibility Features:</h4>
+        <ul>
+          <li>✅ ARIA role="switch" with proper state announcements</li>
+          <li>✅ Keyboard navigation (Tab, Space, Enter)</li>
+          <li>✅ Minimum 44px touch target size</li>
+          <li>✅ High contrast mode support</li>
+          <li>✅ Respects prefers-reduced-motion</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Angular Forms Integration -->
+    <section class="demo-section">
+      <h2>Angular Forms Integration</h2>
+      <p>Toggle switches fully integrated with Angular Reactive Forms.</p>
+
+      <form [formGroup]="settingsForm" class="forms-demo">
+        <div class="toggle-demo">
+          <app-toggle-switch
+            componentId="form-notifications"
+            formControlName="notifications">
+          </app-toggle-switch>
+          <span class="toggle-label">Email Notifications</span>
+        </div>
+
+        <div class="toggle-demo">
+          <app-toggle-switch
+            componentId="form-dark-mode"
+            formControlName="darkMode">
+          </app-toggle-switch>
+          <span class="toggle-label">Dark Mode</span>
+        </div>
+
+        <div class="toggle-demo">
+          <app-toggle-switch
+            componentId="form-auto-save"
+            formControlName="autoSave">
+          </app-toggle-switch>
+          <span class="toggle-label">Auto Save</span>
+        </div>
+
+        <div class="toggle-demo">
+          <app-toggle-switch
+            componentId="form-analytics"
+            formControlName="analytics">
+          </app-toggle-switch>
+          <span class="toggle-label">Analytics</span>
+        </div>
+
+        <div class="form-controls">
+          <button type="button" (click)="resetForm()">Reset Form</button>
+          <button type="button" (click)="disableForm()">Disable Form</button>
+          <button type="button" (click)="enableForm()">Enable Form</button>
+          <button type="button" (click)="toggleAllSettings()">Toggle All</button>
+        </div>
+
+        <div class="form-status">
+          <h4>Form Status:</h4>
+          <p><strong>Valid:</strong> {{ settingsForm.valid }}</p>
+          <p><strong>Dirty:</strong> {{ settingsForm.dirty }}</p>
+          <p><strong>Disabled:</strong> {{ settingsForm.disabled }}</p>
+          <div class="form-values">
+            <strong>Current Values:</strong>
+            <pre>{{ settingsForm.value | json }}</pre>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- Performance Metrics -->
+    <section class="demo-section">
+      <h2>Performance Metrics</h2>
+      <p>Real-time performance monitoring and statistics.</p>
+
+      <div class="performance-stats">
+        <div class="stat-item">
+          <strong>Last Render Time:</strong>
+          <span [class]="lastRenderTime < 50 ? 'stat-good' : 'stat-warning'">
+            {{ lastRenderTime.toFixed(2) }}ms
+          </span>
+        </div>
+
+        <div class="stat-item">
+          <strong>Average Render Time:</strong>
+          <span [class]="getPerformanceStats().avg < 50 ? 'stat-good' : 'stat-warning'">
+            {{ getPerformanceStats().avg.toFixed(2) }}ms
+          </span>
+        </div>
+
+        <div class="stat-item">
+          <strong>Target:</strong>
+          <span class="stat-target">&lt; 50ms</span>
+        </div>
+      </div>
+
+      <div class="performance-info">
+        <p><strong>Performance Requirements:</strong></p>
+        <ul>
+          <li>✅ Component renders within 50ms</li>
+          <li>✅ Animations complete within 300ms</li>
+          <li>✅ OnPush change detection strategy</li>
+          <li>✅ CSS transforms for smooth animations</li>
+          <li>✅ Debounced interactions</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Event Logs -->
+    <section class="demo-section">
+      <h2>Event Tracking & Debugging</h2>
+      <p>Live event logging and tracking demonstration.</p>
+
+      <div class="event-logs">
+        <div class="logs-header">
+          <h4>Recent Events ({{ eventLogs.length }}/{{ maxLogs }})</h4>
+          <button (click)="clearEventLogs()">Clear Logs</button>
+        </div>
+
+        <div class="logs-container" *ngIf="eventLogs.length > 0">
+          <ul>
+            <li *ngFor="let log of eventLogs" class="log-entry">
+              {{ log }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="no-logs" *ngIf="eventLogs.length === 0">
+          <p>No events logged yet. Interact with the toggle switches above.</p>
+        </div>
+      </div>
+
+      <div class="tracking-info">
+        <h4>Tracked Events:</h4>
+        <ul>
+          <li>🎯 <code>toggle_component_init</code> - Component initialization</li>
+          <li>🔄 <code>toggle_state_changed</code> - State changes (user/programmatic)</li>
+          <li>✨ <code>toggle_animation_complete</code> - Animation completion</li>
+          <li>⌨️ <code>toggle_keyboard_used</code> - Keyboard interactions</li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="demo-footer">
+    <p>
+      <strong>Browser Compatibility:</strong> Chrome 120+, Firefox 121+, Safari 17+, Edge 120+
+      <br>
+      <strong>WCAG 2.1 AA Compliant</strong> with full keyboard navigation and screen reader support
+    </p>
+  </footer>
+</div>
