@@ -1,0 +1,103 @@
+<div
+  class="star-rating-container"
+  [ngClass]="getContainerClasses()"
+  [attr.aria-label]="getAriaLabel()"
+  role="radiogroup"
+  [attr.aria-readonly]="!interactive"
+  (mouseleave)="onMouseLeave()">
+
+  <!-- Star Rating Display -->
+  <div
+    class="star-rating__stars"
+    #starContainer
+    [attr.aria-describedby]="getEffectiveComponentId() + '_description'">
+
+    <button
+      *ngFor="let star of stars; trackBy: trackByStar"
+      type="button"
+      class="star-rating__star-button"
+      [ngClass]="getStarClasses(star)"
+      [disabled]="!interactive"
+      [tabindex]="interactive ? (star.index === focusedStarIndex || (focusedStarIndex < 0 && star.index === 0) ? 0 : -1) : -1"
+      [attr.aria-label]="getStarAriaLabel(star.index)"
+      [attr.aria-checked]="currentRating >= (star.index + 1)"
+      role="radio"
+      (click)="onStarClick(star.index)"
+      (mouseenter)="onStarHover(star.index)"
+      (touchstart)="onTouchStart($event, star.index)">
+
+      <!-- Full Star SVG -->
+      <svg
+        class="star-rating__star-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true">
+        <defs>
+          <mask [id]="'star-mask-' + star.index + '-' + getEffectiveComponentId()">
+            <rect width="24" height="24" fill="white"/>
+            <rect
+              *ngIf="star.halfFilled"
+              x="12"
+              y="0"
+              width="12"
+              height="24"
+              fill="black"/>
+          </mask>
+        </defs>
+        <path
+          class="star-rating__star-path"
+          [attr.mask]="star.halfFilled ? 'url(#star-mask-' + star.index + '-' + getEffectiveComponentId() + ')' : null"
+          d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+
+        <!-- Half-star fallback using Unicode -->
+        <text
+          *ngIf="star.halfFilled"
+          class="star-rating__star-unicode"
+          x="12"
+          y="16"
+          text-anchor="middle"
+          font-size="18"
+          fill="currentColor">
+          ½
+        </text>
+      </svg>
+
+      <!-- Screen Reader Text -->
+      <span class="sr-only">
+        {{ getStarAriaLabel(star.index) }}
+      </span>
+    </button>
+  </div>
+
+  <!-- Numeric Rating Display -->
+  <div
+    *ngIf="showNumeric"
+    class="star-rating__numeric"
+    [attr.id]="getEffectiveComponentId() + '_description'"
+    [attr.aria-live]="interactive ? 'polite' : null">
+    <span class="star-rating__rating-value">{{ getFormattedRating() }}</span>
+    <span class="star-rating__max-rating" aria-hidden="true">/{{ maxStars }}</span>
+  </div>
+
+  <!-- Screen Reader Description -->
+  <div
+    [id]="getEffectiveComponentId() + '_description'"
+    class="sr-only">
+    <ng-container *ngIf="interactive; else readonlyDescription">
+      Interactive star rating. Current rating is {{ currentRating }} out of {{ maxStars }} stars.
+      Use arrow keys to navigate between stars and press Enter or Space to select a rating.
+    </ng-container>
+    <ng-template #readonlyDescription>
+      Read-only star rating showing {{ currentRating }} out of {{ maxStars }} stars.
+    </ng-template>
+  </div>
+
+  <!-- Focus Indicator for Keyboard Navigation -->
+  <div
+    *ngIf="interactive && focusedStarIndex >= 0"
+    class="star-rating__focus-indicator"
+    [style.left.%]="(focusedStarIndex / maxStars) * 100"
+    aria-hidden="true">
+  </div>
+</div>
