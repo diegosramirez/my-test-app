@@ -1,0 +1,18 @@
+<button
+  #toggleButton
+  type="button"
+  class="toggle-switch"
+  [class]="sizeClass"
+  [class.checked]="checked"
+  [class.disabled]="disabled"
+  [class.animating]="isAnimating"
+  [disabled]="disabled"
+  role="switch"
+  [attr.aria-checked]="checked"
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-disabled]="disabled"
+>
+  <span class="toggle-track">
+    <span class="toggle-thumb"></span>
+  </span>
+</button>

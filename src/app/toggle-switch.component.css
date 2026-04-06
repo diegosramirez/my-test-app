@@ -1,0 +1,179 @@
+:host {
+  --toggle-track-color-off: #e0e0e0;
+  --toggle-track-color-on: #2196f3;
+  --toggle-thumb-color: #ffffff;
+  --toggle-thumb-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --toggle-focus-color: #1976d2;
+  --toggle-disabled-opacity: 0.6;
+  --toggle-transition-duration: 300ms;
+  --toggle-transition-easing: cubic-bezier(0.4, 0.0, 0.2, 1);
+
+  display: inline-block;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    --toggle-transition-duration: 50ms;
+  }
+}
+
+.toggle-switch {
+  position: relative;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+
+  /* Ensure minimum 44px touch target */
+  min-width: 44px;
+  min-height: 44px;
+
+  /* Center the track within the touch target */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-track {
+  position: relative;
+  border-radius: 12px;
+  background-color: var(--toggle-track-color-off);
+  transition: background-color var(--toggle-transition-duration) var(--toggle-transition-easing);
+  display: block;
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  background-color: var(--toggle-thumb-color);
+  border-radius: 50%;
+  box-shadow: var(--toggle-thumb-shadow);
+  transition: transform var(--toggle-transition-duration) var(--toggle-transition-easing);
+  will-change: transform;
+}
+
+/* Size variants */
+.toggle-small .toggle-track {
+  width: 36px;
+  height: 20px;
+}
+
+.toggle-small .toggle-thumb {
+  width: 16px;
+  height: 16px;
+}
+
+.toggle-medium .toggle-track {
+  width: 48px;
+  height: 24px;
+}
+
+.toggle-medium .toggle-thumb {
+  width: 20px;
+  height: 20px;
+}
+
+.toggle-large .toggle-track {
+  width: 60px;
+  height: 32px;
+}
+
+.toggle-large .toggle-thumb {
+  width: 28px;
+  height: 28px;
+}
+
+/* Checked state */
+.toggle-switch.checked .toggle-track {
+  background-color: var(--toggle-track-color-on);
+}
+
+.toggle-switch.checked.toggle-small .toggle-thumb {
+  transform: translateX(16px);
+}
+
+.toggle-switch.checked.toggle-medium .toggle-thumb {
+  transform: translateX(24px);
+}
+
+.toggle-switch.checked.toggle-large .toggle-thumb {
+  transform: translateX(28px);
+}
+
+/* Focus state */
+.toggle-switch:focus {
+  box-shadow: 0 0 0 2px var(--toggle-focus-color);
+  border-radius: 14px;
+}
+
+.toggle-switch:focus:not(:focus-visible) {
+  box-shadow: none;
+}
+
+/* Disabled state */
+.toggle-switch.disabled {
+  cursor: not-allowed;
+  opacity: var(--toggle-disabled-opacity);
+}
+
+.toggle-switch.disabled .toggle-track {
+  background-color: #f5f5f5;
+}
+
+.toggle-switch.disabled.checked .toggle-track {
+  background-color: #bbbbbb;
+}
+
+/* Animation state management */
+.toggle-switch:not(.animating) .toggle-thumb {
+  will-change: auto;
+}
+
+.toggle-switch.animating .toggle-thumb {
+  will-change: transform;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :host {
+    --toggle-track-color-off: #000000;
+    --toggle-track-color-on: #0000ff;
+    --toggle-thumb-color: #ffffff;
+    --toggle-focus-color: #000000;
+  }
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+  :host {
+    --toggle-track-color-off: #424242;
+    --toggle-track-color-on: #90caf9;
+    --toggle-thumb-color: #ffffff;
+    --toggle-focus-color: #90caf9;
+  }
+}
+
+/* Fallback for older browsers without CSS custom properties */
+@supports not (--css: variables) {
+  .toggle-track {
+    background-color: #e0e0e0;
+  }
+
+  .toggle-switch.checked .toggle-track {
+    background-color: #2196f3;
+  }
+
+  .toggle-thumb {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .toggle-switch:focus {
+    box-shadow: 0 0 0 2px #1976d2;
+  }
+}
