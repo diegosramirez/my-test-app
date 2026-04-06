@@ -1,0 +1,74 @@
+<div
+  #ratingContainer
+  class="star-rating"
+  [class]="'star-rating--' + size"
+  [class.star-rating--readonly]="readonly"
+  [class.star-rating--interactive]="!readonly"
+  [attr.tabindex]="tabIndex()"
+  [attr.aria-readonly]="ariaReadonly()"
+  [attr.aria-label]="ariaLabel()"
+  [attr.aria-valuenow]="rating"
+  [attr.aria-valuemin]="0"
+  [attr.aria-valuemax]="5"
+  role="slider"
+  (mouseleave)="onMouseLeave()"
+  [attr.data-testid]="'star-rating' + (contentId ? '-' + contentId : '')"
+>
+  <div class="star-rating__stars" role="presentation">
+    <button
+      *ngFor="let star of stars(); trackBy: trackByStar"
+      type="button"
+      class="star-rating__star"
+      [class.star-rating__star--filled]="star.isFull"
+      [class.star-rating__star--half]="star.isHalf"
+      [class.star-rating__star--empty]="star.isEmpty"
+      [disabled]="readonly"
+      [attr.aria-label]="'Rate ' + star.index + ' stars'"
+      [attr.tabindex]="-1"
+      (click)="onStarClick(star.index)"
+      (mouseenter)="onStarHover(star.index)"
+      (touchstart)="onStarHover(star.index)"
+    >
+      <svg
+        class="star-rating__star-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient [id]="'half-fill-' + star.index" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="50%" stop-color="currentColor" />
+            <stop offset="50%" stop-color="transparent" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+          [attr.fill]="star.isHalf ? 'url(#half-fill-' + star.index + ')' : (star.isFull ? 'currentColor' : 'transparent')"
+          stroke="currentColor"
+          stroke-width="1"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+  </div>
+
+  <div
+    *ngIf="showNumeric"
+    class="star-rating__numeric"
+    [attr.aria-label]="'Rating: ' + formattedRating() + ' out of 5 stars'"
+  >
+    {{ formattedRating() }}
+  </div>
+</div>
+
+<!-- Screen reader only description -->
+<div class="sr-only" aria-live="polite" aria-atomic="true">
+  <ng-container *ngIf="!readonly">
+    Use arrow keys to navigate between star ratings. Press Enter or Space to select a rating.
+    Current rating: {{ formattedRating() }} out of 5 stars.
+  </ng-container>
+  <ng-container *ngIf="readonly">
+    Rating: {{ formattedRating() }} out of 5 stars.
+  </ng-container>
+</div>

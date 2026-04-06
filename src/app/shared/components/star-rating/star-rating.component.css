@@ -1,0 +1,238 @@
+/* CSS Custom Properties for theming and sizing */
+.star-rating {
+  --star-color-empty: #e5e7eb;
+  --star-color-filled: #fbbf24;
+  --star-color-hover: #f59e0b;
+  --star-size-small: 16px;
+  --star-size-medium: 24px;
+  --star-size-large: 32px;
+  --star-spacing: 4px;
+  --touch-target-size: 44px;
+  --numeric-font-size-small: 12px;
+  --numeric-font-size-medium: 14px;
+  --numeric-font-size-large: 16px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+}
+
+/* Size variants */
+.star-rating--small {
+  --current-star-size: var(--star-size-small);
+  --current-numeric-font-size: var(--numeric-font-size-small);
+}
+
+.star-rating--medium {
+  --current-star-size: var(--star-size-medium);
+  --current-numeric-font-size: var(--numeric-font-size-medium);
+}
+
+.star-rating--large {
+  --current-star-size: var(--star-size-large);
+  --current-numeric-font-size: var(--numeric-font-size-large);
+}
+
+/* Stars container */
+.star-rating__stars {
+  display: inline-flex;
+  gap: var(--star-spacing);
+  align-items: center;
+}
+
+/* Individual star button */
+.star-rating__star {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--touch-target-size);
+  min-height: var(--touch-target-size);
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  color: var(--star-color-empty);
+
+  /* Ensure touch targets are accessible */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Star icon SVG */
+.star-rating__star-icon {
+  width: var(--current-star-size);
+  height: var(--current-star-size);
+  pointer-events: none;
+  transition: color 0.15s ease;
+}
+
+/* Filled star state */
+.star-rating__star--filled {
+  color: var(--star-color-filled);
+}
+
+/* Half-filled star state */
+.star-rating__star--half {
+  color: var(--star-color-filled);
+}
+
+/* Interactive states */
+.star-rating--interactive .star-rating__star:hover,
+.star-rating--interactive .star-rating__star:focus {
+  color: var(--star-color-hover);
+  transform: scale(1.1);
+  outline: 2px solid var(--star-color-hover);
+  outline-offset: 2px;
+}
+
+.star-rating--interactive .star-rating__star:active {
+  transform: scale(0.95);
+}
+
+/* Focus styles for keyboard navigation */
+.star-rating:focus-within .star-rating__star:focus {
+  outline: 2px solid var(--star-color-hover);
+  outline-offset: 2px;
+}
+
+/* Readonly state */
+.star-rating--readonly .star-rating__star {
+  cursor: default;
+  pointer-events: none;
+}
+
+.star-rating--readonly .star-rating__star:hover {
+  transform: none;
+}
+
+/* Numeric rating display */
+.star-rating__numeric {
+  font-size: var(--current-numeric-font-size);
+  font-weight: 500;
+  color: #374151;
+  line-height: 1;
+  margin-left: 4px;
+  min-width: 2ch;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .star-rating {
+    --star-color-empty: #000;
+    --star-color-filled: #000;
+    --star-color-hover: #000;
+  }
+
+  .star-rating__star {
+    border: 1px solid currentColor;
+  }
+
+  .star-rating__star--filled,
+  .star-rating__star--half {
+    background-color: currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .star-rating__star,
+  .star-rating__star-icon {
+    transition: none;
+  }
+
+  .star-rating--interactive .star-rating__star:hover,
+  .star-rating--interactive .star-rating__star:focus {
+    transform: none;
+  }
+
+  .star-rating--interactive .star-rating__star:active {
+    transform: none;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .star-rating {
+    --star-color-empty: #4b5563;
+    --star-color-filled: #fbbf24;
+    --star-color-hover: #f59e0b;
+  }
+
+  .star-rating__numeric {
+    color: #e5e7eb;
+  }
+}
+
+/* Mobile touch improvements */
+@media (pointer: coarse) {
+  .star-rating__star {
+    min-width: var(--touch-target-size);
+    min-height: var(--touch-target-size);
+  }
+
+  /* Larger spacing on touch devices */
+  .star-rating__stars {
+    gap: 6px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .star-rating--interactive .star-rating__star {
+    cursor: default;
+  }
+
+  .star-rating__star {
+    transform: none !important;
+    outline: none !important;
+  }
+}
+
+/* Focus ring improvements for better visibility */
+.star-rating__star:focus-visible {
+  outline: 2px solid var(--star-color-hover);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Ensure proper contrast ratios */
+.star-rating__star[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Animation for rating changes */
+.star-rating__star-icon {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+@keyframes star-fill {
+  from {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
