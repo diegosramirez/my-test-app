@@ -1,0 +1,180 @@
+<div class="todo-app" role="main" aria-label="Todo List Application">
+  <!-- Header with input field -->
+  <header class="todo-header">
+    <h1 class="todo-title">Todo List</h1>
+
+    <!-- Storage warning message -->
+    <div
+      *ngIf="showStorageWarning"
+      class="storage-warning"
+      role="alert"
+      aria-live="polite"
+    >
+      <span class="warning-icon" aria-hidden="true">⚠️</span>
+      <span class="warning-text">{{ storageWarningMessage }}</span>
+      <button
+        type="button"
+        class="warning-dismiss"
+        (click)="dismissWarning()"
+        aria-label="Dismiss warning"
+      >
+        ×
+      </button>
+    </div>
+
+    <!-- Error notification message -->
+    <div
+      *ngIf="showErrorNotification"
+      class="error-notification"
+      role="alert"
+      aria-live="assertive"
+    >
+      <span class="error-icon" aria-hidden="true">❌</span>
+      <span class="error-text">{{ errorNotificationMessage }}</span>
+      <button
+        type="button"
+        class="error-dismiss"
+        (click)="dismissErrorNotification()"
+        aria-label="Dismiss error"
+      >
+        ×
+      </button>
+    </div>
+
+    <!-- Task input form -->
+    <div class="task-input-container">
+      <input
+        type="text"
+        class="task-input"
+        [(ngModel)]="newTaskText"
+        (keypress)="onKeyPress($event)"
+        placeholder="What needs to be done?"
+        aria-label="Add new task"
+        maxlength="500"
+        autocomplete="off"
+      >
+      <button
+        type="button"
+        class="add-button"
+        (click)="addTask()"
+        [disabled]="!newTaskText.trim()"
+        aria-label="Add task"
+      >
+        Add
+      </button>
+    </div>
+  </header>
+
+  <!-- Filter tabs -->
+  <nav class="filter-nav" role="tablist" aria-label="Task filters">
+    <button
+      *ngFor="let filter of filterOptions"
+      type="button"
+      class="filter-tab"
+      [class.active]="isFilterActive(filter.key)"
+      (click)="setFilter(filter.key)"
+      role="tab"
+      [attr.aria-selected]="isFilterActive(filter.key)"
+      [attr.aria-controls]="'task-list'"
+    >
+      {{ filter.label }}
+      <span class="task-count" aria-hidden="true">
+        ({{ filter.key === 'all' ? getTaskCount() :
+            filter.key === 'active' ? getTaskCount('active') :
+            getTaskCount('completed') }})
+      </span>
+    </button>
+  </nav>
+
+  <!-- Task list -->
+  <main class="task-list-container">
+    <ul
+      *ngIf="filteredTasks.length > 0"
+      class="task-list"
+      id="task-list"
+      role="list"
+      [attr.aria-label]="currentFilter + ' tasks'"
+    >
+      <li
+        *ngFor="let task of filteredTasks; trackBy: trackByTaskId"
+        class="task-item"
+        [class.completed]="task.status === 'completed'"
+        role="listitem"
+      >
+        <!-- Task checkbox -->
+        <label class="task-checkbox-label">
+          <input
+            type="checkbox"
+            class="task-checkbox"
+            [checked]="task.status === 'completed'"
+            (change)="toggleTask(task)"
+            [attr.aria-label]="'Mark task as ' + (task.status === 'completed' ? 'active' : 'completed')"
+          >
+          <span class="checkbox-custom" aria-hidden="true"></span>
+        </label>
+
+        <!-- Task text -->
+        <span
+          class="task-text"
+          [attr.aria-label]="task.text + (task.status === 'completed' ? ' (completed)' : ' (active)')"
+        >
+          {{ task.text }}
+        </span>
+
+        <!-- Task metadata -->
+        <span class="task-meta" aria-hidden="true">
+          Created: {{ task.createdAt | date:'MMM d, y' }}
+        </span>
+
+        <!-- Delete button -->
+        <button
+          type="button"
+          class="delete-button"
+          (click)="deleteTask(task)"
+          [attr.aria-label]="'Delete task: ' + task.text"
+        >
+          <span class="delete-icon" aria-hidden="true">🗑️</span>
+        </button>
+      </li>
+    </ul>
+
+    <!-- Empty state -->
+    <div
+      *ngIf="filteredTasks.length === 0"
+      class="empty-state"
+      role="status"
+      aria-live="polite"
+    >
+      <p class="empty-message">
+        <span *ngIf="currentFilter === 'all' && allTasks.length === 0">
+          No tasks yet. Add one above to get started!
+        </span>
+        <span *ngIf="currentFilter === 'active' && getTaskCount('active') === 0">
+          No active tasks
+        </span>
+        <span *ngIf="currentFilter === 'completed' && getTaskCount('completed') === 0">
+          No completed tasks yet.
+        </span>
+      </p>
+    </div>
+  </main>
+
+  <!-- Footer with actions -->
+  <footer *ngIf="allTasks.length > 0" class="todo-footer">
+    <div class="task-summary">
+      <span class="task-stats">
+        {{ getTaskCount('active') }} of {{ getTaskCount() }} tasks remaining
+      </span>
+    </div>
+
+    <button
+      *ngIf="hasCompletedTasks()"
+      type="button"
+      class="clear-completed"
+      (click)="clearCompleted()"
+      aria-label="Clear all completed tasks"
+    >
+      Clear Completed
+    </button>
+  </footer>
+</div>
