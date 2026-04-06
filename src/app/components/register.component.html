@@ -1,0 +1,244 @@
+<div class="register-container">
+  <div class="register-card">
+    <header class="register-header">
+      <h1>Create Your Account</h1>
+      <p class="subtitle">Join us and start your journey today</p>
+    </header>
+
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="register-form" novalidate>
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email" class="form-label">
+          Email Address
+          <span class="required-asterisk" aria-label="required">*</span>
+        </label>
+
+        <div class="input-wrapper" [class.error]="!emailValidationResult.isValid && emailFocused === false">
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="form-input"
+            placeholder="Enter your email address"
+            autocomplete="email"
+            [attr.aria-describedby]="getEmailAriaDescribedBy()"
+            [attr.aria-invalid]="!emailValidationResult.isValid"
+            (focus)="onEmailFocus()"
+            (blur)="onEmailBlur()"
+            [disabled]="isLoading">
+
+          <!-- Email validation indicator -->
+          <div class="validation-indicator" *ngIf="registrationForm.get('email')?.value">
+            <svg
+              *ngIf="emailValidationResult.isValid"
+              class="icon icon-success"
+              aria-label="Valid email"
+              viewBox="0 0 20 20"
+              fill="currentColor">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+
+            <svg
+              *ngIf="!emailValidationResult.isValid"
+              class="icon icon-error"
+              aria-label="Invalid email"
+              viewBox="0 0 20 20"
+              fill="currentColor">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Email requirements (always visible for accessibility) -->
+        <div id="email-requirements" class="field-requirements">
+          Enter a valid email address (e.g., user@example.com)
+        </div>
+
+        <!-- Email error message -->
+        <div
+          id="email-error"
+          class="error-message"
+          *ngIf="emailValidationResult.error"
+          role="alert"
+          aria-live="polite">
+          {{ emailValidationResult.error }}
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password" class="form-label">
+          Password
+          <span class="required-asterisk" aria-label="required">*</span>
+        </label>
+
+        <div class="input-wrapper" [class.error]="!passwordStrengthResult.isValid && passwordTouched">
+          <input
+            [type]="passwordVisible ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            class="form-input password-input"
+            placeholder="Create a strong password"
+            autocomplete="new-password"
+            [attr.aria-describedby]="getPasswordAriaDescribedBy()"
+            [attr.aria-invalid]="!passwordStrengthResult.isValid && passwordTouched"
+            (focus)="onPasswordFocus()"
+            (blur)="onPasswordBlur()"
+            [disabled]="isLoading">
+
+          <!-- Password visibility toggle -->
+          <button
+            type="button"
+            class="password-toggle"
+            [attr.aria-label]="passwordVisible ? 'Hide password' : 'Show password'"
+            (click)="togglePasswordVisibility()"
+            [disabled]="isLoading">
+            <svg
+              *ngIf="!passwordVisible"
+              class="icon"
+              viewBox="0 0 20 20"
+              fill="currentColor">
+              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+              <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+            </svg>
+
+            <svg
+              *ngIf="passwordVisible"
+              class="icon"
+              viewBox="0 0 20 20"
+              fill="currentColor">
+              <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd" />
+              <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Password strength meter -->
+        <div
+          *ngIf="passwordTouched || passwordFocused"
+          class="password-strength-container"
+          id="password-strength"
+          aria-live="polite">
+
+          <div class="password-strength-bar">
+            <div
+              class="password-strength-fill"
+              [style.width.%]="getPasswordStrengthPercentage()"
+              [ngClass]="getPasswordStrengthClass()">
+            </div>
+          </div>
+
+          <div class="password-strength-label">
+            <span class="strength-text" [ngClass]="getPasswordStrengthClass()">
+              {{ getPasswordStrengthLabel(passwordStrengthResult.score) }}
+            </span>
+            <span class="strength-score">
+              {{ passwordStrengthResult.score }}/5
+            </span>
+          </div>
+        </div>
+
+        <!-- Password requirements -->
+        <div
+          *ngIf="passwordFocused || passwordTouched"
+          id="password-requirements"
+          class="password-requirements">
+          <p class="requirements-title">Password must contain:</p>
+          <ul class="requirements-list">
+            <li [class.met]="hasMinLength()">
+              <span class="requirement-icon" aria-hidden="true">
+                {{ hasMinLength() ? '✓' : '○' }}
+              </span>
+              At least 8 characters
+            </li>
+            <li [class.met]="hasLowercase()">
+              <span class="requirement-icon" aria-hidden="true">
+                {{ hasLowercase() ? '✓' : '○' }}
+              </span>
+              One lowercase letter
+            </li>
+            <li [class.met]="hasUppercase()">
+              <span class="requirement-icon" aria-hidden="true">
+                {{ hasUppercase() ? '✓' : '○' }}
+              </span>
+              One uppercase letter
+            </li>
+            <li [class.met]="hasNumber()">
+              <span class="requirement-icon" aria-hidden="true">
+                {{ hasNumber() ? '✓' : '○' }}
+              </span>
+              One number
+            </li>
+            <li [class.met]="hasSpecialChar()">
+              <span class="requirement-icon" aria-hidden="true">
+                {{ hasSpecialChar() ? '✓' : '○' }}
+              </span>
+              One special character
+            </li>
+          </ul>
+        </div>
+
+        <!-- Password error message -->
+        <div
+          id="password-error"
+          class="error-message"
+          *ngIf="!passwordStrengthResult.isValid && passwordTouched"
+          role="alert"
+          aria-live="polite">
+          {{ passwordStrengthResult.feedback.join(', ') }}
+        </div>
+      </div>
+
+      <!-- Submit button -->
+      <div class="form-group">
+        <button
+          type="submit"
+          class="submit-button"
+          [disabled]="!isFormValid()"
+          [attr.aria-describedby]="submitError ? 'submit-error' : null">
+
+          <span *ngIf="!isLoading" class="button-text">
+            Create Account
+          </span>
+
+          <span *ngIf="isLoading" class="button-loading">
+            <svg class="loading-spinner" viewBox="0 0 24 24">
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+                stroke-linecap="round"
+                stroke-dasharray="31.416"
+                stroke-dashoffset="31.416">
+              </circle>
+            </svg>
+            Creating Account...
+          </span>
+        </button>
+
+        <!-- Submit error message -->
+        <div
+          id="submit-error"
+          class="error-message submit-error"
+          *ngIf="submitError"
+          role="alert"
+          aria-live="polite">
+          {{ submitError }}
+        </div>
+      </div>
+    </form>
+
+    <!-- Additional links -->
+    <footer class="register-footer">
+      <p>Already have an account? <a href="/login" class="link">Sign in</a></p>
+      <p class="privacy-note">
+        By creating an account, you agree to our
+        <a href="/terms" class="link">Terms of Service</a> and
+        <a href="/privacy" class="link">Privacy Policy</a>.
+      </p>
+    </footer>
+  </div>
+</div>
