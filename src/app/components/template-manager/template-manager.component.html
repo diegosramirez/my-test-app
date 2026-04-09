@@ -1,0 +1,238 @@
+<div class="template-manager">
+  <!-- Header -->
+  <header class="manager-header">
+    <h1>Email Template Manager</h1>
+    <div class="header-actions">
+      <button class="btn btn-primary" (click)="createNewTemplate()" [disabled]="isLoading()">
+        Create New Template
+      </button>
+      <button
+        class="btn btn-success"
+        (click)="saveTemplate()"
+        [disabled]="!canSaveTemplate() || isLoading()"
+        [class.btn-disabled]="!canSaveTemplate()">
+        Save Template
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="manager-content" *ngIf="!isLoading()">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Template List -->
+      <section class="template-list">
+        <h3>Templates</h3>
+        <div class="template-items">
+          <div
+            *ngFor="let template of templates()"
+            class="template-item"
+            [class.selected]="selectedTemplate()?.id === template.id"
+            (click)="selectTemplate(template)">
+            <div class="template-info">
+              <h4>{{ template.name }}</h4>
+              <span class="template-type">{{ template.contentType }}</span>
+            </div>
+            <div class="template-status">
+              <span *ngIf="template.isPublished" class="status-published">Published</span>
+              <span *ngIf="!template.isPublished" class="status-draft">Draft</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Content Blocks -->
+      <section class="content-blocks">
+        <h3>Content Blocks</h3>
+        <div class="block-palette">
+          <div
+            *ngFor="let block of availableBlocks"
+            class="block-item"
+            draggable="true"
+            (dragstart)="onDragStart(block)"
+            (dragend)="onDragEnd()">
+            <span class="block-icon">{{ block.type }}</span>
+            <span class="block-name">{{ block.type | titlecase }}</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Personalization Tokens -->
+      <section class="personalization-tokens">
+        <h3>Personalization</h3>
+        <div class="token-list">
+          <div *ngFor="let variable of availableVariables()" class="token-item">
+            <div class="token-info">
+              <span class="token-name">{{ variable.name }}</span>
+              <code class="token-code">{{'{{' + ' ' + variable.id + ' ' + '}}'}}</code>
+            </div>
+            <span class="token-required" *ngIf="variable.required">Required</span>
+          </div>
+        </div>
+      </section>
+    </aside>
+
+    <!-- Editor Area -->
+    <main class="editor-area">
+      <!-- Validation Status -->
+      <div class="validation-status">
+        <div class="status-item">
+          <span class="status-label">Brand Compliance:</span>
+          <div class="status-bar">
+            <div
+              class="status-fill"
+              [style.width.%]="brandComplianceScore()"
+              [class.status-good]="brandComplianceScore() >= 80"
+              [class.status-warning]="brandComplianceScore() >= 60 && brandComplianceScore() < 80"
+              [class.status-error]="brandComplianceScore() < 60">
+            </div>
+            <span class="status-value">{{ brandComplianceScore() }}%</span>
+          </div>
+        </div>
+
+        <div class="status-item">
+          <span class="status-label">Accessibility:</span>
+          <div class="status-bar">
+            <div
+              class="status-fill"
+              [style.width.%]="accessibilityScore()"
+              [class.status-good]="accessibilityScore() >= 90"
+              [class.status-warning]="accessibilityScore() >= 70 && accessibilityScore() < 90"
+              [class.status-error]="accessibilityScore() < 70">
+            </div>
+            <span class="status-value">{{ accessibilityScore() }}%</span>
+          </div>
+        </div>
+
+        <div class="status-item">
+          <span class="status-label">Email Client Compatibility:</span>
+          <div class="status-bar">
+            <div
+              class="status-fill"
+              [style.width.%]="compatibilityPassRate()"
+              [class.status-good]="compatibilityPassRate() >= 95"
+              [class.status-warning]="compatibilityPassRate() >= 85 && compatibilityPassRate() < 95"
+              [class.status-error]="compatibilityPassRate() < 85">
+            </div>
+            <span class="status-value">{{ compatibilityPassRate() }}%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Template Editor -->
+      <div class="template-editor" *ngIf="selectedTemplate()">
+        <h2>{{ selectedTemplate()?.name }}</h2>
+
+        <div
+          class="drop-zone"
+          (drop)="onDrop($event)"
+          (dragover)="onDragOver($event)">
+
+          <div
+            *ngFor="let block of currentBlocks(); let i = index"
+            class="editor-block">
+
+            <div class="block-header">
+              <span class="block-type">{{ block.type | titlecase }}</span>
+              <button class="btn-remove" (click)="removeBlock(i)">&times;</button>
+            </div>
+
+            <div class="block-content">
+              <textarea
+                [value]="block.content"
+                (input)="onBlockContentInput(i, $event)"
+                class="block-textarea">
+              </textarea>
+            </div>
+
+            <div class="block-actions" *ngIf="availableVariables().length > 0">
+              <span>Insert:</span>
+              <button
+                *ngFor="let variable of availableVariables()"
+                class="btn-token"
+                (click)="insertPersonalizationToken(i, variable.id)">
+                {{ variable.name }}
+              </button>
+            </div>
+
+            <div
+              class="drop-target"
+              (drop)="onDrop($event, i + 1)"
+              (dragover)="onDragOver($event)">
+              Drop content block here
+            </div>
+          </div>
+
+          <div
+            *ngIf="currentBlocks().length === 0"
+            class="empty-drop-zone">
+            <p>Drag content blocks here to start building your template</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Preview Panel -->
+    <aside class="preview-panel">
+      <div class="preview-controls">
+        <h3>Preview</h3>
+
+        <div class="device-selector">
+          <button
+            *ngFor="let device of ['desktop', 'mobile', 'tablet']"
+            class="btn btn-outline"
+            [class.active]="previewDevice() === device"
+            (click)="onDeviceChange(device)">
+            {{ device | titlecase }}
+          </button>
+        </div>
+
+        <div class="client-selector">
+          <select
+            [value]="previewClient()"
+            (change)="onClientChange($event)">
+            <option value="gmail">Gmail</option>
+            <option value="outlook">Outlook</option>
+            <option value="apple_mail">Apple Mail</option>
+            <option value="yahoo">Yahoo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="preview-content">
+        <div
+          class="preview-iframe"
+          [class.preview-desktop]="previewDevice() === 'desktop'"
+          [class.preview-mobile]="previewDevice() === 'mobile'"
+          [class.preview-tablet]="previewDevice() === 'tablet'">
+
+          <div
+            class="preview-body"
+            [innerHTML]="currentPreview()?.htmlContent || '<p>Select a template to preview</p>'">
+          </div>
+        </div>
+      </div>
+
+      <!-- Compatibility Results -->
+      <div class="compatibility-results" *ngIf="compatibilityResults().length > 0">
+        <h4>Client Compatibility</h4>
+        <div class="compatibility-list">
+          <div
+            *ngFor="let result of compatibilityResults()"
+            class="compatibility-item"
+            [class.passed]="result.passed"
+            [class.failed]="!result.passed">
+            <span class="client-name">{{ result.emailClient | titlecase }}</span>
+            <span class="result-status">{{ result.passed ? '✓' : '✗' }}</span>
+            <span class="result-score">{{ result.score | number:'1.0-1' }}%</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading()">
+    <p>Loading templates...</p>
+  </div>
+</div>
