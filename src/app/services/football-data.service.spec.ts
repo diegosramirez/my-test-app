@@ -1,31 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClient, HttpResponse, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { of, throwError, timer } from 'rxjs';
+import { of, throwError, timer, firstValueFrom } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { FootballDataService } from './football-data.service';
 import { FootballData, ApiResponse } from '../interfaces/football-data.interface';
-
-// Mock environment using vi.mock
-vi.mock('../../environments/environment', () => ({
-  environment: {
-    production: false,
-    apiKey: 'test-api-key-123',
-    apiBaseUrl: 'https://api.football-data.org/v4',
-    cache: {
-      defaultTTL: 30 * 60 * 1000,
-      maxSize: 100,
-      staleThreshold: 30 * 60 * 1000
-    },
-    scheduler: {
-      pollingInterval: 30 * 60 * 1000,
-      maxRetries: 3,
-      baseBackoffDelay: 1000,
-      maxBackoffDelay: 30000,
-      circuitBreakerThreshold: 5,
-      circuitBreakerResetTime: 5 * 60 * 1000
-    }
-  }
-}));
 
 describe('FootballDataService', () => {
   let service: FootballDataService;
@@ -87,7 +65,7 @@ describe('FootballDataService', () => {
       const mockResponse = createMockHttpResponse(mockFootballApiResponse);
       httpClientSpy.get.mockReturnValue(of(mockResponse));
 
-      await service.fetchCompetitionData().toPromise();
+      await firstValueFrom(service.fetchCompetitionData());
 
       expect(httpClientSpy.get).toHaveBeenCalledWith(
         'https://api.football-data.org/v4/competitions/PL/matches',
@@ -107,7 +85,7 @@ describe('FootballDataService', () => {
       const mockResponse = createMockHttpResponse(mockFootballApiResponse);
       httpClientSpy.get.mockReturnValue(of(mockResponse));
 
-      const result = await service.fetchCompetitionData().toPromise();
+      const result = await firstValueFrom(service.fetchCompetitionData());
 
       expect(httpClientSpy.get).toHaveBeenCalledWith(
         'https://api.football-data.org/v4/competitions/PL/matches',
@@ -144,7 +122,7 @@ describe('FootballDataService', () => {
       const mockResponse = createMockHttpResponse(mockFootballApiResponse);
       httpClientSpy.get.mockReturnValue(of(mockResponse));
 
-      await service.fetchCompetitionData('CL').toPromise();
+      await firstValueFrom(service.fetchCompetitionData('CL'));
 
       expect(httpClientSpy.get).toHaveBeenCalledWith(
         'https://api.football-data.org/v4/competitions/CL/matches',
@@ -158,7 +136,7 @@ describe('FootballDataService', () => {
       const emptyResponse = createMockHttpResponse({});
       httpClientSpy.get.mockReturnValue(of(emptyResponse));
 
-      const result = await service.fetchCompetitionData().toPromise();
+      const result = await firstValueFrom(service.fetchCompetitionData());
 
       expect(result?.data).toEqual({
         id: expect.stringContaining('PL-'),
@@ -175,8 +153,8 @@ describe('FootballDataService', () => {
       httpClientSpy.get.mockReturnValue(throwError(() => timeoutError));
 
       try {
-        await service.fetchCompetitionData().toPromise();
-        fail('Should have thrown an error');
+        await firstValueFrom(service.fetchCompetitionData());
+        throw new Error('Should have thrown an error');
       } catch (error: any) {
         expect(error.status).toBe(0);
         expect(error.message).toContain('Network error');
@@ -192,7 +170,7 @@ describe('FootballDataService', () => {
       });
       httpClientSpy.get.mockReturnValue(of(mockResponse));
 
-      await service.fetchCompetitionData().toPromise();
+      await firstValueFrom(service.fetchCompetitionData());
 
       const healthMetrics = service.getHealthMetrics();
       expect(healthMetrics.rateLimitRemaining).toBe(50);
@@ -204,7 +182,7 @@ describe('FootballDataService', () => {
       });
       httpClientSpy.get.mockReturnValue(of(lowRateResponse));
 
-      await service.fetchCompetitionData().toPromise();
+      await firstValueFrom(service.fetchCompetitionData());
 
       expect(service.isRateLimited()).toBe(true);
       expect(service.canMakeRequest()).toBe(false);
@@ -216,7 +194,7 @@ describe('FootballDataService', () => {
       });
       httpClientSpy.get.mockReturnValue(of(goodRateResponse));
 
-      await service.fetchCompetitionData().toPromise();
+      await firstValueFrom(service.fetchCompetitionData());
 
       expect(service.isRateLimited()).toBe(false);
       expect(service.canMakeRequest()).toBe(true);
@@ -226,7 +204,7 @@ describe('FootballDataService', () => {
       const responseWithoutHeaders = createMockHttpResponse(mockFootballApiResponse, {});
       httpClientSpy.get.mockReturnValue(of(responseWithoutHeaders));
 
-      await service.fetchCompetitionData().toPromise();
+      await firstValueFrom(service.fetchCompetitionData());
 
       const metrics = service.getHealthMetrics();
       expect(metrics.rateLimitRemaining).toBe(100); // Should maintain initial value
@@ -253,7 +231,7 @@ describe('FootballDataService', () => {
         .mockReturnValueOnce(throwError(() => rateLimitError))
         .mockReturnValueOnce(of(createMockHttpResponse(mockFootballApiResponse)));
 
-      const result = await service.fetchCompetitionData().toPromise();
+      const result = await firstValueFrom(service.fetchCompetitionData());
       expect(result).toBeDefined();
     });
 
@@ -267,7 +245,7 @@ describe('FootballDataService', () => {
         .mockReturnValueOnce(throwError(() => serverError))
         .mockReturnValueOnce(of(createMockHttpResponse(mockFootballApiResponse)));
 
-      const result = await service.fetchCompetitionData().toPromise();
+      const result = await firstValueFrom(service.fetchCompetitionData());
       expect(result).toBeDefined();
     });
 
@@ -280,8 +258,8 @@ describe('FootballDataService', () => {
       httpClientSpy.get.mockReturnValue(throwError(() => clientError));
 
       try {
-        await service.fetchCompetitionData().toPromise();
-        fail('Should have thrown an error');
+        await firstValueFrom(service.fetchCompetitionData());
+        throw new Error('Should have thrown an error');
       } catch (error: any) {
         expect(error.status).toBe(401);
         expect(error.message).toBe('Invalid API key');
@@ -299,8 +277,8 @@ describe('FootballDataService', () => {
       httpClientSpy.get.mockReturnValue(throwError(() => serverError));
 
       try {
-        await service.fetchCompetitionData().toPromise();
-        fail('Should have thrown an error');
+        await firstValueFrom(service.fetchCompetitionData());
+        throw new Error('Should have thrown an error');
       } catch (error: any) {
         expect(error.status).toBe(503);
       }
@@ -316,7 +294,7 @@ describe('FootballDataService', () => {
       // Make 5 failed requests to trigger circuit breaker
       for (let i = 0; i < 5; i++) {
         try {
-          await service.fetchCompetitionData().toPromise();
+          await firstValueFrom(service.fetchCompetitionData());
         } catch {}
       }
 
@@ -331,12 +309,12 @@ describe('FootballDataService', () => {
       httpClientSpy.get.mockReturnValue(throwError(() => new Error('Network error')));
 
       try {
-        await service.fetchCompetitionData().toPromise();
+        await firstValueFrom(service.fetchCompetitionData());
       } catch {}
 
       // Then succeed
       httpClientSpy.get.mockReturnValue(of(createMockHttpResponse(mockFootballApiResponse)));
-      await service.fetchCompetitionData().toPromise();
+      await firstValueFrom(service.fetchCompetitionData());
 
       const metrics = service.getHealthMetrics();
       expect(metrics.consecutiveFailures).toBe(0);
@@ -348,7 +326,7 @@ describe('FootballDataService', () => {
       const mockResponse = createMockHttpResponse(mockFootballApiResponse);
       httpClientSpy.get.mockReturnValue(of(mockResponse));
 
-      await service.fetchCompetitionData().toPromise();
+      await firstValueFrom(service.fetchCompetitionData());
 
       const healthMetrics = service.getHealthMetrics();
       expect(healthMetrics.successfulRequests).toBe(1);
@@ -366,15 +344,15 @@ describe('FootballDataService', () => {
         .mockReturnValueOnce(of(mockResponse));
 
       // Successful request
-      await service.fetchCompetitionData().toPromise();
+      await firstValueFrom(service.fetchCompetitionData());
 
       // Failed request
       try {
-        await service.fetchCompetitionData().toPromise();
+        await firstValueFrom(service.fetchCompetitionData());
       } catch {}
 
       // Another successful request
-      await service.fetchCompetitionData().toPromise();
+      await firstValueFrom(service.fetchCompetitionData());
 
       const metrics = service.getHealthMetrics();
       expect(metrics.totalRequests).toBe(3);
@@ -403,7 +381,7 @@ describe('FootballDataService', () => {
         of(mockResponse).pipe(delay(10))
       );
 
-      await service.fetchCompetitionData().toPromise();
+      await firstValueFrom(service.fetchCompetitionData());
 
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringMatching(/API call completed in \d+ms/)
@@ -423,8 +401,8 @@ describe('FootballDataService', () => {
       httpClientSpy.get.mockReturnValue(throwError(() => malformedError));
 
       try {
-        await service.fetchCompetitionData().toPromise();
-        fail('Should have thrown an error');
+        await firstValueFrom(service.fetchCompetitionData());
+        throw new Error('Should have thrown an error');
       } catch (error: any) {
         expect(error.status).toBe(500);
         expect(error.message).toContain('HTTP 500: Internal Server Error');
@@ -439,8 +417,8 @@ describe('FootballDataService', () => {
       httpClientSpy.get.mockReturnValue(throwError(() => networkError));
 
       try {
-        await service.fetchCompetitionData().toPromise();
-        fail('Should have thrown an error');
+        await firstValueFrom(service.fetchCompetitionData());
+        throw new Error('Should have thrown an error');
       } catch (error: any) {
         expect(error.status).toBe(0);
         expect(error.message).toContain('Network error: Connection refused');
@@ -453,7 +431,7 @@ describe('FootballDataService', () => {
       // Make multiple failed requests
       for (let i = 1; i <= 3; i++) {
         try {
-          await service.fetchCompetitionData().toPromise();
+          await firstValueFrom(service.fetchCompetitionData());
         } catch {}
 
         const metrics = service.getHealthMetrics();
@@ -470,8 +448,8 @@ describe('FootballDataService', () => {
       httpClientSpy.get.mockReturnValue(throwError(() => rateLimitError));
 
       try {
-        await service.fetchCompetitionData().toPromise();
-        fail('Should have thrown an error');
+        await firstValueFrom(service.fetchCompetitionData());
+        throw new Error('Should have thrown an error');
       } catch (error: any) {
         expect(error.status).toBe(429);
         expect(error.retryAfter).toBe(120000); // Should be converted to milliseconds

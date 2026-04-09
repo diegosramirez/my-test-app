@@ -13,6 +13,8 @@ export interface ApiHealthStatus {
   lastSuccessfulFetch: number;
   rateLimitRemaining: number;
   consecutiveFailures: number;
+  totalRequests: number;
+  successfulRequests: number;
 }
 
 export interface CacheHealthStatus {

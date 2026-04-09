@@ -27,7 +27,9 @@ export class HealthMonitorService implements OnDestroy {
     successRate: 100,
     lastSuccessfulFetch: Date.now(),
     rateLimitRemaining: 100,
-    consecutiveFailures: 0
+    consecutiveFailures: 0,
+    totalRequests: 0,
+    successfulRequests: 0
   });
   private cacheHealth$ = new BehaviorSubject<CacheHealthStatus>({
     status: 'healthy',
@@ -167,7 +169,9 @@ export class HealthMonitorService implements OnDestroy {
       successRate: metrics.successRate,
       lastSuccessfulFetch: metrics.lastSuccessfulFetch,
       rateLimitRemaining: metrics.rateLimitRemaining,
-      consecutiveFailures: metrics.consecutiveFailures
+      consecutiveFailures: metrics.consecutiveFailures,
+      totalRequests: metrics.totalRequests || 0,
+      successfulRequests: metrics.successfulRequests || 0
     };
 
     this.apiHealth$.next(apiHealth);

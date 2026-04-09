@@ -87,7 +87,8 @@ export class FootballDataService {
       lastSuccessfulFetch: this.lastSuccessfulFetch,
       rateLimitRemaining: this.rateLimitRemaining,
       consecutiveFailures: this.consecutiveFailures,
-      totalRequests: this.totalRequests
+      totalRequests: this.totalRequests,
+      successfulRequests: this.successfulRequests
     };
   }
 

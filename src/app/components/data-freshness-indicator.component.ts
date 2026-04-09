@@ -230,7 +230,9 @@ export class DataFreshnessIndicatorComponent implements OnInit, OnDestroy {
       successRate: 100,
       lastSuccessfulFetch: Date.now(),
       rateLimitRemaining: 100,
-      consecutiveFailures: 0
+      consecutiveFailures: 0,
+      totalRequests: 0,
+      successfulRequests: 0
     },
     cache: {
       status: 'healthy',
