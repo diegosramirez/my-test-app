@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { of, throwError } from 'rxjs';
-import { vi, beforeEach, describe, expect, it, afterEach } from 'vitest';
 
 import { MatchService } from './match.service';
 import { MatchesResponse } from '../models/match.interface';
