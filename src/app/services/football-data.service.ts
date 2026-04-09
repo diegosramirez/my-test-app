@@ -3,15 +3,29 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, throwError, timer, of } from 'rxjs';
 import { catchError, retry, timeout, map, retryWhen, mergeMap, finalize } from 'rxjs/operators';
 import { FootballData, ApiResponse, ApiError } from '../interfaces/football-data.interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FootballDataService {
-  private readonly baseUrl = 'https://api.football-data.org/v4';
-  private readonly apiKey = process.env['API_KEY'] || ''; // Use environment variable
+  private generateUUID(): string {
+    // Fallback UUID implementation for browser compatibility
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+
+    // Fallback implementation
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = Math.random() * 16 | 0;
+      const v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+  private readonly baseUrl = environment.apiBaseUrl;
+  private readonly apiKey = environment.apiKey;
   private readonly defaultTimeout = 10000; // 10 seconds
-  private readonly maxRetries = 3;
+  private readonly maxRetries = environment.scheduler.maxRetries;
   private rateLimitRemaining = 100;
   private consecutiveFailures = 0;
   private lastSuccessfulFetch = 0;
@@ -39,7 +53,7 @@ export class FootballDataService {
           const responseTime = Date.now() - startTime;
 
           const footballData: FootballData = {
-            id: `${competitionId}-${Date.now()}`,
+            id: `${competitionId}-${Date.now()}-${this.generateUUID()}`,
             competition: response.body.competition?.name || 'Premier League',
             season: response.body.season?.startDate || new Date().getFullYear().toString(),
             matchday: response.body.season?.currentMatchday || 1,
@@ -121,7 +135,7 @@ export class FootballDataService {
         message: error.error?.message || `HTTP ${error.status}: ${error.statusText}`,
         timestamp: Date.now(),
         retryAfter: error.headers?.get('Retry-After')
-          ? parseInt(error.headers.get('Retry-After')!, 10) * 1000
+          ? parseInt(error.headers.get('Retry-After') || '60', 10) * 1000
           : undefined
       };
     }

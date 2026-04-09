@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, BehaviorSubject, combineLatest, timer, Subject } from 'rxjs';
 import { map, startWith, takeUntil, tap, catchError } from 'rxjs/operators';
 import {
@@ -16,7 +16,7 @@ import { SchedulerService } from './scheduler.service';
 @Injectable({
   providedIn: 'root'
 })
-export class HealthMonitorService {
+export class HealthMonitorService implements OnDestroy {
   private destroy$ = new Subject<void>();
 
   // Health status subjects
@@ -67,6 +67,20 @@ export class HealthMonitorService {
     this.initializeHealthMonitoring();
     this.healthStatus$ = this.createHealthStatus();
     this.startPeriodicHealthChecks();
+  }
+
+  private generateUUID(): string {
+    // Fallback UUID implementation for browser compatibility
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+
+    // Fallback implementation
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = Math.random() * 16 | 0;
+      const v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
   }
 
   private initializeHealthMonitoring(): void {
@@ -266,7 +280,7 @@ export class HealthMonitorService {
 
   private addAlert(type: SystemAlert['type'], message: string, component: SystemAlert['component']): void {
     const alert: SystemAlert = {
-      id: `alert-${Date.now()}-${Math.random()}`,
+      id: `alert-${Date.now()}-${this.generateUUID()}`,
       type,
       message,
       timestamp: Date.now(),
