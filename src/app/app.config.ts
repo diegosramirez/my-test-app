@@ -1,5 +1,6 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { AnalyticsService } from './services/analytics.service';
 
 import { routes } from './app.routes';
 
