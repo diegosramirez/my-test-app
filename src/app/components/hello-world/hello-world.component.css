@@ -1,0 +1,148 @@
+/* Host element styling */
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Main container with fade-in animation */
+.hello-world-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  text-align: center;
+
+  /* Fade-in animation */
+  opacity: 0;
+  animation: fadeIn 250ms ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Welcome message heading */
+.welcome-message {
+  font-size: 3.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: #1a1a1a;
+  margin: 0 0 2rem 0;
+  letter-spacing: -0.02em;
+  max-width: 90vw;
+  word-wrap: break-word;
+  font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+}
+
+/* Footer note */
+.footer-note {
+  font-size: 0.875rem;
+  color: #666;
+  margin-top: auto;
+  padding: 1rem 0;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* Responsive breakpoints */
+/* Mobile phones (320px - 767px) */
+@media screen and (max-width: 767px) {
+  .hello-world-container {
+    padding: 1rem 0.75rem;
+  }
+
+  .welcome-message {
+    font-size: 2.25rem;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-note {
+    font-size: 0.75rem;
+    padding: 0.75rem 0;
+  }
+}
+
+/* Extra small phones (320px - 479px) */
+@media screen and (max-width: 479px) {
+  .welcome-message {
+    font-size: 1.875rem;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .welcome-message {
+    font-size: 3rem;
+  }
+}
+
+/* Desktop (1024px - 1439px) */
+@media screen and (min-width: 1024px) and (max-width: 1439px) {
+  .welcome-message {
+    font-size: 3.5rem;
+  }
+}
+
+/* Large desktop (1440px - 1919px) */
+@media screen and (min-width: 1440px) and (max-width: 1919px) {
+  .welcome-message {
+    font-size: 4rem;
+  }
+}
+
+/* 4K displays (1920px+) */
+@media screen and (min-width: 1920px) {
+  .welcome-message {
+    font-size: 4.5rem;
+    max-width: 80vw;
+  }
+
+  .footer-note {
+    font-size: 1rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .welcome-message {
+    color: #000;
+    font-weight: 600;
+  }
+
+  .footer-note {
+    color: #333;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .hello-world-container {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Focus management for accessibility */
+.welcome-message:focus {
+  outline: 2px solid #0066cc;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
