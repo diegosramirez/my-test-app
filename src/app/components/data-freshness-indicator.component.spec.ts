@@ -19,7 +19,9 @@ describe('DataFreshnessIndicatorComponent', () => {
       successRate: 95,
       lastSuccessfulFetch: Date.now(),
       rateLimitRemaining: 80,
-      consecutiveFailures: 0
+      consecutiveFailures: 0,
+      totalRequests: 100,
+      successfulRequests: 95
     },
     cache: {
       status: 'healthy',

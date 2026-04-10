@@ -72,8 +72,12 @@ describe('SchedulerService', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-    // Restore original Worker
-    (globalThis as any).Worker = originalWorker;
+    // Restore original Worker with proper cleanup safeguards
+    try {
+      (globalThis as any).Worker = originalWorker;
+    } catch (error) {
+      console.warn('Failed to restore original Worker constructor:', error);
+    }
   });
 
   it('should be created', () => {
@@ -91,25 +95,31 @@ describe('SchedulerService', () => {
   });
 
   it('should handle Web Worker not supported', () => {
-    // Clear the service instance
-    TestBed.resetTestingModule();
+    // Create isolated test setup without interfering with other tests
+    const originalWorkerForTest = (globalThis as any).Worker;
 
-    // Mock Worker as undefined
-    (globalThis as any).Worker = undefined;
+    try {
+      // Mock Worker as undefined
+      (globalThis as any).Worker = undefined;
 
-    const consoleSpy = vi.spyOn(console, 'warn');
+      const consoleSpy = vi.spyOn(console, 'warn');
 
-    TestBed.configureTestingModule({
-      providers: [
-        SchedulerService,
-        { provide: CacheService, useValue: mockCacheService },
-        { provide: NgZone, useValue: mockNgZone }
-      ]
-    });
+      // Create a new isolated TestBed configuration
+      const isolatedTestBed = TestBed.configureTestingModule({
+        providers: [
+          SchedulerService,
+          { provide: CacheService, useValue: mockCacheService },
+          { provide: NgZone, useValue: mockNgZone }
+        ]
+      });
 
-    service = TestBed.inject(SchedulerService);
+      const isolatedService = isolatedTestBed.inject(SchedulerService);
 
-    expect(consoleSpy).toHaveBeenCalledWith('Web Workers not supported in this environment');
+      expect(consoleSpy).toHaveBeenCalledWith('Web Workers not supported in this environment');
+    } finally {
+      // Restore Worker constructor
+      (globalThis as any).Worker = originalWorkerForTest;
+    }
   });
 
   describe('Worker Message Handling', () => {
@@ -118,7 +128,7 @@ describe('SchedulerService', () => {
     beforeEach(() => {
       // Capture the message handler
       const addEventListenerCall = mockWorker.addEventListener.mock.calls.find(
-        call => call[0] === 'message'
+        (call: any) => call[0] === 'message'
       );
       messageHandler = addEventListenerCall[1];
     });
@@ -305,7 +315,7 @@ describe('SchedulerService', () => {
 
       // Simulate worker response
       const messageHandler = mockWorker.addEventListener.mock.calls.find(
-        call => call[0] === 'message'
+        (call: any) => call[0] === 'message'
       )[1];
 
       messageHandler({
@@ -329,7 +339,7 @@ describe('SchedulerService', () => {
       };
 
       const messageHandler = mockWorker.addEventListener.mock.calls.find(
-        call => call[0] === 'message'
+        (call: any) => call[0] === 'message'
       )[1];
 
       // Simulate multiple successful responses
@@ -347,7 +357,7 @@ describe('SchedulerService', () => {
 
     it('should track failures and calculate success rate', () => {
       const messageHandler = mockWorker.addEventListener.mock.calls.find(
-        call => call[0] === 'message'
+        (call: any) => call[0] === 'message'
       )[1];
 
       // Simulate mixed responses
@@ -368,7 +378,7 @@ describe('SchedulerService', () => {
 
     it('should limit execution time history to last 20 entries', () => {
       const messageHandler = mockWorker.addEventListener.mock.calls.find(
-        call => call[0] === 'message'
+        (call: any) => call[0] === 'message'
       )[1];
 
       // Simulate 25 successful responses
@@ -422,29 +432,36 @@ describe('SchedulerService', () => {
 
   describe('Error Handling', () => {
     it('should handle worker initialization errors gracefully', () => {
-      TestBed.resetTestingModule();
+      // Create isolated test setup
+      const originalWorkerForTest = (globalThis as any).Worker;
 
-      // Mock Worker constructor to throw error
-      (globalThis as any).Worker = vi.fn(() => {
-        throw new Error('Worker initialization failed');
-      });
+      try {
+        // Mock Worker constructor to throw error
+        (globalThis as any).Worker = vi.fn(() => {
+          throw new Error('Worker initialization failed');
+        });
 
-      const consoleSpy = vi.spyOn(console, 'error');
+        const consoleSpy = vi.spyOn(console, 'error');
 
-      TestBed.configureTestingModule({
-        providers: [
-          SchedulerService,
-          { provide: CacheService, useValue: mockCacheService },
-          { provide: NgZone, useValue: mockNgZone }
-        ]
-      });
+        // Create isolated TestBed configuration
+        const isolatedTestBed = TestBed.configureTestingModule({
+          providers: [
+            SchedulerService,
+            { provide: CacheService, useValue: mockCacheService },
+            { provide: NgZone, useValue: mockNgZone }
+          ]
+        });
 
-      service = TestBed.inject(SchedulerService);
+        const isolatedService = isolatedTestBed.inject(SchedulerService);
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Failed to initialize Web Worker:',
-        expect.any(Error)
-      );
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'Failed to initialize Web Worker:',
+          expect.any(Error)
+        );
+      } finally {
+        // Restore Worker constructor
+        (globalThis as any).Worker = originalWorkerForTest;
+      }
     });
 
     it('should handle worker runtime errors', () => {
@@ -465,7 +482,7 @@ describe('SchedulerService', () => {
       mockCacheService.set.mockReturnValue(throwError(() => new Error('Cache error')));
 
       const messageHandler = mockWorker.addEventListener.mock.calls.find(
-        call => call[0] === 'message'
+        (call: any) => call[0] === 'message'
       )[1];
 
       const consoleSpy = vi.spyOn(console, 'error');
@@ -501,27 +518,34 @@ describe('SchedulerService', () => {
 
   describe('Main Thread Fallback', () => {
     it('should fallback to main thread when worker initialization fails', () => {
-      TestBed.resetTestingModule();
+      // Create isolated test setup
+      const originalWorkerForTest = (globalThis as any).Worker;
 
-      // Mock Worker constructor to throw error
-      (globalThis as any).Worker = vi.fn(() => {
-        throw new Error('Worker not supported');
-      });
+      try {
+        // Mock Worker constructor to throw error
+        (globalThis as any).Worker = vi.fn(() => {
+          throw new Error('Worker not supported');
+        });
 
-      const consoleSpy = vi.spyOn(console, 'log');
+        const consoleSpy = vi.spyOn(console, 'log');
 
-      TestBed.configureTestingModule({
-        providers: [
-          SchedulerService,
-          { provide: CacheService, useValue: mockCacheService },
-          { provide: NgZone, useValue: mockNgZone }
-        ]
-      });
+        // Create isolated TestBed configuration
+        const isolatedTestBed = TestBed.configureTestingModule({
+          providers: [
+            SchedulerService,
+            { provide: CacheService, useValue: mockCacheService },
+            { provide: NgZone, useValue: mockNgZone }
+          ]
+        });
 
-      service = TestBed.inject(SchedulerService);
+        const isolatedService = isolatedTestBed.inject(SchedulerService);
 
-      expect(consoleSpy).toHaveBeenCalledWith('Using main thread fallback for polling');
-      expect(service.isWorkerSupported()).toBe(false);
+        expect(consoleSpy).toHaveBeenCalledWith('Using main thread fallback for polling');
+        expect(isolatedService.isWorkerSupported()).toBe(false);
+      } finally {
+        // Restore Worker constructor
+        (globalThis as any).Worker = originalWorkerForTest;
+      }
     });
   });
 });
