@@ -1,0 +1,125 @@
+<div [class]="matchCardClass" [attr.data-fixture-status]="fixture.status">
+  <!-- Match Header -->
+  <div class="match-header">
+    <div class="teams">
+      <div class="team-info">
+        <span class="team-name team-name--home">{{ fixture.home_team }}</span>
+        <span class="vs-indicator">vs</span>
+        <span class="team-name team-name--away">{{ fixture.away_team }}</span>
+      </div>
+      <div class="match-metadata">
+        <span class="kick-off-time">{{ formattedKickOff }}</span>
+        <span class="time-until" *ngIf="fixture.status === 'scheduled'">{{ timeUntilKickOff }}</span>
+        <span class="status-text" *ngIf="statusDisplayText">{{ statusDisplayText }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Messages for Disrupted Fixtures -->
+  <div class="status-message" *ngIf="fixture.status !== 'scheduled'">
+    <div class="status-content">
+      <span class="status-icon">⚠️</span>
+      <span class="status-text-full">
+        This match has been {{ fixture.status }}.
+        <span *ngIf="fixture.status === 'postponed'">Predictions will be updated when rescheduled.</span>
+        <span *ngIf="fixture.status === 'cancelled'">No predictions available.</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Quick Prediction Overview -->
+  <div class="prediction-overview" *ngIf="fixture.prediction && fixture.status === 'scheduled'">
+    <div class="most-likely-outcome" *ngIf="fixture.prediction.prediction_confidence !== 'unavailable'">
+      <div class="outcome-header">
+        <span class="outcome-label">Most likely:</span>
+        <span class="outcome-result" [attr.data-outcome]="mostLikelyOutcome.outcome">
+          <span *ngIf="mostLikelyOutcome.outcome === 'home'">{{ fixture.home_team }} win</span>
+          <span *ngIf="mostLikelyOutcome.outcome === 'away'">{{ fixture.away_team }} win</span>
+          <span *ngIf="mostLikelyOutcome.outcome === 'draw'">Draw</span>
+          ({{ (mostLikelyOutcome.probability * 100) | number:'1.0-0' }}%)
+        </span>
+      </div>
+      <div class="close-match-indicator" *ngIf="isCloseMatch">
+        <small class="close-match-text">Close match - low confidence</small>
+      </div>
+    </div>
+
+    <!-- Unavailable Prediction Message -->
+    <div class="prediction-unavailable" *ngIf="fixture.prediction.prediction_confidence === 'unavailable'">
+      <span class="unavailable-icon">📊</span>
+      <span class="unavailable-message">Prediction unavailable - insufficient data</span>
+    </div>
+  </div>
+
+  <!-- Detailed Predictions (Expandable) -->
+  <div class="prediction-details" *ngIf="fixture.prediction && fixture.status === 'scheduled' && fixture.prediction.prediction_confidence !== 'unavailable'">
+    <button
+      class="details-toggle"
+      type="button"
+      (click)="toggleDetails()"
+      [attr.aria-expanded]="showDetails"
+      aria-controls="prediction-breakdown">
+      <span class="toggle-text">{{ showDetails ? 'Hide' : 'Show' }} detailed predictions</span>
+      <span class="toggle-icon" [class.toggle-icon--expanded]="showDetails">▼</span>
+    </button>
+
+    <div
+      class="prediction-breakdown"
+      id="prediction-breakdown"
+      [class.prediction-breakdown--expanded]="showDetails"
+      [attr.aria-hidden]="!showDetails">
+
+      <div class="probability-grid">
+        <app-probability-indicator
+          [probability]="fixture.prediction.home_win_probability"
+          [label]="fixture.home_team + ' win'"
+          [outcome]="'home'"
+          [confidence]="fixture.prediction.prediction_confidence"
+          [size]="'medium'"
+          (click)="onPredictionClick('view_home_probability')">
+        </app-probability-indicator>
+
+        <app-probability-indicator
+          [probability]="fixture.prediction.draw_probability"
+          [label]="'Draw'"
+          [outcome]="'draw'"
+          [confidence]="fixture.prediction.prediction_confidence"
+          [size]="'medium'"
+          (click)="onPredictionClick('view_draw_probability')">
+        </app-probability-indicator>
+
+        <app-probability-indicator
+          [probability]="fixture.prediction.away_win_probability"
+          [label]="fixture.away_team + ' win'"
+          [outcome]="'away'"
+          [confidence]="fixture.prediction.prediction_confidence"
+          [size]="'medium'"
+          (click)="onPredictionClick('view_away_probability')">
+        </app-probability-indicator>
+      </div>
+
+      <div class="prediction-metadata">
+        <div class="metadata-item">
+          <span class="metadata-label">Data freshness:</span>
+          <span class="metadata-value">{{ lastUpdatedText }}</span>
+        </div>
+        <div class="metadata-item">
+          <span class="metadata-label">Based on:</span>
+          <span class="metadata-value">Last {{ fixture.prediction.form_period_used }} matches</span>
+        </div>
+        <div class="metadata-item">
+          <span class="metadata-label">Confidence:</span>
+          <span class="metadata-value confidence-badge" [attr.data-confidence]="fixture.prediction.prediction_confidence">
+            {{ fixture.prediction.prediction_confidence | titlecase }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Venue Information -->
+  <div class="venue-info">
+    <span class="venue-label">📍</span>
+    <span class="venue-name">{{ fixture.venue }}</span>
+  </div>
+</div>

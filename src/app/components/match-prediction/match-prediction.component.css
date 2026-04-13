@@ -1,0 +1,405 @@
+.match-card {
+  background: #ffffff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.match-card:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.match-card--close {
+  border-left: 4px solid #f59e0b;
+}
+
+.match-card--clear-favorite {
+  border-left: 4px solid #10b981;
+}
+
+.match-card--disrupted {
+  border-left: 4px solid #ef4444;
+  background: #fef2f2;
+}
+
+/* Match Header */
+.match-header {
+  margin-bottom: 1rem;
+}
+
+.teams {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.team-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.team-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #111827;
+}
+
+.team-name--home {
+  color: #059669;
+}
+
+.team-name--away {
+  color: #2563eb;
+}
+
+.vs-indicator {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.match-metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.kick-off-time {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.time-until {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.status-text {
+  font-size: 0.75rem;
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* Status Messages */
+.status-message {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.status-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.status-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.status-text-full {
+  font-size: 0.875rem;
+  color: #dc2626;
+  line-height: 1.4;
+}
+
+/* Prediction Overview */
+.prediction-overview {
+  margin-bottom: 1rem;
+}
+
+.most-likely-outcome {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.outcome-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.outcome-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.outcome-result {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.outcome-result[data-outcome="home"] {
+  color: #059669;
+}
+
+.outcome-result[data-outcome="away"] {
+  color: #2563eb;
+}
+
+.outcome-result[data-outcome="draw"] {
+  color: #d97706;
+}
+
+.close-match-indicator {
+  margin-top: 0.25rem;
+}
+
+.close-match-text {
+  font-size: 0.75rem;
+  color: #f59e0b;
+  font-style: italic;
+}
+
+/* Unavailable Predictions */
+.prediction-unavailable {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  border-radius: 0.5rem;
+}
+
+.unavailable-icon {
+  font-size: 1.2rem;
+  opacity: 0.6;
+}
+
+.unavailable-message {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Prediction Details */
+.prediction-details {
+  margin-bottom: 1rem;
+}
+
+.details-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.details-toggle:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.details-toggle:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.toggle-text {
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.toggle-icon {
+  color: #6b7280;
+  transition: transform 0.2s ease;
+  font-size: 0.75rem;
+}
+
+.toggle-icon--expanded {
+  transform: rotate(180deg);
+}
+
+.prediction-breakdown {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease, opacity 0.2s ease, padding 0.2s ease;
+  opacity: 0;
+}
+
+.prediction-breakdown--expanded {
+  max-height: 500px;
+  opacity: 1;
+  padding-top: 1rem;
+}
+
+/* Probability Grid */
+.probability-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Prediction Metadata */
+.prediction-metadata {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.metadata-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.metadata-item:not(:last-child) {
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 0.25rem;
+}
+
+.metadata-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.metadata-value {
+  font-size: 0.75rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.confidence-badge {
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.confidence-badge[data-confidence="high"] {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.confidence-badge[data-confidence="medium"] {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.confidence-badge[data-confidence="low"] {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Venue Information */
+.venue-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 1rem;
+}
+
+.venue-label {
+  font-size: 0.875rem;
+  opacity: 0.7;
+}
+
+.venue-name {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Responsive Design */
+@media (min-width: 640px) {
+  .match-card {
+    padding: 1.25rem;
+  }
+
+  .teams {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .team-info {
+    flex: 1;
+  }
+
+  .match-metadata {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .team-name {
+    font-size: 1.1rem;
+  }
+
+  .probability-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .outcome-header {
+    justify-content: flex-start;
+  }
+}
+
+@media (min-width: 1024px) {
+  .match-card {
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .prediction-breakdown--expanded {
+    padding-top: 1.25rem;
+  }
+
+  .metadata-item {
+    padding: 0.375rem 0;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .match-card,
+  .details-toggle,
+  .toggle-icon,
+  .prediction-breakdown {
+    transition: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .match-card {
+    box-shadow: none;
+    border: 1px solid #000;
+    break-inside: avoid;
+  }
+
+  .details-toggle {
+    display: none;
+  }
+
+  .prediction-breakdown {
+    max-height: none !important;
+    opacity: 1 !important;
+    padding-top: 1rem !important;
+  }
+}

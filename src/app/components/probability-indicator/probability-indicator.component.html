@@ -1,0 +1,35 @@
+<div class="probability-indicator" [attr.data-confidence]="confidence">
+  <div class="probability-header" *ngIf="label">
+    <span class="probability-label">{{ label }}</span>
+    <span class="probability-percentage" *ngIf="showPercentage && confidence !== 'unavailable'">
+      {{ percentageValue }}%
+    </span>
+    <span class="unavailable-text" *ngIf="confidence === 'unavailable'">
+      Prediction unavailable
+    </span>
+  </div>
+
+  <div class="progress-container" *ngIf="confidence !== 'unavailable'">
+    <div [class]="progressBarClass">
+      <div
+        class="progress-fill"
+        [style.width.%]="percentageValue"
+        [attr.aria-label]="label + ': ' + percentageValue + '%'"
+        role="progressbar"
+        [attr.aria-valuenow]="percentageValue"
+        aria-valuemin="0"
+        aria-valuemax="100">
+      </div>
+    </div>
+  </div>
+
+  <!-- Confidence indicator for close matches -->
+  <div class="confidence-indicator" *ngIf="isCloseMatch && confidence !== 'unavailable'">
+    <small class="confidence-text">{{ confidenceLabel }}</small>
+  </div>
+
+  <!-- Unavailable state -->
+  <div class="unavailable-indicator" *ngIf="confidence === 'unavailable'">
+    <div class="unavailable-bar"></div>
+  </div>
+</div>
