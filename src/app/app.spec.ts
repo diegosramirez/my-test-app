@@ -1,10 +1,23 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { Component } from '@angular/core';
 import { App } from './app';
+
+@Component({
+  template: '<div>Test Component</div>',
+  standalone: true
+})
+class TestComponent {}
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [
+        provideRouter([
+          { path: '', component: TestComponent }
+        ])
+      ]
     }).compileComponents();
   });
 
@@ -14,10 +27,9 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', async () => {
+  it('should render router outlet', () => {
     const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, my-test-app');
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
 });
