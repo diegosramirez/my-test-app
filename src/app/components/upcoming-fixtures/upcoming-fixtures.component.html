@@ -1,0 +1,147 @@
+<div class="upcoming-fixtures">
+  <!-- Header Section -->
+  <div class="page-header">
+    <h1 class="page-title">Upcoming Premier League Fixtures</h1>
+    <p class="page-subtitle">Win probabilities based on recent team form analysis</p>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="(loading$ | async)?.isLoading">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Loading fixtures with predictions...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="(loading$ | async)?.error as error">
+    <div class="error-content">
+      <span class="error-icon">⚠️</span>
+      <div class="error-details">
+        <h3 class="error-title">Unable to Load Fixtures</h3>
+        <p class="error-message">{{ error }}</p>
+        <button class="retry-button" type="button" (click)="loadFixtures()">
+          Try Again
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success State with Fixtures -->
+  <div class="fixtures-container" *ngIf="!(loading$ | async)?.isLoading && !(loading$ | async)?.error">
+
+    <!-- Performance & Availability Stats -->
+    <div class="stats-panel">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">Load Time</span>
+          <span class="stat-value">{{ (loading$ | async)?.loadTime || 0 }}ms</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Prediction Coverage</span>
+          <span class="stat-value" [class.stat-value--success]="availabilityPercentage >= 95">
+            {{ availabilityPercentage }}%
+          </span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Fixtures Available</span>
+          <span class="stat-value">{{ fixtures.length }}</span>
+        </div>
+      </div>
+
+      <!-- Success Threshold Indicator -->
+      <div class="threshold-indicator" *ngIf="availabilityPercentage >= 95">
+        <span class="threshold-icon">✅</span>
+        <span class="threshold-text">Meeting success threshold: 95%+ prediction coverage achieved</span>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <button
+          class="refresh-button"
+          type="button"
+          (click)="refreshPredictions()"
+          [disabled]="(loading$ | async)?.isLoading"
+          title="Manually refresh all predictions">
+          <span class="button-icon">🔄</span>
+          <span class="button-text">Refresh Predictions</span>
+        </button>
+        <button
+          class="clear-cache-button"
+          type="button"
+          (click)="clearCache()"
+          [disabled]="(loading$ | async)?.isLoading"
+          title="Clear prediction cache and reload">
+          <span class="button-icon">🗑️</span>
+          <span class="button-text">Clear Cache</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Disrupted Fixtures Alert -->
+    <div class="disruption-alert" *ngIf="hasDisruptedFixtures">
+      <div class="alert-header">
+        <span class="alert-icon">⚠️</span>
+        <h3 class="alert-title">Schedule Changes</h3>
+      </div>
+      <p class="alert-message">
+        {{ disruptedFixtures.length }} fixture(s) have been postponed or cancelled.
+        Predictions are temporarily unavailable for these matches.
+      </p>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="fixtures.length === 0">
+      <div class="empty-content">
+        <span class="empty-icon">📅</span>
+        <h3 class="empty-title">No Upcoming Fixtures</h3>
+        <p class="empty-message">
+          No Premier League fixtures are currently scheduled.
+          Check back later for upcoming matches.
+        </p>
+      </div>
+    </div>
+
+    <!-- Fixtures List -->
+    <div class="fixtures-list" *ngIf="fixtures.length > 0">
+      <app-match-prediction
+        *ngFor="let fixture of fixtures; trackBy: trackByFixtureId"
+        [fixture]="fixture"
+        (predictionClicked)="onPredictionClicked($event)">
+      </app-match-prediction>
+    </div>
+
+    <!-- Methodology Disclaimer -->
+    <div class="methodology-disclaimer" *ngIf="fixtures.length > 0">
+      <details class="disclaimer-details">
+        <summary class="disclaimer-summary">
+          <span class="disclaimer-icon">📊</span>
+          <span class="disclaimer-title">About These Predictions</span>
+        </summary>
+        <div class="disclaimer-content">
+          <h4>Calculation Methodology</h4>
+          <ul class="methodology-list">
+            <li>Predictions are based on recent team form from the last 5-10 matches</li>
+            <li>Algorithm considers goals scored/conceded, win/draw/loss records, and home advantage</li>
+            <li>Confidence levels reflect data quality and prediction certainty</li>
+            <li>Predictions refresh automatically every 4 hours during active periods</li>
+          </ul>
+
+          <h4>Important Disclaimers</h4>
+          <ul class="disclaimer-list">
+            <li>These are statistical predictions, not guaranteed outcomes</li>
+            <li>Football matches can have unexpected results due to many factors</li>
+            <li>Predictions should be used for entertainment and analysis purposes only</li>
+            <li>Close matches (under 60% probability) should be considered highly uncertain</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <!-- Data Freshness Footer -->
+    <div class="freshness-footer" *ngIf="fixtures.length > 0">
+      <p class="freshness-text">
+        <span class="freshness-icon">🕒</span>
+        Prediction data auto-refreshes every 4 hours. Last updated: {{ getCurrentTime() }}
+      </p>
+    </div>
+  </div>
+</div>
