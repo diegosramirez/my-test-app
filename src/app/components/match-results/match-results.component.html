@@ -1,0 +1,68 @@
+<div class="match-results">
+  <div class="results-header">
+    <h2>Recent Premier League Results</h2>
+  </div>
+
+  <!-- Loading skeleton -->
+  @if (loading) {
+    <div class="results-grid">
+      @for (item of [1,2,3,4,5,6,7,8,9,10]; track $index) {
+        <div class="match-card skeleton">
+          <div class="match-date skeleton-text"></div>
+          <div class="match-teams">
+            <div class="team home">
+              <div class="team-name skeleton-text"></div>
+              <div class="team-score skeleton-score"></div>
+            </div>
+            <div class="vs">vs</div>
+            <div class="team away">
+              <div class="team-score skeleton-score"></div>
+              <div class="team-name skeleton-text"></div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Error state -->
+  @if (error && !loading) {
+    <div class="error-state">
+      <div class="error-icon">⚠️</div>
+      <h3>Unable to load match results</h3>
+      <p>{{ error }}</p>
+      <p class="error-subtitle">Showing cached data if available</p>
+    </div>
+  }
+
+  <!-- Results grid -->
+  @if (!loading && matches.length > 0) {
+    <div class="results-grid">
+      @for (match of matches; track match.id) {
+        <div class="match-card" [class]="getMatchResult(match)">
+          <div class="match-date">{{ formatMatchDate(match.matchDate) }}</div>
+          <div class="match-teams">
+            <div class="team home">
+              <div class="team-name">{{ match.homeTeam }}</div>
+              <div class="team-score">{{ match.homeScore }}</div>
+            </div>
+            <div class="vs">vs</div>
+            <div class="team away">
+              <div class="team-score">{{ match.awayScore }}</div>
+              <div class="team-name">{{ match.awayTeam }}</div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Empty state -->
+  @if (!loading && matches.length === 0 && !error) {
+    <div class="empty-state">
+      <div class="empty-icon">⚽</div>
+      <h3>No matches found</h3>
+      <p>Check back later for recent Premier League results</p>
+    </div>
+  }
+</div>
