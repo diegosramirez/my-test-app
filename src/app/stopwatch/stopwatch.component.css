@@ -1,0 +1,301 @@
+/* Stopwatch Container */
+.stopwatch-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Timer Display */
+.timer-display {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.timer-text {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  display: block;
+  line-height: 1.1;
+}
+
+/* Control Buttons */
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.control-button {
+  min-width: 120px;
+  min-height: 44px;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.control-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.control-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.control-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.start-pause-button.running {
+  background: rgba(255, 87, 51, 0.2);
+  border-color: rgba(255, 87, 51, 0.5);
+}
+
+.start-pause-button.running:hover {
+  background: rgba(255, 87, 51, 0.3);
+}
+
+.lap-button:not(:disabled) {
+  background: rgba(52, 152, 219, 0.2);
+  border-color: rgba(52, 152, 219, 0.5);
+}
+
+.lap-button:hover:not(:disabled) {
+  background: rgba(52, 152, 219, 0.3);
+}
+
+.reset-button:not(:disabled) {
+  background: rgba(155, 89, 182, 0.2);
+  border-color: rgba(155, 89, 182, 0.5);
+}
+
+.reset-button:hover:not(:disabled) {
+  background: rgba(155, 89, 182, 0.3);
+}
+
+/* Lap Times Section */
+.laps-container {
+  width: 100%;
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.laps-title {
+  margin: 0;
+  padding: 1rem 1.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.laps-list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.laps-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.laps-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.laps-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.laps-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.lap-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.2s ease;
+}
+
+.lap-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lap-item:last-child {
+  margin-bottom: 0;
+}
+
+.lap-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.lap-number {
+  font-weight: 600;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  min-width: 60px;
+}
+
+.lap-times {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.lap-absolute {
+  font-size: 1rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.025em;
+}
+
+.lap-split {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .stopwatch-container {
+    padding: 0.5rem;
+  }
+
+  .timer-display {
+    margin-bottom: 2rem;
+  }
+
+  .controls {
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .control-button {
+    min-width: 100px;
+    min-height: 48px;
+    padding: 0.875rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  .laps-container {
+    max-width: 100%;
+  }
+
+  .lap-times {
+    align-items: flex-end;
+  }
+
+  .lap-absolute {
+    font-size: 0.95rem;
+  }
+
+  .lap-split {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .controls {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .control-button {
+    width: 100%;
+    min-height: 50px;
+  }
+
+  .lap-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .lap-times {
+    align-items: flex-start;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .control-button {
+    border-width: 3px;
+  }
+
+  .timer-text {
+    text-shadow: none;
+    font-weight: 700;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .control-button {
+    transition: none;
+  }
+
+  .control-button:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .control-button:active:not(:disabled) {
+    transform: none;
+  }
+
+  .lap-item {
+    transition: none;
+  }
+}
+
+/* Focus styles for accessibility */
+.control-button:focus {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.lap-item:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 1px;
+}
