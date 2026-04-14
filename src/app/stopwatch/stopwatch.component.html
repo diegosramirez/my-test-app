@@ -1,0 +1,58 @@
+<div class="stopwatch-container">
+  <!-- Timer Display -->
+  <div class="timer-display">
+    <span class="timer-text" [attr.aria-label]="'Timer showing ' + formattedTime()">
+      {{ formattedTime() }}
+    </span>
+  </div>
+
+  <!-- Control Buttons -->
+  <div class="controls">
+    <button
+      class="control-button start-pause-button"
+      [class.running]="isRunning()"
+      (click)="toggleTimer()"
+      [attr.aria-label]="buttonText() + ' timer'"
+      type="button">
+      {{ buttonText() }}
+    </button>
+
+    <button
+      class="control-button lap-button"
+      [disabled]="!canLap()"
+      (click)="recordLap()"
+      [attr.aria-label]="'Record lap time'"
+      type="button">
+      Lap
+    </button>
+
+    <button
+      class="control-button reset-button"
+      [disabled]="!canReset()"
+      (click)="resetTimer()"
+      [attr.aria-label]="'Reset timer to zero'"
+      type="button">
+      Reset
+    </button>
+  </div>
+
+  <!-- Lap Times Display -->
+  <div class="laps-container" *ngIf="getLaps().length > 0">
+    <h3 class="laps-title">Lap Times</h3>
+    <div class="laps-list" role="list" aria-label="Recorded lap times">
+      <div
+        class="lap-item"
+        *ngFor="let lap of getLaps(); trackBy: trackByLapNumber"
+        role="listitem"
+        [attr.aria-label]="'Lap ' + lap.lapNumber + ': ' + formatTime(lap.absoluteTime) + ', split time: ' + formatTime(lap.splitTime)">
+        <div class="lap-info">
+          <span class="lap-number">{{ lap.lapNumber }}</span>
+          <div class="lap-times">
+            <span class="lap-absolute">{{ formatTime(lap.absoluteTime) }}</span>
+            <span class="lap-split">(+{{ formatTime(lap.splitTime) }})</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
