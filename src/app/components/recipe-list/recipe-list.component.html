@@ -1,0 +1,94 @@
+<div class="recipe-list-container">
+  <header class="search-header">
+    <h1>Recipe Finder</h1>
+    <div class="search-controls">
+      <div class="search-input-container">
+        <input
+          type="text"
+          placeholder="Search recipes or ingredients..."
+          [(ngModel)]="searchQuery"
+          (input)="onSearchChange($any($event.target).value)"
+          class="search-input"
+        >
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="21 21l-4.35-4.35"></path>
+        </svg>
+      </div>
+
+      <div class="category-filter-container">
+        <select
+          [(ngModel)]="selectedCategory"
+          (change)="onCategoryChange($any($event.target).value)"
+          class="category-select"
+        >
+          <option value="all">All Categories</option>
+          <option value="breakfast">Breakfast</option>
+          <option value="lunch">Lunch</option>
+          <option value="dinner">Dinner</option>
+          <option value="dessert">Dessert</option>
+          <option value="appetizer">Appetizer</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="recipes-content">
+    <div *ngIf="filteredRecipes.length > 0; else emptyState" class="recipes-grid">
+      <article
+        *ngFor="let recipe of filteredRecipes"
+        class="recipe-card"
+        (click)="onRecipeClick(recipe.id)"
+        [attr.data-testid]="'recipe-card-' + recipe.id"
+      >
+        <div class="recipe-image-container">
+          <img [src]="recipe.image" [alt]="recipe.name" class="recipe-image">
+          <button
+            class="favorite-button"
+            [class.favorited]="isFavorite(recipe.id)"
+            (click)="toggleFavorite($event, recipe.id)"
+            [attr.aria-label]="isFavorite(recipe.id) ? 'Remove from favorites' : 'Add to favorites'"
+          >
+            <svg class="heart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="recipe-content">
+          <h3 class="recipe-name">{{ recipe.name }}</h3>
+          <span class="recipe-category">{{ recipe.category | titlecase }}</span>
+          <p class="recipe-summary">{{ recipe.ingredients.length }} ingredients • {{ recipe.steps.length }} steps</p>
+        </div>
+      </article>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <svg class="empty-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <h2>No Recipes Found</h2>
+        <p>{{ emptyStateMessage }}</p>
+        <div class="empty-state-actions">
+          <button
+            *ngIf="searchQuery.length > 0"
+            class="clear-search-btn"
+            (click)="onSearchChange('')"
+          >
+            Clear Search
+          </button>
+          <button
+            *ngIf="selectedCategory !== 'all'"
+            class="clear-filter-btn"
+            (click)="onCategoryChange('all')"
+          >
+            Show All Categories
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </main>
+</div>
