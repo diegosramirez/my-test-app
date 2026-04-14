@@ -1,0 +1,61 @@
+<div class="landing-page">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="brand-section">
+        <div class="premier-league-logo">
+          <div class="pl-emblem">
+            <div class="pl-lion">⚽</div>
+          </div>
+        </div>
+        <div class="brand-text">
+          <h1>Premier League Results</h1>
+          <p class="tagline">Latest match results and scores</p>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div class="data-freshness">
+          <div class="last-updated" [class.stale]="(lastUpdated$ | async) && isCacheStale(lastUpdated$ | async)">
+            <span class="label">Last updated:</span>
+            <span class="timestamp">{{ formatLastUpdated(lastUpdated$ | async) }}</span>
+            @if ((lastUpdated$ | async) && isCacheStale(lastUpdated$ | async)) {
+              <span class="stale-indicator">⚠️</span>
+            }
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="refresh-btn"
+          (click)="onRefreshClick()"
+          [disabled]="loading$ | async"
+          aria-label="Refresh match results">
+          <span class="refresh-icon" [class.spinning]="loading$ | async">🔄</span>
+          <span class="refresh-text">Refresh</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <app-match-results
+      [matches]="(matches$ | async) || []"
+      [loading]="(loading$ | async) ?? false"
+      [error]="error$ | async">
+    </app-match-results>
+  </main>
+
+  <!-- Footer -->
+  <footer class="page-footer">
+    <div class="footer-content">
+      <p class="data-source">
+        Data provided by Football-Data.org API
+      </p>
+      <p class="disclaimer">
+        Match times displayed in your local timezone
+      </p>
+    </div>
+  </footer>
+</div>
