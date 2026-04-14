@@ -1,0 +1,128 @@
+<div class="recipe-list-container">
+  <!-- Header Section -->
+  <header class="header">
+    <h1>Recipe Finder</h1>
+    <p>Discover delicious recipes for every meal</p>
+  </header>
+
+  <!-- Search and Filter Section -->
+  <div class="search-filters">
+    <div class="search-container">
+      <label for="search" class="sr-only">Search recipes</label>
+      <input
+        id="search"
+        type="text"
+        [(ngModel)]="searchQuery"
+        (input)="onSearchInput(searchQuery)"
+        placeholder="Search recipes, ingredients, or descriptions..."
+        class="search-input"
+        aria-label="Search recipes by name, ingredients, or description"
+      >
+      <div class="search-icon" aria-hidden="true">🔍</div>
+    </div>
+
+    <div class="category-filter">
+      <label for="category" class="filter-label">Category:</label>
+      <select
+        id="category"
+        [(ngModel)]="selectedCategory"
+        (change)="onCategoryChange(selectedCategory)"
+        class="category-select"
+        aria-label="Filter recipes by category"
+      >
+        <option *ngFor="let category of categories" [value]="category">
+          {{ category }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container" role="status" aria-live="polite">
+    <div class="loading-spinner"></div>
+    <span class="sr-only">Loading recipes...</span>
+  </div>
+
+  <!-- Recipe Grid -->
+  <div class="recipes-container" *ngIf="!isLoading">
+    <div class="recipe-grid" *ngIf="recipes$ | async as recipes; else noRecipes">
+      <div class="results-count" aria-live="polite">
+        Found {{ recipes.length }} recipe{{ recipes.length !== 1 ? 's' : '' }}
+      </div>
+
+      <div class="recipe-cards">
+        <div
+          *ngFor="let recipe of recipes; trackBy: trackByRecipeId"
+          class="recipe-card"
+          (click)="onRecipeClick(recipe.id)"
+          (keydown.enter)="onRecipeClick(recipe.id)"
+          (keydown.space)="onRecipeClick(recipe.id)"
+          tabindex="0"
+          role="button"
+          [attr.aria-label]="'View recipe for ' + recipe.name"
+        >
+          <div class="recipe-image-container">
+            <img
+              [src]="recipe.image"
+              [alt]="recipe.name"
+              class="recipe-image"
+              loading="lazy"
+            >
+            <button
+              *ngIf="favorites$ | async as favorites"
+              class="favorite-btn"
+              [class.is-favorite]="isFavorite(recipe.id, favorites)"
+              (click)="toggleFavorite(recipe.id, $event)"
+              [attr.aria-label]="isFavorite(recipe.id, favorites) ? 'Remove from favorites' : 'Add to favorites'"
+              type="button"
+            >
+              <span class="heart-icon" aria-hidden="true">
+                {{ isFavorite(recipe.id, favorites) ? '❤️' : '🤍' }}
+              </span>
+            </button>
+          </div>
+
+          <div class="recipe-content">
+            <div class="recipe-category">
+              <span class="category-badge" [attr.data-category]="recipe.category.toLowerCase()">
+                {{ recipe.category }}
+              </span>
+            </div>
+
+            <h3 class="recipe-name">{{ recipe.name }}</h3>
+            <p class="recipe-description">{{ recipe.description }}</p>
+
+            <div class="recipe-meta">
+              <div class="prep-time">
+                <span class="clock-icon" aria-hidden="true">⏱️</span>
+                <span>{{ recipe.prepTime }} min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <ng-template #noRecipes>
+      <div class="empty-state" role="region" aria-label="No recipes found">
+        <div class="empty-icon">🍽️</div>
+        <h2>No recipes found</h2>
+        <p *ngIf="searchQuery || selectedCategory !== 'All'; else noRecipesAtAll">
+          Try adjusting your search terms or category filter.
+        </p>
+        <ng-template #noRecipesAtAll>
+          <p>Check back later for delicious recipes!</p>
+        </ng-template>
+        <button
+          *ngIf="searchQuery || selectedCategory !== 'All'"
+          class="clear-filters-btn"
+          (click)="onSearchInput(''); onCategoryChange('All')"
+          type="button"
+        >
+          Clear Filters
+        </button>
+      </div>
+    </ng-template>
+  </div>
+</div>
