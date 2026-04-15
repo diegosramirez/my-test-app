@@ -1,0 +1,124 @@
+<div class="movie-list-container">
+  <header class="page-header">
+    <h1>My Movie Watchlist</h1>
+    <button
+      class="add-movie-btn"
+      (click)="onAddMovie()"
+      [disabled]="loading">
+      <span class="btn-icon">+</span>
+      Add Movie
+    </button>
+  </header>
+
+  <!-- Controls -->
+  <div class="controls">
+    <!-- Search Input -->
+    <div class="search-container">
+      <input
+        type="search"
+        class="search-input"
+        placeholder="Search movies by title..."
+        [value]="searchQuery"
+        (input)="onSearchChange($event.target.value)"
+        [disabled]="loading">
+      <span class="search-icon">🔍</span>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="filter-buttons">
+      <button
+        class="filter-btn"
+        [class.active]="watchedFilter === 'all'"
+        (click)="onFilterChange('all')"
+        [disabled]="loading">
+        All Movies ({{ movies.length }})
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="watchedFilter === 'watched'"
+        (click)="onFilterChange('watched')"
+        [disabled]="loading">
+        Watched ({{ getWatchedCount() }})
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="watchedFilter === 'unwatched'"
+        (click)="onFilterChange('unwatched')"
+        [disabled]="loading">
+        Unwatched ({{ getUnwatchedCount() }})
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading movies...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="error-container">
+    <p class="error-message">{{ error }}</p>
+    <button class="retry-btn" (click)="loadMovies()">Retry</button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && !error && filteredMovies.length === 0 && movies.length === 0" class="empty-state">
+    <div class="empty-icon">🎬</div>
+    <h2>No movies in your watchlist yet</h2>
+    <p>Start building your movie collection by adding your first movie!</p>
+    <button class="add-first-movie-btn" (click)="onAddMovie()">
+      Add Your First Movie
+    </button>
+  </div>
+
+  <!-- No Search Results -->
+  <div *ngIf="!loading && !error && filteredMovies.length === 0 && movies.length > 0" class="no-results">
+    <div class="no-results-icon">🔍</div>
+    <h3>No movies match your criteria</h3>
+    <p *ngIf="searchQuery">
+      No movies found containing "{{ searchQuery }}"
+    </p>
+    <p *ngIf="watchedFilter !== 'all' && !searchQuery">
+      No {{ watchedFilter }} movies found
+    </p>
+    <button class="clear-filters-btn" (click)="onSearchChange(''); onFilterChange('all')">
+      Clear Filters
+    </button>
+  </div>
+
+  <!-- Movies Grid -->
+  <div *ngIf="!loading && !error && filteredMovies.length > 0" class="movies-grid">
+    <app-movie-card
+      *ngFor="let movie of filteredMovies; trackBy: trackByMovieId"
+      [movie]="movie"
+      [highlightedTitle]="getHighlightedTitle(movie.title)"
+      (watchedToggle)="onToggleWatched(movie)"
+      (edit)="onEditMovie(movie)"
+      (delete)="onDeleteMovie(movie)">
+    </app-movie-card>
+  </div>
+
+  <!-- Results Count -->
+  <div *ngIf="!loading && !error && filteredMovies.length > 0" class="results-info">
+    <p>
+      Showing {{ filteredMovies.length }} of {{ movies.length }} movies
+      <span *ngIf="searchQuery || watchedFilter !== 'all'">
+        • <button class="clear-filters-link" (click)="onSearchChange(''); onFilterChange('all')">
+          Clear filters
+        </button>
+      </span>
+    </p>
+  </div>
+</div>
+
+<!-- Confirm Delete Dialog -->
+<app-confirm-dialog
+  *ngIf="showConfirmDialog && movieToDelete"
+  [show]="showConfirmDialog"
+  [title]="'Delete Movie'"
+  [message]="getDeleteMessage()"
+  [confirmText]="'Delete'"
+  [confirmStyle]="'danger'"
+  (confirm)="onConfirmDelete()"
+  (cancel)="onCancelDelete()"></app-confirm-dialog>
