@@ -1,0 +1,7 @@
+/* Clean app styles - no scaffolded content */
+
+/* Ensure router-outlet is visible as a block element */
+router-outlet {
+  display: block;
+  min-height: 1px;
+}
