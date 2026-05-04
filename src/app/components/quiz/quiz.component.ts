@@ -76,7 +76,7 @@ export class QuizComponent implements OnInit {
   }
 
   onSubmitAnswer(): void {
-    if (!this.state.selectedOptionId || !this.state.currentQuestion) {
+    if (!this.state.selectedOptionId || !this.state.currentQuestion || this.state.isAnswered) {
       return;
     }
 
@@ -84,7 +84,8 @@ export class QuizComponent implements OnInit {
       option => option.id === this.state.selectedOptionId
     );
 
-    const isCorrect = selectedIndex === this.state.currentQuestion.correctAnswerIndex;
+    // Handle both valid and invalid option selections
+    const isCorrect = selectedIndex !== -1 && selectedIndex === this.state.currentQuestion.correctAnswerIndex;
 
     this.state = {
       ...this.state,

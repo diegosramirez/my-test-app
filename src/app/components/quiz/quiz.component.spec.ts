@@ -36,6 +36,15 @@ describe('QuizComponent', () => {
     fixture = TestBed.createComponent(QuizComponent);
     component = fixture.componentInstance;
     debugElement = fixture.debugElement;
+
+    // Override component state with test mockQuestion
+    component.state = {
+      currentQuestion: mockQuestion,
+      selectedOptionId: null,
+      isAnswered: false,
+      showFeedback: false,
+      isCorrect: null
+    };
   });
 
   afterEach(() => {
