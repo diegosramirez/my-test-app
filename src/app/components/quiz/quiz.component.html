@@ -1,0 +1,145 @@
+<main class="quiz-container" [attr.data-testid]="'quiz-component'">
+  <div class="quiz-content" *ngIf="state.currentQuestion as question">
+    <!-- Quiz Header -->
+    <header class="quiz-header">
+      <div class="quiz-category">
+        <span class="category-label" [attr.aria-label]="'Quiz category: ' + question.category">
+          {{question.category}}
+        </span>
+      </div>
+      <h1 class="quiz-question" id="quiz-question">
+        {{question.question}}
+      </h1>
+    </header>
+
+    <!-- Quiz Options -->
+    <section class="quiz-options" role="radiogroup" aria-labelledby="quiz-question">
+      <div
+        *ngFor="let option of question.options; trackBy: trackByOptionId"
+        class="option-container"
+        [class.selected]="isOptionSelected(option.id)"
+        [class.correct]="isOptionCorrect(option.id)"
+        [class.incorrect]="isOptionIncorrect(option.id)"
+        [class.disabled]="state.isAnswered"
+        [attr.data-testid]="'quiz-option-' + option.letter.toLowerCase()"
+        (click)="onOptionSelect(option.id)"
+        (keydown.enter)="onOptionSelect(option.id)"
+        (keydown.space)="onOptionSelect(option.id); $event.preventDefault()"
+        tabindex="0"
+        role="radio"
+        [attr.aria-checked]="isOptionSelected(option.id)"
+        [attr.aria-describedby]="state.showFeedback ? 'quiz-feedback' : null"
+        [attr.aria-label]="'Option ' + option.letter + ': ' + option.text">
+
+        <div class="option-letter">
+          {{option.letter}}
+        </div>
+        <div class="option-text">
+          {{option.text}}
+        </div>
+        <div class="option-indicator" aria-hidden="true" *ngIf="state.showFeedback">
+          <svg
+            *ngIf="isOptionCorrect(option.id)"
+            class="correct-icon"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M16.7 4.3L7.5 13.5L3.3 9.3"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"/>
+          </svg>
+          <svg
+            *ngIf="isOptionIncorrect(option.id)"
+            class="incorrect-icon"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M15 5L5 15M5 5l10 10"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Submit Button -->
+    <section class="quiz-actions" *ngIf="!state.showFeedback">
+      <button
+        type="button"
+        class="submit-button"
+        [class.disabled]="!canSubmit()"
+        [disabled]="!canSubmit()"
+        [attr.data-testid]="'submit-answer-button'"
+        [attr.aria-describedby]="!canSubmit() ? 'submit-hint' : null"
+        (click)="onSubmitAnswer()">
+        Submit Answer
+      </button>
+      <p id="submit-hint" class="submit-hint" *ngIf="!canSubmit()" aria-live="polite">
+        Please select an answer before submitting
+      </p>
+    </section>
+
+    <!-- Feedback Section -->
+    <section class="quiz-feedback" *ngIf="state.showFeedback" role="alert" aria-live="assertive">
+      <div class="feedback-content" id="quiz-feedback">
+        <div class="feedback-icon" aria-hidden="true">
+          <svg
+            *ngIf="state.isCorrect"
+            class="success-icon"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M20 7L9 18L4 13"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"/>
+          </svg>
+          <svg
+            *ngIf="!state.isCorrect"
+            class="error-icon"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M18 6L6 18M6 6l12 12"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <p class="feedback-message">
+          {{getFeedbackMessage()}}
+        </p>
+        <button
+          type="button"
+          class="try-again-button"
+          [attr.data-testid]="'try-again-button'"
+          (click)="onTryAgain()">
+          Try Again
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Loading State -->
+  <div class="quiz-loading" *ngIf="!state.currentQuestion" role="status" aria-live="polite">
+    <p>Loading quiz question...</p>
+  </div>
+</main>
