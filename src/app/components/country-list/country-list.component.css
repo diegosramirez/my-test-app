@@ -1,0 +1,142 @@
+.country-list-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 32px;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.loading {
+  text-align: center;
+  padding: 48px;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.countries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.confirm-button-container {
+  position: sticky;
+  bottom: 24px;
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+  z-index: 10;
+}
+
+.confirm-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 16px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  min-height: 44px;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.confirm-button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+}
+
+.confirmed-prediction {
+  text-align: center;
+  background-color: #e8f5e8;
+  border: 2px solid #4caf50;
+  border-radius: 16px;
+  padding: 32px;
+  margin-top: 24px;
+}
+
+.confirmed-prediction h2 {
+  color: #2e7d32;
+  margin-bottom: 16px;
+}
+
+.prediction-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0;
+  padding: 16px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.prediction-display .flag {
+  font-size: 2rem;
+}
+
+.prediction-display .country-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2e7d32;
+}
+
+.confirmed-prediction p {
+  color: #2e7d32;
+  font-weight: 500;
+  margin-top: 16px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .country-list-container {
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    margin-bottom: 24px;
+  }
+
+  .countries-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+
+  .confirm-button {
+    padding: 16px 24px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .confirmed-prediction {
+    padding: 24px 16px;
+  }
+
+  .prediction-display {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .prediction-display .flag {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .countries-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+  }
+}
